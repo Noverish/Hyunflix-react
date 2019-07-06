@@ -23,8 +23,7 @@ export interface File {
 export interface Video {
   posterUrl: string | null
   videoUrl: string
-  vttUrl: string | null
-  smiUrl: string | null
+  subtitleUrl: string | null
   videoWidth: number
   videoHeight: number
 }

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Video } from '../models'
 import videojs from 'video.js';
+import { Video } from '../models'
 
 interface State {
   
@@ -15,12 +15,12 @@ export default class VideoPlayer extends React.Component<Video, State> {
   constructor(props: Video) {
     super(props);
     
-    if(props.vttUrl) {
+    if(props.subtitleUrl) {
       this.captionOption = {
         kind: 'subtitles',
         srclang: 'ko',
         label: 'Korean',
-        src: this.props.vttUrl,
+        src: props.subtitleUrl,
         default: true
       };
     }
@@ -39,7 +39,7 @@ export default class VideoPlayer extends React.Component<Video, State> {
   
   componentDidMount() {
     this.player = videojs(this.videoNode, this.videoOption, () => {
-      if (this.props.vttUrl) {
+      if (this.props.subtitleUrl) {
         this.player.addRemoteTextTrack(this.captionOption);
       
         var settings = this.player.textTrackSettings;

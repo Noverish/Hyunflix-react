@@ -6,7 +6,13 @@ export default function FolderPage (res: ServerResponse) {
   const files: File[] = res.payload as File[];
   const fileCompList = files.map((file: File) => {
     const ext = extname(file.path);
-    const filePath = (ext === '') ? file.path : 'http://home.hyunsub.kim:8080' + file.path + "?raw";
+    let filePath = '';
+    
+    if (ext === '.mp4' || ext === '') {
+      filePath = file.path;
+    } else {
+      filePath = 'http://home.hyunsub.kim:8080' + file.path + "?raw";
+    }
     
     return (
       <tr key={ file.name }>
