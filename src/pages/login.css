@@ -1,0 +1,20 @@
+.login-layout {
+  vertical-align: middle;
+  text-align: center;
+  display: table-cell;
+}
+
+.login-form {
+  max-width: 300px;
+  display: inline-block;
+}
+.login-form-forgot {
+  float: right;
+}
+.login-form-button {
+  width: 100%;
+}
+
+.login-title {
+  text-align: center;
+}

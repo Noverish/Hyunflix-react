@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom'
 
 import { ServerResponse, Type } from '../models';
 import * as service from '../services';
 import { FolderPage, VideoPage } from './sub_pages';
 
-interface Props {
+export interface HomePageProps {
   
 }
 
@@ -13,7 +12,7 @@ interface State {
   serverResponse: ServerResponse | null
 }
 
-export default class HomePage extends Component<Props, State> {
+export default class HomePage extends Component<HomePageProps, State> {
   constructor(props) {
     super(props);
     
