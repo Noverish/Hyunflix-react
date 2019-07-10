@@ -8,7 +8,7 @@ export default function FolderPage (res: ServerResponse) {
     const ext = extname(file.path);
     let filePath = '';
     
-    if (ext === '.mp4' || ext === '') {
+    if (file.isDir || ext === '.mp4') {
       filePath = file.path;
     } else {
       filePath = 'http://home.hyunsub.kim:8080' + file.path + "?raw";
