@@ -28,7 +28,6 @@ class HomePage extends React.Component<HomePageProps, State> {
   
   componentDidMount() {
     const path = this.props['location']['pathname'];
-    console.log(path);
     this.load(path);
   }
   
@@ -52,6 +51,7 @@ class HomePage extends React.Component<HomePageProps, State> {
 
   render() {
     const res: ServerResponse | null = this.state.serverResponse;
+    
     let content = ( <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>Home</div> );
     
     if(res) {
@@ -77,12 +77,11 @@ class HomePage extends React.Component<HomePageProps, State> {
     
     return (
       <Layout className="layout">
-        <Header>
+        <Header style={{ padding: '0 0 0 20px' }}>
           <div className="logo" />
           <Menu
             theme="dark"
             mode="horizontal"
-            defaultSelectedKeys={['/']}
             style={{ lineHeight: '64px' }}
             onClick={this.handleClick.bind(this)}
           >
@@ -95,7 +94,6 @@ class HomePage extends React.Component<HomePageProps, State> {
         <Content style={{ padding: '20px 50px', background: 'white' }}>
           { content }
         </Content>
-        <Footer style={{ textAlign: 'center' }}>hello, world!</Footer>
       </Layout>
     )
   }
