@@ -1,6 +1,10 @@
 import React from 'react';
 import { TabBar } from 'antd-mobile';
 
+import { File } from '../models';
+
+import FolderList, { FolderListProps } from '../components-mobile/folder-list';
+
 interface Props {
   
 }
@@ -38,11 +42,26 @@ const items: Item[] = [
   },
 ]
 
+const files: File[] = [
+  {
+    name: 'asdf',
+    isDir: true,
+    path: '',
+    size: '-'
+  },
+  {
+    name: 'asdf.mp4',
+    isDir: false,
+    path: '',
+    size: '1.24GB'
+  }
+];
+
 export default class TabBarExample extends React.Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: 'redTab'
+      selectedTab: items[0].key
     };
   }
 
@@ -60,13 +79,13 @@ export default class TabBarExample extends React.Component<Props, State> {
           });
         }}
       >
-      
+        <FolderList files={files}/>
       </TabBar.Item>  
     )
   }
 
   render() {
-    const tabBarItems = items.forEach((e) => this.tabBarItem(e));
+    const tabBarItems = items.map((e) => this.tabBarItem(e));
     
     return (
       <div style={{ height: '100%' }}>
@@ -75,10 +94,7 @@ export default class TabBarExample extends React.Component<Props, State> {
           tintColor="#33A3F4"
           barTintColor="white"
         >
-          { this.tabBarItem(items[0]) }
-          { this.tabBarItem(items[1]) }
-          { this.tabBarItem(items[2]) }
-          { this.tabBarItem(items[3]) }
+          { tabBarItems }
         </TabBar>
       </div>
     );
