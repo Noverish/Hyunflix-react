@@ -24,6 +24,8 @@ export default class FolderListPage extends React.Component<Props, State> {
   componentDidMount() {
     get(this.props.path)
       .then((res: ServerResponse) => {
+        console.log(res);
+        
         this.setState({
           files: res.payload as File[]
         })

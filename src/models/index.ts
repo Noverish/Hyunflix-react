@@ -6,20 +6,18 @@ export enum Type {
   etc = "etc"
 }
 
-export namespace Type {
-  export function svg(type: Type): string {
-    switch (type) {
-      case Type.folder:
-        return '/icons/folder.svg';
-      case Type.image:
-        return '/icons/image.svg';
-      case Type.text:
-        return '/icons/text.svg';
-      case Type.video:
-        return '/icons/video.svg';
-      case Type.etc:
-        return '';
-    }
+export function typeToSVG(type: Type): string {
+  switch (type) {
+    case Type.folder:
+      return '/icons/folder.svg';
+    case Type.image:
+      return '/icons/image.svg';
+    case Type.text:
+      return '/icons/text.svg';
+    case Type.video:
+      return '/icons/video.svg';
+    case Type.etc:
+      return '/icons/etc.svg';
   }
 }
 

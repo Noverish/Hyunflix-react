@@ -1,0 +1,8 @@
+.am-list-extra {
+  flex-basis: auto !important;
+  padding-left: 15px;
+}
+
+.am-list-content {
+  word-wrap: break-word !important;
+}

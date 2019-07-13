@@ -54,17 +54,19 @@ export default class TabBarExample extends React.Component<Props, State> {
         key={item.key}
         icon={<i className="material-icons">{item.icon}</i>}
         selectedIcon={<i className="material-icons">{item.icon}</i>}
-        selected={this.props.location.pathname === item.path}
+        selected={this.props.location.pathname.startsWith(item.path)}
         onPress={() => {
           this.props.history.push(item.path);
         }}
       >
-        <FolderList path={item.path}/>
+        <FolderList path={this.props.location.pathname}/>
       </TabBar.Item>  
     )
   }
 
   render() {
+    console.log(this.props.location.pathname);
+    
     const tabBarItems = items.map((e) => this.tabBarItem(e));
     
     return (
