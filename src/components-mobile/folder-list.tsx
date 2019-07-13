@@ -3,9 +3,9 @@ import { List } from 'antd-mobile';
 
 import Folder from './folder';
 
-export default ({ files }) => {
+export default ({ files, callback }) => {
   const folders = files.map((file) => (
-    <Folder key={file.name} {...file} />
+    <Folder key={file.name} file={file} callback={callback} />
   ));
   
   return (

@@ -2,13 +2,15 @@ import React from 'react';
 
 import FolderList from '../components-mobile/folder-list';
 import { get } from '../services';
-import { ServerResponse, File } from '../models';
+import { ServerResponse, File, Type } from '../models';
 
 interface Props {
-  path: string;
+  location;
+  history;
 }
 
 interface State {
+  path: string;
   files: File[]
 }
 
@@ -17,24 +19,35 @@ export default class FolderListPage extends React.Component<Props, State> {
     super(props);
     
     this.state = {
+      path: '',
       files: []
     }
   }
   
-  componentDidMount() {
-    get(this.props.path)
+  fileClickCallback(file: File) {
+    if(file.type === Type.folder) {
+      this.props.history.push(file.path);
+    }
+  }
+  
+  refresh(path: string) {
+    get(path)
       .then((res: ServerResponse) => {
-        console.log(res);
-        
         this.setState({
+          path: path,
           files: res.payload as File[]
         })
       })
   }
   
   render() {
+    const newPath = this.props.location.pathname;
+    if (newPath !== this.state.path) {
+      this.refresh(newPath);
+    }
+    
     return (
-      <FolderList files={this.state.files} />
+      <FolderList files={this.state.files} callback={this.fileClickCallback.bind(this)} />
     )
   }
 }

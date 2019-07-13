@@ -6,14 +6,10 @@ import { File, typeToSVG } from '../models';
 
 const Item = List.Item;
 
-const style = {
-  "flex-basis": "auto"
-}
-
-export default (file: File) => (
+export default ({ file, callback }) => (
   <Item
     extra={file.size}
-    onClick={() => {}}
+    onClick={() => { callback(file) }}
     thumb={typeToSVG(file.type)}
     wrap
   >

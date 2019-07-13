@@ -1,4 +1,5 @@
 import React from 'react';
+import { Route } from 'react-router-dom';
 import { TabBar } from 'antd-mobile';
 
 import FolderList from '../pages-mobile/folder-list';
@@ -17,57 +18,64 @@ interface Item {
   key: string;
   icon: string;
   path: string;
+  content;
 }
 
-const items: Item[] = [
-  {
-    title: '영화',
-    key: 'Movie',
-    icon: 'movie',
-    path: '/archive/Movies',
-  },
-  {
-    title: 'TV',
-    key: 'tv',
-    icon: 'tv',
-    path: '/archive/TV_Series',
-  },
-  {
-    title: '다큐멘터리',
-    key: 'documentary',
-    icon: 'dvr',
-    path: '/archive/Documentaries',
-  },
-  {
-    title: '토렌트',
-    key: 'torrent',
-    icon: 'subscriptions',
-    path: '/archive/torrents',
-  },
-]
-
 export default class TabBarExample extends React.Component<Props, State> {
-  tabBarItem(item: Item) {
+  renderTabBarItem(item: Item) {
+    const path = this.props.location.pathname;
+    const selected = path.startsWith(item.path);
+    
     return (
       <TabBar.Item
         title={item.title}
         key={item.key}
         icon={<i className="material-icons">{item.icon}</i>}
         selectedIcon={<i className="material-icons">{item.icon}</i>}
-        selected={this.props.location.pathname.startsWith(item.path)}
+        selected={selected}
         onPress={() => {
           this.props.history.push(item.path);
         }}
       >
-        <FolderList path={this.props.location.pathname}/>
+        {(selected) ? item.content : (<div></div>)}
       </TabBar.Item>  
     )
   }
 
   render() {
-    console.log(this.props.location.pathname);
+    const path = this.props.location.pathname;
+    const items: Item[] = [
+      {
+        title: '영화',
+        key: 'Movie',
+        icon: 'movie',
+        path: '/archive',
+        content: (<Route path={path} component={FolderList} />),
+      },
+      {
+        title: '사진',
+        key: 'Picture',
+        icon: 'collections',
+        path: '/pictures',
+        content: (<div></div>),
+      },
+      {
+        title: '음악',
+        key: 'Music',
+        icon: 'library_music',
+        path: '/musics',
+        content: (<div></div>),
+      },
+      {
+        title: '설정',
+        key: 'Setting',
+        icon: 'settings',
+        path: '/settings',
+        content: (<div></div>),
+      },
+    ];
     
-    const tabBarItems = items.map((e) => this.tabBarItem(e));
+    const tabBarItems = items.map((i) => this.renderTabBarItem(i));
     
     return (
       <div style={{ height: '100%' }}>

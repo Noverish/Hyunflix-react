@@ -9,9 +9,9 @@ class App extends Component {
   render() {
     return (
       <Switch>
-        <Route path="/archive" component={ HomePage } />
+        <Route path="/" component={ HomePage } />
         <Route exact path="/" render={() => (
-            <Redirect to="/archive/Movies"/>
+            <Redirect to="/archive"/>
         )}/>
         <Route component={NotFoundPage} />
       </Switch>
