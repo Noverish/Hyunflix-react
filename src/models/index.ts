@@ -21,6 +21,28 @@ export function typeToSVG(type: Type): string {
   }
 }
 
+export function parseType(ext: string): Type {
+  ext = ext.toLowerCase();
+  
+  switch (ext) {
+    case '':
+      return Type.folder;
+    case '.mp4':
+      return Type.video;
+    case '.vtt':
+    case '.srt':
+    case '.smi':
+    case '.txt':
+      return Type.text;
+    case '.jpg':
+    case '.jpeg':
+    case '.png':
+      return Type.image;
+    default:
+      return Type.etc;
+  }
+}
+
 export interface ServerResponse {
   type: Type,
   path: string

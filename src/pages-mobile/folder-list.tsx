@@ -25,7 +25,7 @@ export default class FolderListPage extends React.Component<Props, State> {
   }
   
   fileClickCallback(file: File) {
-    if(file.type === Type.folder) {
+    if(file.type === Type.folder || file.type === Type.video) {
       this.props.history.push(file.path);
     }
   }

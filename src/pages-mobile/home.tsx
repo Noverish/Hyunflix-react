@@ -1,8 +1,11 @@
 import React from 'react';
+import { extname } from 'path';
 import { Route } from 'react-router-dom';
 import { TabBar } from 'antd-mobile';
 
 import FolderList from '../pages-mobile/folder-list';
+import VideoPlayer from '../pages-mobile/video-player';
+import { Type, parseType } from '../models';
 
 interface Props {
   location,
@@ -44,13 +47,24 @@ export default class TabBarExample extends React.Component<Props, State> {
 
   render() {
     const path = this.props.location.pathname;
+    const ext = extname(path);
+    const type: Type = parseType(ext);
+    
+    let content = (<div></div>);
+    
+    if(type === Type.folder) {
+      content = (<Route path={path} component={FolderList} />)
+    } else if (type === Type.video) {
+      content = (<Route path={path} component={VideoPlayer} />)
+    }
+    
     const items: Item[] = [
       {
         title: '영화',
         key: 'Movie',
         icon: 'movie',
         path: '/archive',
-        content: (<Route path={path} component={FolderList} />),
+        content: content,
       },
       {
         title: '사진',
