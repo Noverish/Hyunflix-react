@@ -2,7 +2,25 @@ export enum Type {
   folder = "folder",
   video = "video",
   image = "image",
-  text = "text"
+  text = "text",
+  etc = "etc"
+}
+
+export namespace Type {
+  export function svg(type: Type): string {
+    switch (type) {
+      case Type.folder:
+        return '/icons/folder.svg';
+      case Type.image:
+        return '/icons/image.svg';
+      case Type.text:
+        return '/icons/text.svg';
+      case Type.video:
+        return '/icons/video.svg';
+      case Type.etc:
+        return '';
+    }
+  }
 }
 
 export interface ServerResponse {
@@ -15,6 +33,7 @@ export interface ServerResponse {
 
 export interface File {
   name: string
+  type: Type
   path: string
   isDir: boolean
   size: string | null

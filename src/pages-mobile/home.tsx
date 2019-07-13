@@ -1,22 +1,22 @@
 import React from 'react';
 import { TabBar } from 'antd-mobile';
 
-import { File } from '../models';
-
-import FolderList, { FolderListProps } from '../components-mobile/folder-list';
+import FolderList from '../pages-mobile/folder-list';
 
 interface Props {
-  
+  location,
+  history
 }
 
 interface State {
-  selectedTab: string;
+  
 }
 
 interface Item {
   title: string;
   key: string;
   icon: string;
+  path: string;
 }
 
 const items: Item[] = [
@@ -24,47 +24,29 @@ const items: Item[] = [
     title: '영화',
     key: 'Movie',
     icon: 'movie',
+    path: '/archive/Movies',
   },
   {
     title: 'TV',
     key: 'tv',
     icon: 'tv',
+    path: '/archive/TV_Series',
   },
   {
     title: '다큐멘터리',
     key: 'documentary',
     icon: 'dvr',
+    path: '/archive/Documentaries',
   },
   {
     title: '토렌트',
     key: 'torrent',
     icon: 'subscriptions',
+    path: '/archive/torrents',
   },
 ]
 
-const files: File[] = [
-  {
-    name: 'asdf',
-    isDir: true,
-    path: '',
-    size: '-'
-  },
-  {
-    name: 'asdf.mp4',
-    isDir: false,
-    path: '',
-    size: '1.24GB'
-  }
-];
-
 export default class TabBarExample extends React.Component<Props, State> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedTab: items[0].key
-    };
-  }
-
   tabBarItem(item: Item) {
     return (
       <TabBar.Item
@@ -72,14 +54,12 @@ export default class TabBarExample extends React.Component<Props, State> {
         key={item.key}
         icon={<i className="material-icons">{item.icon}</i>}
         selectedIcon={<i className="material-icons">{item.icon}</i>}
-        selected={this.state.selectedTab === item.key}
+        selected={this.props.location.pathname === item.path}
         onPress={() => {
-          this.setState({
-            selectedTab: item.key,
-          });
+          this.props.history.push(item.path);
         }}
       >
-        <FolderList files={files}/>
+        <FolderList path={item.path}/>
       </TabBar.Item>  
     )
   }

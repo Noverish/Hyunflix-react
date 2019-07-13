@@ -4,14 +4,14 @@ import { List } from 'antd-mobile';
 import { File } from '../models';
 
 const Item = List.Item;
-const Brief = Item.Brief;
 
 export default (file: File) => (
   <Item
+    extra={file.size}
     arrow="horizontal"
-    multipleLine
     onClick={() => {}}
+    thumb="/icons/folder.svg"
   >
-    {file.name}<Brief>{file.size}</Brief>
+    {file.name}
   </Item>
 )
