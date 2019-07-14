@@ -1,6 +1,7 @@
 import React from 'react';
 import videojs from 'video.js';
-import { Video } from '../models'
+import { Video } from '../models';
+require('videojs-landscape-fullscreen');
 
 interface State {
   
@@ -51,6 +52,7 @@ export default class VideoPlayer extends React.Component<Video, State> {
         settings.updateDisplay();
       }
     });
+    this.player.landscapeFullscreen();
   }
 
   // destroy player on unmount
