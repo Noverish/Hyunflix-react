@@ -2,7 +2,7 @@ import React from 'react';
 import { List } from 'antd-mobile';
 import './folder.css';
 
-import { File, typeToSVG } from '../models';
+import { typeToSVG } from '../models';
 
 const Item = List.Item;
 

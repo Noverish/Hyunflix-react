@@ -29,8 +29,8 @@ export default class VideoPlayer extends React.Component<Video, State> {
     this.videoOption = {
       autoplay: false,
       controls: true,
-      width: this.props.videoWidth,
-      height: this.props.videoHeight,
+      width: 360,
+      height: 200,
       sources: [{
         src: this.props.videoUrl,
         type: 'video/mp4'

@@ -34,8 +34,6 @@ export default class VideoPage extends React.Component<Props, State> {
   
   render() {
     if (this.state.video) {
-      this.state.video.videoWidth = 360;
-      this.state.video.videoHeight = 200;
       return (<VideoPlayer { ...this.state.video } />)
     } else {
       return (<div></div>)
