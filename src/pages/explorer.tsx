@@ -1,11 +1,13 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom'
 
 import FileList from 'container/file-list';
 import VideoPlayer from 'container/video-player';
 import { File, Type } from 'models';
 
 interface Props {
-  
+  location
+  history
 }
 
 interface State {
@@ -13,7 +15,7 @@ interface State {
   type: Type
 }
 
-export default class ExplorerPage extends React.Component<Props, State> {
+class ExplorerPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     
@@ -23,7 +25,22 @@ export default class ExplorerPage extends React.Component<Props, State> {
     }
   }
   
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    const newPath = nextProps.location.pathname;
+    
+    if(!newPath.startsWith('/archive')) {
+      return {}
+    }
+    
+    if (newPath !== prevState.path) {
+      return { path: newPath }
+    } else {
+      return {}
+    }
+  }
+  
   callback(file: File) {
+    this.props.history.push(file.path);
     this.setState({
       path: file.path,
       type: file.type
@@ -48,3 +65,5 @@ export default class ExplorerPage extends React.Component<Props, State> {
     }
   }
 }
+
+export default withRouter(ExplorerPage);
