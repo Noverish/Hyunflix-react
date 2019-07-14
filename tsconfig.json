@@ -20,7 +20,8 @@
         "jsx": "preserve",
         "noImplicitAny": false,
         "rootDir": "src/",
-        "types": []
+        "types": [],
+        "baseUrl": "src/"
     },
     "include": [
         "src/**/*"

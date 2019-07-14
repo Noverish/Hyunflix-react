@@ -1,18 +1,16 @@
 import React from 'react';
 import { List } from 'antd-mobile';
 
-import Folder from './folder';
+import Folder from './file';
 
-export default ({ files, callback }) => {
+export default ({path, files, callback}) => {
   const folders = files.map((file) => (
     <Folder key={file.name} file={file} callback={callback} />
   ));
   
   return (
-    <div>
-      <List renderHeader={() => 'Subtitle'} className="my-list">
-        { folders }
-      </List>
-    </div>
+    <List renderHeader={() => path} className="my-list">
+      { folders }
+    </List>
   )
 }

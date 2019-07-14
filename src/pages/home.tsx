@@ -1,102 +1,84 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom'
-import { Layout, Menu } from 'antd';
-import './home.css';
+import { TabBar } from 'antd-mobile';
 
-import { ServerResponse, Type } from '../models';
-import * as service from '../services';
-import { FolderPage, VideoPage } from './sub_pages';
+import ExplorerPage from 'pages/explorer';
+import FavoritePage from 'pages/favorite';
+import SettingPage from 'pages/settings';
 
-const { Header, Content, Footer } = Layout;
-
-export interface HomePageProps {
-  history;
+interface Props {
+  location,
+  history
 }
 
 interface State {
-  serverResponse: ServerResponse | null
+  
 }
 
-class HomePage extends React.Component<HomePageProps, State> {
-  constructor(props) {
-    super(props);
+interface Item {
+  title: string;
+  key: string;
+  icon: string;
+  path: string;
+  content;
+}
+
+export default class TabBarExample extends React.Component<Props, State> {
+  renderTabBarItem(item: Item) {
+    const nowPath = this.props.location.pathname;
     
-    this.state = {
-      serverResponse: null
-    }
-  }
-  
-  componentDidMount() {
-    const path = this.props['location']['pathname'];
-    this.load(path);
-  }
-  
-  load(path: string) {
-    service.get(path)
-      .then((res: ServerResponse) => {
-        this.setState({
-          serverResponse: res
-        })
-      })
-      .catch((err) => {
-        console.error(err);
-      })
-  }
-  
-  handleClick(e) {
-    const path = e['key']
-    this.props.history.push(path);
-    this.load(path);
+    return (
+      <TabBar.Item
+        title={item.title}
+        key={item.key}
+        icon={<i className="material-icons">{item.icon}</i>}
+        selectedIcon={<i className="material-icons">{item.icon}</i>}
+        selected={nowPath.startsWith(item.path)}
+        onPress={() => {
+          this.props.history.push(item.path);
+        }}
+      >
+        {item.content}
+      </TabBar.Item>  
+    )
   }
 
   render() {
-    const res: ServerResponse | null = this.state.serverResponse;
+    const items: Item[] = [
+      {
+        title: '탐색기',
+        key: 'Explorer',
+        icon: 'folder',
+        path: '/archive',
+        content: (<ExplorerPage />),
+      },
+      {
+        title: '즐겨찾기',
+        key: 'favorite',
+        icon: 'star',
+        path: '/favorite',
+        content: (<FavoritePage />),
+      },
+      {
+        title: '설정',
+        key: 'Settings',
+        icon: 'settings',
+        path: '/settings',
+        content: (<SettingPage />),
+      },
+    ];
     
-    let content = ( <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>Home</div> );
-    
-    if(res) {
-      switch (res.type) {
-        case Type.folder: {
-          content = ( <FolderPage { ...res } /> )
-          break;
-        }
-        case Type.video: {
-          content = ( <VideoPage { ...res } /> )
-          break;
-        }
-        case Type.image: {
-          content = ( <a href={res.payload['rawUrl']}>{ res.payload['rawUrl'] }</a> )
-          break;
-        }
-        case Type.text: {
-          content = ( <a href={res.payload['rawUrl']}>{ res.payload['rawUrl'] }</a> )
-          break;
-        }
-      }
-    }
+    const tabBarItems = items.map((i) => this.renderTabBarItem(i));
     
     return (
-      <Layout className="layout">
-        <Header style={{ padding: '0 0 0 20px' }}>
-          <div className="logo" />
-          <Menu
-            theme="dark"
-            mode="horizontal"
-            style={{ lineHeight: '64px' }}
-            onClick={this.handleClick.bind(this)}
-          >
-            <Menu.Item key="/">홈</Menu.Item>
-            <Menu.Item key="/archive/Movies">영화</Menu.Item>
-            <Menu.Item key="/archive/TV_Series">드라마</Menu.Item>
-            <Menu.Item key="/archive/torrents">토렌트</Menu.Item>
-          </Menu>
-        </Header>
-        <Content style={{ padding: '20px 50px', background: 'white' }}>
-          { content }
-        </Content>
-      </Layout>
-    )
+      <div style={{ height: '100%' }}>
+        <TabBar
+          unselectedTintColor="#949494"
+          tintColor="#33A3F4"
+          barTintColor="white"
+        >
+          { tabBarItems }
+        </TabBar>
+      </div>
+    );
   }
 }
-
-export default withRouter(HomePage);
