@@ -41,7 +41,7 @@ export default class VideoPlayer extends React.Component<Video, State> {
   componentDidMount() {
     this.player = videojs(this.videoNode, this.videoOption, () => {
       if (this.props.subtitleUrl) {
-        this.player.addRemoteTextTrack(this.captionOption);
+        this.player.addRemoteTextTrack(this.captionOption, false);
       
         var settings = this.player.textTrackSettings;
         settings.setValues({
@@ -56,11 +56,11 @@ export default class VideoPlayer extends React.Component<Video, State> {
   }
 
   // destroy player on unmount
-  componentWillUnmount() {
-    if (this.player) {
-      this.player.dispose()
-    }
-  }
+  // componentWillUnmount() {
+  //   if (this.player) {
+  //     this.player.dispose()
+  //   }
+  // }
 
   // wrap the player in a div with a `data-vjs-player` attribute
   // so videojs won't create additional wrapper in the DOM

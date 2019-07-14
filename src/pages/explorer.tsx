@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom'
 
 import FileList from 'container/file-list';
 import VideoPlayer from 'container/video-player';
-import { File, Type } from 'models';
+import { File, Type, parseType } from 'models';
 
 interface Props {
   location
@@ -33,7 +33,7 @@ class ExplorerPage extends React.Component<Props, State> {
     }
     
     if (newPath !== prevState.path) {
-      return { path: newPath }
+      return { path: newPath, type: parseType(newPath) }
     } else {
       return {}
     }
@@ -54,9 +54,7 @@ class ExplorerPage extends React.Component<Props, State> {
       )
     } else if (this.state.type === Type.video) {
       return (
-        <div>
-          <VideoPlayer path={this.state.path}/> 
-        </div>
+        <VideoPlayer path={this.state.path}/> 
       )
     } else {
       return (
