@@ -2,6 +2,7 @@ import React from 'react';
 import { List, InputItem, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import { Redirect } from 'react-router-dom';
+
 import { api, auth } from 'utils'
 
 const Item = List.Item;
@@ -11,37 +12,45 @@ interface Props {
 }
 
 interface State {
-  
+  register: boolean
 }
 
 class BasicInput extends React.Component<Props, State> {
+  state = {
+    register: false
+  }
+  
   onSubmit = () => {
-    this.props.form.validateFields({ force: true }, (error) => {
-      const values = this.props.form.getFieldsValue();
-      const id = values['id'];
-      const password = values['password'];
-      
-      api.login(id, password)
-        .then((token) => {
-          auth.setToken(token);
-          this.forceUpdate();
-        })
-        .catch((err) => {
-          alert(err.response.data['msg']);
-        })
-    });
+    const values = this.props.form.getFieldsValue();
+    const id = values['id'];
+    const password = values['password'];
+    
+    api.login(id, password)
+      .then((token) => {
+        auth.setToken(token);
+        this.forceUpdate();
+      })
+      .catch((err) => {
+        alert(err.response.data['msg']);
+      })
   }
   
   onRegister = () => {
-    
+    this.setState({
+      register: true
+    })
   }
   
   render() {
-    const { getFieldProps } = this.props.form;
-    
     if (auth.getToken()) {
       return <Redirect to="/"/>
     }
+    
+    if (this.state.register) {
+      return <Redirect to="/register"/>
+    }
+    
+    const { getFieldProps } = this.props.form;
 
     return (
       <form>

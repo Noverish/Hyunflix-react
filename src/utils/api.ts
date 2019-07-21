@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { join } from 'path';
-import { ServerResponse } from '../models'
+import { ServerResponse } from 'models'
 
 const BASE: string = 'home.hyunsub.kim:8080'
 
@@ -13,5 +13,11 @@ export async function get(path: string): Promise<ServerResponse> {
 export async function login(id: string, password: string): Promise<string> {
   const url = `http://${BASE}/auth/login`;
   const body = { id, password }
+  return (await axios.post(url, body)).data['token'];
+}
+
+export async function register(id: string, password: string, register_code: string): Promise<string> {
+  const url = `http://${BASE}/auth/register`;
+  const body = { id, password, register_code }
   return (await axios.post(url, body)).data['token'];
 }
