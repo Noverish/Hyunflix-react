@@ -2,7 +2,7 @@ import React from 'react';
 
 import FileListComp from 'components/file-list';
 import { File } from 'models';
-import { get } from 'services';
+import { api } from 'utils';
 
 interface Props {
   path: string;
@@ -33,7 +33,7 @@ export default class FileList extends React.Component<Props, State> {
   }
   
   fetch(path: string) {
-    get(path)
+    api.get(path)
       .then((res) => {
         this.setState({
           files: res.payload as File[]

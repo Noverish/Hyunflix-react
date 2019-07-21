@@ -2,7 +2,7 @@ import React from 'react';
 
 import VideoPlayerComp from 'components/video-player';
 import { Video } from 'models';
-import { get } from 'services';
+import { api } from 'utils';
 
 interface Props {
   path: string;
@@ -31,7 +31,7 @@ export default class VideoPlayer extends React.Component<Props, State> {
   }
   
   fetch(path: string) {
-    get(path)
+    api.get(path)
       .then((res) => {
         this.setState({
           video: res.payload as Video

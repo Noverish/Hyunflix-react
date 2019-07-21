@@ -1,6 +1,8 @@
 import React from 'react';
-import { List, InputItem, Switch, Stepper, Range, Button } from 'antd-mobile';
+import { List, InputItem, Button } from 'antd-mobile';
 import { createForm } from 'rc-form';
+import { Redirect } from 'react-router-dom';
+import { api, auth } from 'utils'
 
 const Item = List.Item;
 
@@ -13,17 +15,20 @@ interface State {
 }
 
 class BasicInput extends React.Component<Props, State> {
-  state = {
-    value: 1,
-  }
-  
   onSubmit = () => {
     this.props.form.validateFields({ force: true }, (error) => {
-      if (!error) {
-        console.log(this.props.form.getFieldsValue());
-      } else {
-        alert('Validation failed');
-      }
+      const values = this.props.form.getFieldsValue();
+      const id = values['id'];
+      const password = values['password'];
+      
+      api.login(id, password)
+        .then((token) => {
+          auth.setToken(token);
+          this.forceUpdate();
+        })
+        .catch((err) => {
+          alert(err.response.data['msg']);
+        })
     });
   }
   
@@ -31,43 +36,28 @@ class BasicInput extends React.Component<Props, State> {
     
   }
   
-  validateAccount = (rule, value, callback) => {
-    if (value && value.length > 4) {
-      callback();
-    } else {
-      callback(new Error('At least four characters for account'));
-    }
-  }
-  
   render() {
-    const { getFieldProps, getFieldError } = this.props.form;
+    const { getFieldProps } = this.props.form;
+    
+    if (auth.getToken()) {
+      return <Redirect to="/"/>
+    }
 
     return (
       <form>
         <List
-          renderHeader={() => 'Form Validation'}
-          renderFooter={() => getFieldError('account') && getFieldError('account').join(',')}
+          renderHeader={() => '로그인'}
         >
           <InputItem
-            {...getFieldProps('account', {
-              rules: [
-                { required: true, message: 'Please input account' },
-                { validator: this.validateAccount },
-              ],
-            })}
-            clear
-            error={!!getFieldError('account')}
-            onErrorClick={() => {
-              alert(getFieldError('account').join('、'));
-            }}
-            placeholder="id"
+            {...getFieldProps('id')}
+            placeholder="아이디"
           >
             아이디
           </InputItem>
           <InputItem
             {...getFieldProps('password')}
-            placeholder="password"
             type="password"
+            placeholder="비밀번호"
           >
             비밀번호
           </InputItem>
