@@ -1,35 +1,26 @@
-import { Type } from './type';
-
-export interface ServerResponse {
-  type: Type,
-  path: string
-  name: string
-  ext: string
-  payload: File[] | Video | Image | Text
+export interface MoviePreview {
+  movie_id: number;
+  title: string;
+  path: string;
+  date: string;
 }
 
-export interface File {
-  name: string
-  type: Type
-  path: string
-  isDir: boolean
-  size: string | null
+export interface Subtitle {
+  language: string;
+  src: string;
 }
 
 export interface Video {
-  posterUrl: string | null
-  videoUrl: string
-  subtitleUrl: string | null
-  videoWidth: number
-  videoHeight: number
+  resolution: number;
+  src: string;
 }
 
-export interface Image {
-  rawUrl: string
+export interface MovieDetail {
+  title: string;
+  path: string;
+  subtitles: Subtitle[];
+  videos: Video[];
+  poster: string | null;
+  thumbnail: string | null;
+  date: string;
 }
-
-export interface Text {
-  rawUrl: string
-}
-
-export { Type, typeToSVG, parseType } from './type';

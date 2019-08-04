@@ -1,0 +1,12 @@
+.register-form-container {
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.register-form {
+  max-width: 800px;
+}

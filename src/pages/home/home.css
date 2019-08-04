@@ -1,0 +1,11 @@
+.home-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.home-link {
+  font-size: 64px;
+  margin: 24px;
+}
