@@ -1,8 +1,8 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { PageHeader, Typography, Dropdown, Button, Menu, Icon, Layout } from 'antd';
+import { PageHeader, Typography, Dropdown, Button, Menu, Icon } from 'antd';
 
-import { VideoPlayer } from 'components';
+import { VideoPlayer, MainLayout } from 'components';
 import { getMovieDetail } from 'api';
 import { MovieDetail } from 'models';
 import './movie-detail.css';
@@ -20,6 +20,8 @@ interface State {
 }
 
 class MovieDetailPage extends React.Component<Props, State> {
+  videoContainer
+  
   state = {
     movieDetail: null,
     width: 360,
@@ -28,7 +30,6 @@ class MovieDetailPage extends React.Component<Props, State> {
   
   componentDidMount() {
     window.addEventListener("resize", this.resize);
-    this.resize();
     
     const path = this.props.match.params[0];
     getMovieDetail('/' + path)
@@ -40,12 +41,20 @@ class MovieDetailPage extends React.Component<Props, State> {
       })
   }
   
+  componentDidUpdate() {
+    this.resize();
+  }
+  
   onBack = () => {
     this.props.history.goBack();
   }
   
   resize = () => {
-    this.setState({ width: window.innerWidth })
+    if(this.videoContainer) {
+      if(this.state.width !== this.videoContainer.clientWidth) {
+        this.setState({ width: this.videoContainer.clientWidth })
+      }
+    }
   }
   
   handleMenuClick = (e) => {
@@ -71,19 +80,19 @@ class MovieDetailPage extends React.Component<Props, State> {
       )
       
       return (
-        <Layout className="movie-detail-layout">
-          <div className="movie-detail-container">
-            <PageHeader onBack={this.onBack} title={md.title} />
+        <MainLayout>
+          <PageHeader onBack={this.onBack} title={md.title} />
+          <div ref={ref => {this.videoContainer = ref}}>
             <VideoPlayer movieDetail={movieDetail} width={width} height={height} resolution={this.state.resolution}/>
-            <div style={{ padding: '12px' }}>
-              <div>
-                <Title className="movie-detail-title" level={4}>{md.title}</Title>
-                <Dropdown className="movie-detail-resolution-button" overlay={menu}><Button>{`${this.state.resolution}p`} <Icon type="down"/></Button></Dropdown>
-              </div>
-              <Text type="secondary">{md.date}</Text>
-            </div>
           </div>
-        </Layout>
+          <div style={{ padding: '12px' }}>
+            <div>
+              <Title className="movie-detail-title" level={4}>{md.title}</Title>
+              <Dropdown className="movie-detail-resolution-button" overlay={menu}><Button>{`${this.state.resolution}p`} <Icon type="down"/></Button></Dropdown>
+            </div>
+            <Text type="secondary">{md.date}</Text>
+          </div>
+        </MainLayout>
       )
     }
     

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Layout, Divider , PageHeader } from 'antd';
+import { Divider , PageHeader } from 'antd';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { MovieListComp } from 'components';
+import { MovieListComp, MainLayout } from 'components';
 import { MoviePreview } from 'models';
 import { getMoviePreviewList } from 'api';
 import './movie-list.css';
@@ -35,13 +35,11 @@ class MoviePage extends React.Component<Props, State> {
   
   render() {
     return (
-      <Layout className="movie-list-layout">
-        <div className="movie-list-container">
-          <PageHeader onBack={this.onBack} title='영화' />
-          <Divider style={{ margin: '0' }}></Divider>
-          <MovieListComp moviePreviews={this.state.moviePreviews}></MovieListComp>
-        </div>
-      </Layout>
+      <MainLayout>
+        <PageHeader onBack={this.onBack} title='영화' />
+        <Divider style={{ margin: '0' }}></Divider>
+        <MovieListComp moviePreviews={this.state.moviePreviews}></MovieListComp>
+      </MainLayout>
     )
   }
 }
