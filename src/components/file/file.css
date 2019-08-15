@@ -1,0 +1,32 @@
+.file-item {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #ededed;
+}
+
+.file-item:first-child {
+  border-top: 1px solid #ededed;
+}
+
+.file-item-title {
+  display: flex;
+  flex-grow: 1;
+  margin: 6px 0;
+}
+
+.file-item-name {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.file-item-size {
+  margin: 0 12px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.file-item-button {
+  margin: 4px;
+}

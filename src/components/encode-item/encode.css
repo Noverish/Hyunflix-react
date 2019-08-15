@@ -1,0 +1,29 @@
+.encode-item {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #ededed;
+  align-items: center;
+}
+
+.encode-item:first-child {
+  border-top: 1px solid #ededed;
+}
+
+.encode-item-id {
+  margin: 8px;
+}
+
+.encode-item-target {
+  flex-grow: 1;
+}
+
+.encode-item-status {
+  width: 75px;
+  text-align: center;
+}
+
+.encode-item-progress {
+  width: 100px !important;
+  margin: 0 8px !important;
+}

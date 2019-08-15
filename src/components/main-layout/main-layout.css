@@ -1,3 +1,34 @@
-.layout-layout {
+.main-layout {
   min-height: 100% !important;
+  display: flex;
+  align-items: center;
+}
+
+.main-layout-header {
+  align-self: stretch;
+}
+
+.main-layout-content {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 1200px;
+  
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-layout-breadcrumb {
+  margin: 16px 0 !important;
+}
+
+.main-layout-content-inner {
+  background: #fff;
+  padding: 24px;
+}
+
+@media only screen and (max-width: 768px) {
+  .main-layout-content {
+    padding: 0 0;
+  }
 }

@@ -5,7 +5,6 @@
   "dependencies": {
     "@types/jest": "24.0.13",
     "@types/node": "12.0.7",
-    "@types/react": "16.8.19",
     "@types/react-dom": "16.8.4",
     "@types/react-router-dom": "^4.3.4",
     "antd": "^3.20.1",
@@ -41,5 +40,7 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/react": "^16.8.19"
+  }
 }

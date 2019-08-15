@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { MoviePreview, MovieDetail } from 'models'
+import { MoviePreview, MovieDetail, File, Encode } from 'models'
 
 const SERVER: string = 'http://home.hyunsub.kim:8080';
 
@@ -28,4 +28,29 @@ export async function register(username: string, password: string, register_code
   const url = `${SERVER}/auth/register`;
   const body = { username, password, register_code }
   return (await axios.post(url, body)).data['token'];
+}
+
+export async function readdir(path: string): Promise<File[]> {
+  try {
+    const url = `${SERVER}/explorer/readdir`;
+    const body = { path }
+    return (await axios.post(url, body)).data;
+  } catch (err) {
+    if (err.response) {
+      throw { msg: err.response.data.msg, status: err.response.status };
+    }
+    throw err;
+  }
+}
+
+export async function encodeStatus(): Promise<Encode[]> {
+  const url = `${SERVER}/encode/status`;
+  return (await axios.get(url)).data;
+}
+
+export async function encodeFile(target: string) {
+  const url = `${SERVER}/encode/file`;
+  const body = { target }
+  await axios.post(url, body);
+  return;
 }

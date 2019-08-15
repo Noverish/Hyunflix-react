@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu } from 'antd';
 import './main-layout.css';
 
 const { Header, Content, Footer } = Layout;
@@ -14,35 +14,32 @@ interface State {
 }
 
 class LayoutComp extends React.Component<Props, State> {
-  breadcrumbClicked = (e) => {
-    e.preventDefault();
-    this.props.history.push(e.currentTarget.target);
+  menuClicked = (e) => {
+    this.props.history.push(`/${e.key}`);
   }
   
   render() {
+    const path = this.props.match.path;
+    const first = path.split('/')[1];
+    
     return (
-      <Layout className="layout-layout">
-        <Header>
+      <Layout className="main-layout">
+        <Header className="main-layout-header">
           <Menu
             theme="dark"
             mode="horizontal"
-            defaultSelectedKeys={['2']}
+            selectedKeys={[first]}
             style={{ lineHeight: '64px' }}
+            onClick={this.menuClicked}
           >
-            <Menu.Item key="1">nav 1</Menu.Item>
-            <Menu.Item key="2">nav 2</Menu.Item>
-            <Menu.Item key="3">nav 3</Menu.Item>
+            <Menu.Item key="home">Home</Menu.Item>
+            <Menu.Item key="movies">영화</Menu.Item>
+            <Menu.Item key="explorer">탐색기</Menu.Item>
+            <Menu.Item key="encode">인코딩</Menu.Item>
           </Menu>
         </Header>
-        <Content style={{ padding: '0 50px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>
-              <a href="/" target="/" onClick={this.breadcrumbClicked}>Home</a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
-          </Breadcrumb>
-          <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
+        <Content className="main-layout-content">
+          <div className="main-layout-content-inner">
             {this.props.children}
           </div>
         </Content>
