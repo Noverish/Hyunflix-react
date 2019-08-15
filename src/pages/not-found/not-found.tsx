@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { Empty, Button } from 'antd';
+import { Result, Button } from 'antd';
 
 const style = {
   height: '100%',
@@ -26,19 +26,12 @@ class NotFoundPage extends React.Component<Props, State> {
   render() {
     return (
       <div style={style}>
-        <Empty
-          image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
-          imageStyle={{
-            height: 60,
-          }}
-          description={
-            <span>
-              해당 페이지가 존재하지 않습니다.
-            </span>
-          }
-        >
-          <Button type="primary" onClick={this.onClick}>홈으로 가기</Button>
-        </Empty>
+        <Result
+          status="404"
+          title="404"
+          subTitle="해당 페이지가 존재하지 않습니다."
+          extra={<Button type="primary" onClick={this.onClick}>홈으로 가기</Button>}
+        />
       </div>
     )
   }

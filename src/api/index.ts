@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { MoviePreview, MovieDetail } from 'models'
 
-const SERVER: string = 'http://home.hyunsub.kim:8091';
+const SERVER: string = 'http://home.hyunsub.kim:8080';
 
 export async function getMoviePreviewList(): Promise<MoviePreview[]> {
   const url = `${SERVER}/movies`;

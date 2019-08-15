@@ -1,4 +1,5 @@
 import React from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 import { Form, Icon, Input, Button, Checkbox, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Redirect } from 'react-router-dom';
@@ -9,12 +10,12 @@ import './login.css';
 
 const { Title } = Typography;
 
-interface Props extends FormComponentProps {
+interface Props extends FormComponentProps, RouteComponentProps {
   
 }
 
 interface State {
-  goToRegister: boolean;
+  
 }
 
 class NormalLoginForm extends React.Component<Props, State> {
@@ -40,25 +41,19 @@ class NormalLoginForm extends React.Component<Props, State> {
         })
         .catch((err) => {
           console.log(err);
-          alert(err.response.data['msg']);
+          alert(err.response);
         })
     });
   };
   
   onRegisterClicked = (e) => {
     e.preventDefault();
-    this.setState({
-      goToRegister: true
-    })
+    this.props.history.push('/register');
   }
 
   render() {
     if (auth.getToken()) {
       return <Redirect to="/"/>
-    }
-    
-    if (this.state.goToRegister) {
-      return <Redirect to="/register"/>
     }
 
     const { getFieldDecorator } = this.props.form;
@@ -92,13 +87,10 @@ class NormalLoginForm extends React.Component<Props, State> {
               valuePropName: 'checked',
               initialValue: true,
             })(<Checkbox>로그인 상태 유지</Checkbox>)}
-            <a className="login-form-forgot" href="/">
-              아이디/비밀번호 찾기
-            </a>
+            <a href="/" className="login-form-register" onClick={this.onRegisterClicked}>회원가입하기</a>
             <Button type="primary" htmlType="submit" className="login-form-button">
               로그인
             </Button>
-            <a href="/" onClick={this.onRegisterClicked}>회원가입하기</a>
           </Form.Item>
         </Form>
       </div>
