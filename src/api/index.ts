@@ -54,3 +54,15 @@ export async function encodeFile(target: string) {
   await axios.post(url, body);
   return;
 }
+
+export async function pauseEncoding() {
+  const url = `${SERVER}/encode/pause`;
+  await axios.get(url);
+  return;
+}
+
+export async function resumeEncoding() {
+  const url = `${SERVER}/encode/resume`;
+  await axios.get(url);
+  return;
+}

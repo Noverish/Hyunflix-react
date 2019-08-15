@@ -25,5 +25,6 @@
 
 .encode-item-progress {
   width: 100px !important;
-  margin: 0 8px !important;
+  margin-left: 8px !important;
+  margin-right: 16px !important;
 }
