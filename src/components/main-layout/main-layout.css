@@ -28,7 +28,26 @@
 }
 
 @media only screen and (max-width: 768px) {
+  .main-layout-header {
+    padding: 0 !important;
+  }
+  
+  .main-layout-header > ul {
+    display: flex;
+  }
+  
+  .main-layout-header > ul > li:nth-child(even) {
+    flex-grow: 1 !important;
+    display: flex !important;
+    justify-content: center !important;
+    padding: 0 !important;
+  }
+  
   .main-layout-content {
     padding: 0 0;
+  }
+  
+  .main-layout-content-inner {
+    padding: 0px;
   }
 }
