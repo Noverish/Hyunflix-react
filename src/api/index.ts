@@ -9,20 +9,12 @@ async function request(path: string, method: string, data: any = undefined) {
   try {
     return (await axios({ url, method, data })).data;
   } catch (err) {
-    
-    console.log(err.response);
-    // console.log(err.config);
-    // console.log(err.request);
-    // console.log(err.message);
+    console.log(err.config);
     
     if (err.response && err.response.data && err.response.data.msg) {
       throw err.response.data.msg;
     } else if (err.response && err.response.data) {
       throw JSON.stringify(err.response.data);
-    } else if (err.response) {
-      throw JSON.stringify(err.response);
-    } else if (err.request) {
-      throw JSON.stringify(err.request);
     } else {
       throw err.message;
     }
