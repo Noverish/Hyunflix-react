@@ -1,12 +1,12 @@
 import React from 'react';
 import videojs from 'video.js';
-import { MovieDetail } from 'models';
+import { Video } from 'models';
 
 interface Props {
-  movieDetail: MovieDetail
+  video: Video
   width: number
   height: number
-  resolution: number
+  resolution: string
 }
 
 interface State {
@@ -21,13 +21,6 @@ interface CaptionOption {
   default: boolean;
 }
 
-interface VideoSrc {
-  src: string;
-  type: string;
-  label: string;
-  res: number;
-}
-
 export default class VideoPlayer extends React.Component<Props, State> {
   captionOptions: CaptionOption[] = [];
   player;
@@ -36,12 +29,12 @@ export default class VideoPlayer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     
-    for(const subtitle of this.props.movieDetail.subtitles) {
+    for(const subtitle of this.props.video.subtitles) {
       this.captionOptions.push({
         kind: 'subtitles',
         srclang: subtitle.language,
         label: subtitle.language,
-        src: subtitle.src,
+        src: 'http://home.hyunsub.kim:8081' + subtitle.path,
         default: subtitle.language === 'ko'
       })
     }
@@ -62,10 +55,10 @@ export default class VideoPlayer extends React.Component<Props, State> {
       sources: [{ src: '', type: ''}]
     }
     
-    for(const video of this.props.movieDetail.videos) {
+    for(const video of this.props.video.srcs) {
       if(this.props.resolution === video.resolution) {
         videoOption.sources[0] = {
-          src: video.src,
+          src: 'http://home.hyunsub.kim:8081' + video.path,
           type: 'video/mp4'
         }
       }

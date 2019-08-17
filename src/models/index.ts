@@ -5,24 +5,25 @@ export interface MoviePreview {
   date: string;
 }
 
-export interface Subtitle {
+export interface VideoSubtitle {
   language: string;
-  src: string;
+  path: string;
+}
+
+export interface VideoSrc {
+  resolution: string;
+  width: number;
+  height: number;
+  path: string;
 }
 
 export interface Video {
-  resolution: number;
-  src: string;
-}
-
-export interface MovieDetail {
   title: string;
-  path: string;
-  subtitles: Subtitle[];
-  videos: Video[];
-  poster: string | null;
+  subtitles: VideoSubtitle[];
+  srcs: VideoSrc[];
   thumbnail: string | null;
   date: string;
+  duration: number;
 }
 
 export interface File {

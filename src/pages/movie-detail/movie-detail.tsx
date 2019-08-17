@@ -4,7 +4,7 @@ import { PageHeader, Typography, Dropdown, Button, Menu, Icon } from 'antd';
 
 import { VideoPlayer, MainLayout } from 'components';
 import { getMovieDetail } from 'api';
-import { MovieDetail } from 'models';
+import { Video } from 'models';
 import './movie-detail.css';
 
 const { Title, Text } = Typography;
@@ -14,18 +14,18 @@ interface Props extends RouteComponentProps {
 }
 
 interface State {
-  movieDetail: MovieDetail | null;
+  video: Video | null;
   width: number;
-  resolution: number;
+  resolution: string;
 }
 
 class MovieDetailPage extends React.Component<Props, State> {
   videoContainer
   
   state = {
-    movieDetail: null,
+    video: null,
     width: 360,
-    resolution: 0
+    resolution: ""
   }
   
   componentDidMount() {
@@ -33,10 +33,10 @@ class MovieDetailPage extends React.Component<Props, State> {
     
     const path = this.props.match.params[0];
     getMovieDetail('/' + path)
-      .then((movieDetail: MovieDetail) => {
+      .then((video: Video) => {
         this.setState({
-          movieDetail,
-          resolution: movieDetail.videos[0].resolution
+          video,
+          resolution: video.srcs[0].resolution
         })
       })
       .catch((msg) => {
@@ -61,19 +61,19 @@ class MovieDetailPage extends React.Component<Props, State> {
   }
   
   handleMenuClick = (e) => {
-    this.setState({ resolution: parseInt(e.key, 10) })
+    this.setState({ resolution: e.key })
   }
   
   render() {
-    const movieDetail: MovieDetail | null = this.state.movieDetail;
+    const video: Video | null = this.state.video;
     
-    if(movieDetail) {
-      const md: MovieDetail = movieDetail;
+    if(video) {
+      const v: Video = video;
       const width = this.state.width;
       const height = Math.floor(width / 16 * 9);
       
-      const menuItems = md.videos.map((value) => (
-        <Menu.Item key={value.resolution}>{`${value.resolution}p`}</Menu.Item>
+      const menuItems = v.srcs.map((value) => (
+        <Menu.Item key={value.resolution}>{value.resolution}</Menu.Item>
       ))
       
       const menu = (
@@ -84,16 +84,16 @@ class MovieDetailPage extends React.Component<Props, State> {
       
       return (
         <MainLayout>
-          <PageHeader onBack={this.onBack} title={md.title} />
+          <PageHeader onBack={this.onBack} title={v.title} />
           <div ref={ref => {this.videoContainer = ref}}>
-            <VideoPlayer movieDetail={movieDetail} width={width} height={height} resolution={this.state.resolution}/>
+            <VideoPlayer video={video} width={width} height={height} resolution={this.state.resolution}/>
           </div>
           <div style={{ padding: '12px' }}>
             <div>
-              <Title className="movie-detail-title" level={4}>{md.title}</Title>
-              <Dropdown className="movie-detail-resolution-button" overlay={menu}><Button>{`${this.state.resolution}p`} <Icon type="down"/></Button></Dropdown>
+              <Title className="movie-detail-title" level={4}>{v.title}</Title>
+              <Dropdown className="movie-detail-resolution-button" overlay={menu}><Button>{this.state.resolution} <Icon type="down"/></Button></Dropdown>
             </div>
-            <Text type="secondary">{md.date}</Text>
+            <Text type="secondary">{v.date}</Text>
           </div>
         </MainLayout>
       )

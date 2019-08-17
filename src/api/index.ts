@@ -1,4 +1,4 @@
-import { MoviePreview, MovieDetail, File, Encode } from 'models'
+import { MoviePreview, Video, File, Encode } from 'models'
 const axios = require('axios');
 
 const SERVER: string = 'http://home.hyunsub.kim:8080';
@@ -27,7 +27,7 @@ export async function getMoviePreviewList(): Promise<MoviePreview[]> {
   return await request(url, method);
 }
 
-export async function getMovieDetail(path: string): Promise<MovieDetail> {
+export async function getMovieDetail(path: string): Promise<Video> {
   const url = `/movies${path}`;
   const method = 'get';
   return await request(url, method);
