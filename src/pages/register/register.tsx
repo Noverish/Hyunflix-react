@@ -47,8 +47,8 @@ class RegistrationForm extends React.Component<Props, State> {
               auth.setToken(token);
               this.forceUpdate();
             })
-            .catch((err) => {
-              alert(err.response.data['msg']);
+            .catch((msg) => {
+              alert(msg);
             })
         } else {
           alert('비밀번호를 다르게 입력하셨습니다');

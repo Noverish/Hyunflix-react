@@ -27,6 +27,9 @@ class MoviePage extends React.Component<Props, State> {
           moviePreviews
         })
       })
+      .catch((msg) => {
+        alert(msg);
+      })
   }
   
   onBack = () => {

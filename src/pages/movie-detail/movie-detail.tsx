@@ -39,6 +39,9 @@ class MovieDetailPage extends React.Component<Props, State> {
           resolution: movieDetail.videos[0].resolution
         })
       })
+      .catch((msg) => {
+        alert(msg);
+      })
   }
   
   componentDidUpdate() {

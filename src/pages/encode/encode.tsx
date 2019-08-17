@@ -32,9 +32,8 @@ class EncodePage extends React.Component<Props, State> {
           this.refresh()
         }, 1000);
       })
-      .catch((err) => {
-        console.log(err);
-        alert(err);
+      .catch((msg) => {
+        alert(msg);
       })
   }
   
@@ -57,8 +56,8 @@ class EncodePage extends React.Component<Props, State> {
       .then(() => {
         alert('success');
       })
-      .catch((err) => {
-        alert(JSON.stringify(err.response.data));
+      .catch((msg) => {
+        alert(msg);
       })
   }
   
@@ -67,10 +66,9 @@ class EncodePage extends React.Component<Props, State> {
       .then(() => {
         alert('success');
       })
-      .catch((err) => {
-        alert(JSON.stringify(err.response.data));
+      .catch((msg) => {
+        alert(msg);
       })
-    
   }
 }
 

@@ -33,7 +33,6 @@ class ExplorerPage extends React.Component<Props, State> {
   }
   
   refresh = () => {
-    console.log(this.props.match)
     const path = `/${this.props.match.params[0] || ''}`;
     readdir(path)
       .then((files: File[]) => {
@@ -43,8 +42,8 @@ class ExplorerPage extends React.Component<Props, State> {
           files
         })
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((msg) => {
+        alert(msg);
         this.setState({
           shouldRefresh: false,
           nowPath: path,

@@ -39,9 +39,8 @@ class NormalLoginForm extends React.Component<Props, State> {
           auth.setToken(token);
           this.forceUpdate();
         })
-        .catch((err) => {
-          console.log(err);
-          alert(err.response);
+        .catch((msg) => {
+          alert(msg);
         })
     });
   };

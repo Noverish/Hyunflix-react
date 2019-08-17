@@ -1,68 +1,88 @@
-import axios from 'axios';
 import { MoviePreview, MovieDetail, File, Encode } from 'models'
+const axios = require('axios');
 
 const SERVER: string = 'http://home.hyunsub.kim:8080';
 
-export async function getMoviePreviewList(): Promise<MoviePreview[]> {
-  const url = `${SERVER}/movies`;
-  return (await axios.get(url)).data;
-}
-
-export async function getMovieDetail(path: string): Promise<MovieDetail> {
-  const url = `${SERVER}/movies${path}`;
-  return (await axios.get(url)).data;
-}
-
-// export async function get(path: string): Promise<MoviePreview> {
+async function request(path: string, method: string, data: any = undefined) {
+  const url = `${SERVER}${path}`;
   
-//   const url = 'http://' + join(BASE, path);
-// }
-
-export async function login(username: string, password: string): Promise<string> {
-  const url = `${SERVER}/auth/login`;
-  const body = { username, password }
-  return (await axios.post(url, body)).data['token'];
-}
-
-export async function register(username: string, password: string, register_code: string): Promise<string> {
-  const url = `${SERVER}/auth/register`;
-  const body = { username, password, register_code }
-  return (await axios.post(url, body)).data['token'];
-}
-
-export async function readdir(path: string): Promise<File[]> {
   try {
-    const url = `${SERVER}/explorer/readdir`;
-    const body = { path }
-    return (await axios.post(url, body)).data;
+    return (await axios({ url, method, data })).data;
   } catch (err) {
-    if (err.response) {
-      throw { msg: err.response.data.msg, status: err.response.status };
+    
+    console.log(err.response);
+    // console.log(err.config);
+    // console.log(err.request);
+    // console.log(err.message);
+    
+    if (err.response && err.response.data && err.response.data.msg) {
+      throw err.response.data.msg;
+    } else if (err.response && err.response.data) {
+      throw JSON.stringify(err.response.data);
+    } else if (err.response) {
+      throw JSON.stringify(err.response);
+    } else if (err.request) {
+      throw JSON.stringify(err.request);
+    } else {
+      throw err.message;
     }
-    throw err;
   }
 }
 
+export async function getMoviePreviewList(): Promise<MoviePreview[]> {
+  const url = `/movies`;
+  const method = 'get';
+  return await request(url, method);
+}
+
+export async function getMovieDetail(path: string): Promise<MovieDetail> {
+  const url = `/movies${path}`;
+  const method = 'get';
+  return await request(url, method);
+}
+
+export async function login(username: string, password: string): Promise<string> {
+  const url = `/auth/login`;
+  const method = 'post';
+  const body = { username, password }
+  return (await request(url, method, body)).token;
+}
+
+export async function register(username: string, password: string, register_code: string): Promise<string> {
+  const url = `/auth/register`;
+  const method = 'post';
+  const body = { username, password, register_code }
+  return (await request(url, method, body)).token;
+}
+
+export async function readdir(path: string): Promise<File[]> {
+  const url = `/explorer/readdir`;
+  const method = 'post';
+  const body = { path }
+  return await request(url, method, body);
+}
+
 export async function encodeStatus(): Promise<Encode[]> {
-  const url = `${SERVER}/encode/status`;
-  return (await axios.get(url)).data;
+  const url = `/encode/status`;
+  const method = 'get';
+  return await request(url, method);
 }
 
 export async function encodeFile(target: string) {
-  const url = `${SERVER}/encode/file`;
+  const url = `/encode/file`;
+  const method = 'post';
   const body = { target }
-  await axios.post(url, body);
-  return;
+  return await request(url, method, body);
 }
 
 export async function pauseEncoding() {
-  const url = `${SERVER}/encode/pause`;
-  await axios.get(url);
-  return;
+  const url = `/encode/pause`;
+  const method = 'post';
+  return await request(url, method);
 }
 
 export async function resumeEncoding() {
-  const url = `${SERVER}/encode/resume`;
-  await axios.get(url);
-  return;
+  const url = `/encode/resume`;
+  const method = 'post';
+  return await request(url, method);
 }

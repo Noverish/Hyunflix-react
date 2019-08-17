@@ -32,10 +32,16 @@ class Fileitem extends React.Component<Props, State> {
   }
   
   handleOk = e => {
-    encodeFile(this.props.file.path);
-    this.setState({
-      encodeModalVisible: false,
-    });
+    encodeFile(this.props.file.path)
+      .then(() => {
+        this.setState({
+          encodeModalVisible: false,
+        });
+      })
+      .catch((msg) => {
+        alert(msg);
+      });
+      
   };
 
   handleCancel = e => {
