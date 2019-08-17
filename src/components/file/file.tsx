@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal } from 'antd';
+import { Button, Modal, Icon } from 'antd';
 import { extname } from 'path';
 
 import { File } from 'models';
@@ -59,9 +59,9 @@ class Fileitem extends React.Component<Props, State> {
           <a className="file-item-name" href={this.props.file.path} onClick={this.onClick}><span>{this.props.file.name}</span></a>
           <div className="file-item-size">{this.props.file.size}</div>
         </div>
-        <Button className="file-item-button">rename</Button>
-        <Button className="file-item-button">remove</Button>
-        <Button className="file-item-button" onClick={this.showModal} disabled={!isVideo}>encode</Button>
+        <Button className="file-item-button"><Icon type="edit"/></Button>
+        <Button className="file-item-button"><Icon type="delete"/></Button>
+        <Button className="file-item-button" onClick={this.showModal} disabled={!isVideo}><Icon type="filter"/></Button>
         <Modal
             title="비디오 인코딩"
             visible={this.state.encodeModalVisible}

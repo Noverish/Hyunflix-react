@@ -23,9 +23,9 @@ const encodeItem: React.FunctionComponent<Props> = ({ encode }) => {
 export default encodeItem;
 
 function progress2tag(progress: number): React.ReactElement {
-  if (progress == 0.0) {
+  if (progress === 0.0) {
     return <Tag className="encode-item-status" color="red">queued</Tag>
-  } else if (progress == 100.0) {
+  } else if (progress === 100.0) {
     return <Tag className="encode-item-status" color="green">done</Tag>
   } else {
     return <Tag className="encode-item-status" color="cyan">processing</Tag>
