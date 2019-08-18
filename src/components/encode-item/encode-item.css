@@ -1,9 +1,8 @@
 .encode-item {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   border-bottom: 0.5px solid #dddddd;
-  align-items: center;
 }
 
 .encode-item:first-child {
@@ -16,6 +15,15 @@
 
 .encode-item-target {
   flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.encode-item-etc-layout {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 0;
+  flex-shrink: 0;
+  align-items: center;
 }
 
 .encode-item-status {
@@ -27,4 +35,22 @@
   width: 100px !important;
   margin-left: 8px !important;
   margin-right: 16px !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .encode-item {
+    flex-direction: column;
+    padding: 8px;
+  }
+  
+  .encode-item-etc-layout {
+    padding-top: 8px;
+  }
+  
+  .encode-item-id {
+    margin: 0px;
+    width: 0px;
+    height: 0px;
+    visibility: collapse;
+  }
 }
