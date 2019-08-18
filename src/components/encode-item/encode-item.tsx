@@ -2,7 +2,7 @@ import React from 'react';
 import { Tag, Progress } from 'antd';
 
 import { Encode } from 'models';
-import './encode.css'
+import './encode-item.css'
 
 interface Props {
   encode: Encode

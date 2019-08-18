@@ -4,7 +4,7 @@ import { extname } from 'path';
 
 import { File } from 'models';
 import { encodeFile } from 'api';
-import './file.css';
+import './file-item.css';
 
 interface Props {
   file: File

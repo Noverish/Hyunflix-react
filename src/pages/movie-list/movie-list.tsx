@@ -2,7 +2,7 @@ import React from 'react';
 import { PageHeader, List, Pagination } from 'antd';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { MovieComp, MainLayout } from 'components';
+import { MovieItem, MainLayout } from 'components';
 import { MoviePreview } from 'models';
 import { getMoviePreviewList } from 'api';
 import './movie-list.css';
@@ -49,7 +49,7 @@ class MoviePage extends React.Component<Props, State> {
           <List
             dataSource={subItems}
             renderItem={ moviePreview => (
-              <MovieComp moviePreview={moviePreview}/>
+              <MovieItem moviePreview={moviePreview}/>
             )}
           />
         </div>

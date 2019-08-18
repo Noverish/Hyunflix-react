@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import './movie.css';
+import './movie-item.css';
 
 import { MoviePreview } from 'models';
 
