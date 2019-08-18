@@ -18,6 +18,10 @@ async function request(path: string, method: string, data: any = undefined) {
   } catch (err) {
     console.log(err.config);
     
+    if (err.response.status === 401) {
+      auth.clearToken();
+    }
+    
     if (err.response && err.response.data && err.response.data.msg) {
       throw err.response.data.msg;
     } else if (err.response && err.response.data) {

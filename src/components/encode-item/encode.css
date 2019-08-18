@@ -2,12 +2,12 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  border-bottom: 1px solid #ededed;
+  border-bottom: 0.5px solid #dddddd;
   align-items: center;
 }
 
 .encode-item:first-child {
-  border-top: 1px solid #ededed;
+  border-top: 0.5px solid #dddddd;
 }
 
 .encode-item-id {

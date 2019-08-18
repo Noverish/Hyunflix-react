@@ -1,8 +1,12 @@
 .movie-preview {
-  border-bottom: 1px solid #ededed;
+  border-bottom: 1px solid #dddddd;
   padding: 10px;
   display: flex;
   flex-direction: column;
+}
+
+.movie-preview:first-child {
+  border-top: 1px solid #dddddd;
 }
 
 .movie-preview-title {

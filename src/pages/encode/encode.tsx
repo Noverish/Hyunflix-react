@@ -1,6 +1,6 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { Button } from 'antd';
+import { Button, Pagination, List } from 'antd';
 
 import { MainLayout, EncodeItem } from 'components';
 import { Encode } from 'models';
@@ -13,11 +13,13 @@ interface Props extends RouteComponentProps {
 
 interface State {
   encodes: Encode[]
+  page: number
 }
 
 class EncodePage extends React.Component<Props, State> {
   state = {
-    encodes: []
+    encodes: [],
+    page: 1
   }
   
   componentDidMount() {
@@ -28,9 +30,6 @@ class EncodePage extends React.Component<Props, State> {
     encodeStatus()
       .then((encodes: Encode[]) => {
         this.setState({ encodes })
-        setTimeout(() => {
-          this.refresh()
-        }, 1000);
       })
       .catch((msg) => {
         alert(msg);
@@ -38,17 +37,34 @@ class EncodePage extends React.Component<Props, State> {
   }
   
   render() {
-    const encodeComps = this.state.encodes.map((encode, index) => {
-      return <EncodeItem encode={encode} key={index} />
-    })
+    const page = this.state.page;
+    const subItems = this.state.encodes.slice((page - 1) * 10, (page) * 10);
     
     return (
       <MainLayout>
-        <Button type="primary" onClick={this.onPauseClicked}>Pause</Button>
-        <Button type="primary" onClick={this.onResumeClicked}>Resume</Button>
-        {encodeComps}
+        <div className="encode-page-layout">
+          <div className="encode-page-button-bar">
+            <Button type="primary" onClick={this.onPauseClicked}>Pause</Button>
+            <Button type="primary" onClick={this.onResumeClicked}>Resume</Button>
+          </div>
+          <div className="encode-page-item-list">
+            <List
+              dataSource={subItems}
+              renderItem={(item: Encode) => (
+                <EncodeItem encode={item} key={item._id} />
+              )}
+            />
+          </div>
+          <div className="pagination-layout">
+            <Pagination current={page} total={this.state.encodes.length} onChange={this.onChange} />
+          </div>
+        </div>
       </MainLayout>
     )
+  }
+  
+  onChange = (page) => {
+    this.setState({ page })
   }
   
   onPauseClicked = () => {

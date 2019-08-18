@@ -4,6 +4,7 @@ import * as pages from 'pages';
 import { auth } from './utils';
 
 import 'antd/dist/antd.css';
+import './App.css';
 
 class App extends Component {
   render() {
