@@ -1,14 +1,20 @@
 import { MoviePreview, Video, File, Encode } from 'models'
 import * as NodeRSA from 'node-rsa';
+import { auth } from 'utils';
 const axios = require('axios');
 
 const SERVER: string = 'http://home.hyunsub.kim:8080';
 
 async function request(path: string, method: string, data: any = undefined) {
   const url = `${SERVER}${path}`;
+  const headers = {};
+  
+  if(auth.getToken()) {
+    headers['Authorization'] = 'Bearer ' + auth.getToken()
+  }
   
   try {
-    return (await axios({ url, method, data })).data;
+    return (await axios({ url, method, headers, data })).data;
   } catch (err) {
     console.log(err.config);
     
