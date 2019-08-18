@@ -84,6 +84,13 @@ export async function readdir(path: string): Promise<File[]> {
   return await request(url, method, body);
 }
 
+export async function rename(fromPath: string, toPath: string) {
+  const url = `/explorer/rename`;
+  const method = 'post';
+  const body = { fromPath, toPath }
+  return await request(url, method, body);
+}
+
 export async function encodeStatus(): Promise<Encode[]> {
   const url = `/encode/status`;
   const method = 'get';

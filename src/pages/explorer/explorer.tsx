@@ -24,7 +24,7 @@ class ExplorerPage extends React.Component<Props, State> {
   }
   
   static getDerivedStateFromProps(props: Props, state: State) {
-    const path = `/archive/${props.match.params[0] || ''}`;
+    const path = `/${props.match.params[0] || ''}`;
     
     if(path !== state.nowPath) {
       return { shouldRefresh: true };
@@ -33,7 +33,7 @@ class ExplorerPage extends React.Component<Props, State> {
   }
   
   refresh = () => {
-    const path = `/archive/${this.props.match.params[0] || ''}`;
+    const path = `/${this.props.match.params[0] || ''}`;
     readdir(path)
       .then((files: File[]) => {
         this.setState({

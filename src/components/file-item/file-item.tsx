@@ -1,9 +1,10 @@
 import React from 'react';
 import { Button, Modal, Icon } from 'antd';
-import { extname } from 'path';
+import { extname, basename } from 'path';
 
 import { File } from 'models';
 import { encodeFile } from 'api';
+import { RenameModal } from 'components';
 import './file-item.css';
 
 interface Props {
@@ -12,11 +13,13 @@ interface Props {
 }
 
 interface State {
-  encodeModalVisible: boolean
+  renameModalVisible: boolean;
+  encodeModalVisible: boolean;
 }
 
 class Fileitem extends React.Component<Props, State> {
   state = {
+    renameModalVisible: false,
     encodeModalVisible: false
   }
   
@@ -59,19 +62,41 @@ class Fileitem extends React.Component<Props, State> {
           <a className="file-item-name" href={this.props.file.path} onClick={this.onClick}><span>{this.props.file.name}</span></a>
           <div className="file-item-size">{this.props.file.size}</div>
         </div>
-        <Button className="file-item-button"><Icon type="edit"/></Button>
+        
+        <Button className="file-item-button" onClick={this.showRenameModal}><Icon type="edit"/></Button>
+        <RenameModal
+          value={this.props.file.path}
+          visible={this.state.renameModalVisible}
+          closeCallback={this.renameModalClosed}
+          successCallback={this.renameModalSuccessed}
+        />
+        
         <Button className="file-item-button"><Icon type="delete"/></Button>
         <Button className="file-item-button" onClick={this.showModal} disabled={!isVideo}><Icon type="filter"/></Button>
         <Modal
-            title="비디오 인코딩"
-            visible={this.state.encodeModalVisible}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
-          >
-            인코딩 하시겠습니까?
-          </Modal>
+          title="비디오 인코딩"
+          visible={this.state.encodeModalVisible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          인코딩 하시겠습니까?
+        </Modal>
       </div>
     )
+  }
+  
+  showRenameModal = () => {
+    this.setState({ renameModalVisible: true })
+  }
+  
+  renameModalClosed = () => {
+    this.setState({ renameModalVisible: false })
+  }
+  
+  renameModalSuccessed = (fromPath, toPath) => {
+    this.props.file.path = toPath;
+    this.props.file.name = basename(toPath);
+    this.forceUpdate();
   }
 }
 
