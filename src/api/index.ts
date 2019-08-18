@@ -91,6 +91,27 @@ export async function rename(fromPath: string, toPath: string) {
   return await request(url, method, body);
 }
 
+export async function isdir(path: string): Promise<boolean> {
+  const url = `/explorer/isdir`;
+  const method = 'post';
+  const body = { path }
+  return (await request(url, method, body)).isdir;
+}
+
+export async function exists(path: string): Promise<boolean> {
+  const url = `/explorer/exists`;
+  const method = 'post';
+  const body = { path }
+  return (await request(url, method, body)).exists;
+}
+
+export async function video(path: string): Promise<Video> {
+  const url = `/explorer/video`;
+  const method = 'post';
+  const body = { path }
+  return await request(url, method, body);
+}
+
 export async function encodeStatus(): Promise<Encode[]> {
   const url = `/encode/status`;
   const method = 'get';

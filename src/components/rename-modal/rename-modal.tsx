@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Input } from 'antd';
+import { Modal, Input, message } from 'antd';
 import { rename } from 'api';
 import './rename-modal.css';
 
@@ -30,6 +30,7 @@ export default class RenameModal extends React.Component<Props, State> {
       .then(() => {
         this.close();
         this.props.successCallback(fromPath, toPath);
+        message.success('이름 변경에 성공했습니다');
       })
       .catch((msg) => {
         this.close();
@@ -51,7 +52,7 @@ export default class RenameModal extends React.Component<Props, State> {
   render() {
     return (
       <Modal
-        title="이름 바꾸기"
+        title="이름 변경"
         visible={this.props.visible}
         onOk={this.handleOk}
         onCancel={this.handleCancel}

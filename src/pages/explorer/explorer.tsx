@@ -1,87 +1,112 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
+import { Result } from 'antd';
+import { extname } from 'path';
 
-import { MainLayout, FileItem } from 'components';
-import { readdir } from 'api';
-import { File } from 'models';
-import './explorer.css';
+import { MainLayout, VideoPage } from 'components';
+import FileListPage from './file-list';
+import * as api from 'api';
+import { File, Video } from 'models';
 
 interface Props extends RouteComponentProps {
   
 }
 
 interface State {
-  shouldRefresh: boolean,
-  nowPath: string,
-  files: File[]
+  path: string;
+  exists: boolean;
+  isdir: boolean;
+  files: File[];
+  video: Video | null;
 }
 
 class ExplorerPage extends React.Component<Props, State> {
   state = {
-    shouldRefresh: false,
-    nowPath : '',
-    files: []
-  }
-  
-  static getDerivedStateFromProps(props: Props, state: State) {
-    const path = `/${props.match.params[0] || ''}`;
-    
-    if(path !== state.nowPath) {
-      return { shouldRefresh: true };
-    }
-    return {};
-  }
-  
-  refresh = () => {
-    const path = `/${this.props.match.params[0] || ''}`;
-    readdir(path)
-      .then((files: File[]) => {
-        this.setState({
-          shouldRefresh: false,
-          nowPath: path,
-          files
-        })
-      })
-      .catch((msg) => {
-        alert(msg);
-        this.setState({
-          shouldRefresh: false,
-          nowPath: path,
-          files: []
-        })
-      })
+    path: '',
+    exists: true,
+    isdir: true,
+    files: [],
+    video: null,
   }
   
   componentDidMount() {
-    if(this.state.shouldRefresh) {
-      this.refresh();
-    }
+    this.refresh()
+      .catch(err => {
+        console.log(err);
+      });
   }
   
   componentDidUpdate() {
-    if(this.state.shouldRefresh) {
-      this.refresh();
+    this.refresh()
+      .catch(err => {
+        console.log(err);
+      });
+  }
+  
+  refresh = async () => {
+    const path = `/${this.props.match.params[0] || ''}`;
+    if(this.state.path === path) {
+      return;
+    }
+    
+    const exists = await api.exists(path);
+    if(!exists) {
+      this.setState({ path, exists: false, isdir: false, files: [], video: null })
+      return;
+    }
+    
+    const isdir = await api.isdir(path);
+    if(isdir) {
+      const files: File[] = await api.readdir(path);
+      this.setState({ path, exists: true, isdir: true, files: files, video: null })
+    } else {
+      if(extname(path) === '.mp4') {
+        const video: Video = await api.video(path);
+        this.setState({ path, exists: true, isdir: false, files: [], video: video })
+      } else {
+        this.setState({ path, exists: true, isdir: false, files: [], video: null })
+      }
     }
   }
   
   render() {
-    const fileItems = this.state.files.map((file, index) => {
-      return <FileItem file={file} callback={this.onItemClicked} key={index}/>
-    })
+    if(!this.state.exists) {
+      return (
+        <MainLayout>
+          <Result
+            status="404"
+            title="404"
+            subTitle="존재하지 않는 경로입니다"
+          />
+        </MainLayout>
+      )
+    }
     
+    if(!this.state.isdir) {
+      if(this.state.video) {
+        return (
+          <MainLayout>
+            <VideoPage video={this.state.video!} />
+          </MainLayout>
+        )
+      } else {
+        return (
+          <MainLayout>
+            <Result
+              status="500"
+              title="500"
+              subTitle="준비중"
+            />
+          </MainLayout>
+        )
+      }
+    }
+        
     return (
       <MainLayout>
-        {fileItems}
+        <FileListPage files={this.state.files} />
       </MainLayout>
     )
-  }
-  
-  onBack = () => {
-    
-  }
-  
-  onItemClicked = (file: File) => {
-    this.props.history.push(`/explorer${file.path}`)
   }
 }
 

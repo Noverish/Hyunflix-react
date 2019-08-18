@@ -56,10 +56,14 @@ class Fileitem extends React.Component<Props, State> {
   render () {
     const isVideo = ['.mp4', '.avi', '.mkv'].includes(extname(this.props.file.name));
     
+    const link: React.ReactNode = (this.props.file.isdir || extname(this.props.file.name) === '.mp4')
+      ? <a className="file-item-name" href={this.props.file.path} onClick={this.onClick}><span>{this.props.file.name}</span></a>
+      : <span className="file-item-name">{this.props.file.name}</span>
+    
     return (
       <div className="file-item">
         <div className="file-item-title">
-          <a className="file-item-name" href={this.props.file.path} onClick={this.onClick}><span>{this.props.file.name}</span></a>
+          { link }
           <div className="file-item-size">{this.props.file.size}</div>
         </div>
         
