@@ -1,4 +1,5 @@
 import { MoviePreview, Video, File, Encode } from 'models'
+import * as NodeRSA from 'node-rsa';
 const axios = require('axios');
 
 const SERVER: string = 'http://home.hyunsub.kim:8080';
@@ -33,17 +34,36 @@ export async function getMovieDetail(path: string): Promise<Video> {
   return await request(url, method);
 }
 
+export async function getRSAKey(): Promise<string> {
+  const url = '/auth/rsa-key';
+  const method = 'get';
+  return (await request(url, method)).key;
+}
+
 export async function login(username: string, password: string): Promise<string> {
+  const publicKeyString: string = await getRSAKey();
+  const publicKey = new NodeRSA(publicKeyString, 'pkcs8-public');
+  
   const url = `/auth/login`;
   const method = 'post';
-  const body = { username, password }
+  const body = {
+    username: publicKey.encrypt(username, 'base64'),
+    password: publicKey.encrypt(password, 'base64'),
+  }
   return (await request(url, method, body)).token;
 }
 
 export async function register(username: string, password: string, register_code: string): Promise<string> {
+  const publicKeyString: string = await getRSAKey();
+  const publicKey = new NodeRSA(publicKeyString, 'pkcs8-public');
+  
   const url = `/auth/register`;
   const method = 'post';
-  const body = { username, password, register_code }
+  const body = {
+    username: publicKey.encrypt(username, 'base64'),
+    password: publicKey.encrypt(password, 'base64'),
+    register_code: publicKey.encrypt(register_code, 'base64'),
+  }
   return (await request(url, method, body)).token;
 }
 
