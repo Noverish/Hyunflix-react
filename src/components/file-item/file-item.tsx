@@ -62,29 +62,30 @@ class Fileitem extends React.Component<Props, State> {
     
     return (
       <div className="file-item">
-        <div className="file-item-title">
+        <div className="file-item-name-layout">
           { link }
-          <div className="file-item-size">{this.props.file.size}</div>
         </div>
-        
-        <Button className="file-item-button" onClick={this.showRenameModal}><Icon type="edit"/></Button>
-        <RenameModal
-          value={this.props.file.path}
-          visible={this.state.renameModalVisible}
-          closeCallback={this.renameModalClosed}
-          successCallback={this.renameModalSuccessed}
-        />
-        
-        <Button className="file-item-button"><Icon type="delete"/></Button>
-        <Button className="file-item-button" onClick={this.showModal} disabled={!isVideo}><Icon type="filter"/></Button>
-        <Modal
-          title="비디오 인코딩"
-          visible={this.state.encodeModalVisible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-        >
-          인코딩 하시겠습니까?
-        </Modal>
+        <div className="file-item-etc-layout">
+          <div className="file-item-size">{this.props.file.size}</div>
+          <Button className="file-item-button" onClick={this.showRenameModal}><Icon type="edit"/></Button>
+          <RenameModal
+            value={this.props.file.path}
+            visible={this.state.renameModalVisible}
+            closeCallback={this.renameModalClosed}
+            successCallback={this.renameModalSuccessed}
+          />
+          
+          <Button className="file-item-button"><Icon type="delete"/></Button>
+          <Button className="file-item-button" onClick={this.showModal} disabled={!isVideo}><Icon type="filter"/></Button>
+          <Modal
+            title="비디오 인코딩"
+            visible={this.state.encodeModalVisible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+          >
+            인코딩 하시겠습니까?
+          </Modal>
+        </div>
       </div>
     )
   }
