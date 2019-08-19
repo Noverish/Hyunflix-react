@@ -2,11 +2,37 @@
   height: 100%;
   width: 100%;
   align-items: center;
+  justify-content: center;
   display: flex;
   flex-direction: column;
-  padding: 20px;
 }
 
 .register-form {
-  max-width: 800px;
+  width: 500px;
+  max-width: 100%;
+  padding: 0 32px !important;
+}
+
+.register-form > .ant-form-item {
+  display: flex;
+}
+
+.register-form > .ant-form-item > .ant-form-item-label {
+  width: 120px;
+}
+
+.register-form > .ant-form-item > .ant-form-item-control-wrapper {
+  flex-grow: 1;
+}
+  
+.register-form-button {
+  display: block !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media only screen and (max-width: 575px) {
+  .register-form > .ant-form-item {
+    display: block;
+  }
 }

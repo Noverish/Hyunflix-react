@@ -14,138 +14,99 @@ interface Props extends FormComponentProps {
 }
 
 interface State {
-  
+  password2Dirty: boolean
 }
 
 class RegistrationForm extends React.Component<Props, State> {
   state = {
-    confirmDirty: false,
+    password2Dirty: false
   };
 
-  handleSubmit = e => {
+  onSubmit = e => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
+    this.props.form.validateFieldsAndScroll({ force: true }, (err, values) => {
+      if (err) {
+        console.log(err);
+        alert('입력하신 내용에 오류가 있습니다');
+        return;
       }
+      
+      const username = values['username'];
+      const password1 = values['password1'];
+      const reg_code = values['reg_code'];
+      
+      register(username, password1, reg_code)
+        .then((token) => {
+          auth.setToken(token);
+          this.forceUpdate();
+        })
+        .catch((msg) => {
+          alert(msg);
+        })
     });
   };
   
-  onSubmit = () => {
-    this.props.form.validateFields({ force: true }, (error) => {
-      if (!error) {
-        
-        const values = this.props.form.getFieldsValue();
-        const username = values['username'];
-        const password1 = values['password1'];
-        const password2 = values['password2'];
-        const register_code = values['register_code'];
-      
-        if(password1 === password2) {
-          register(username, password1, register_code)
-            .then((token) => {
-              auth.setToken(token);
-              this.forceUpdate();
-            })
-            .catch((msg) => {
-              alert(msg);
-            })
-        } else {
-          alert('비밀번호를 다르게 입력하셨습니다');
-        }
-      } else {
-        alert('입력하신 내용에 오류가 있습니다');
-      }
-    });
-  }
-
   handleConfirmBlur = e => {
     const { value } = e.target;
-    this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+    this.setState({ password2Dirty: this.state.password2Dirty || !!value });
   };
   
   validateID = (rule, value, callback) => {
-    if (!value || value === '') {
-      callback(new Error('아이디를 입력해주세요'))
-    } else if (value.length < 4) {
-      callback(new Error('아이디는 4자리 이상이어야 합니다'));
-    } else if ((/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/).test(value)) {
-      callback(new Error('아이디에 한글을 넣을 수 없습니다'));
-    } else {
-      callback();
-    }
-  }
-  
-  validatePassword = (rule, value, callback) => {
-    if (!value || value === '') {
-      callback(new Error('비밀번호를 입력해주세요'));
-    } else if (value.length < 4) {
-      callback(new Error('비밀번호는 4자리 이상이어야 합니다'));
-    } else if ((/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/).test(value)) {
-      callback(new Error('비밀번호에 한글을 넣을 수 없습니다'));
-    } else {
-      callback();
-    }
-  }
-
-  compareToFirstPassword = (rule, value, callback) => {
-    const { form } = this.props;
-    if (value && value !== form.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!');
-    } else {
-      callback();
-    }
-  };
-
-  validateToNextPassword = (rule, value, callback) => {
-    const { form } = this.props;
-    if (value && this.state.confirmDirty) {
-      form.validateFields(['confirm'], { force: true });
+    if(value) {
+      if (value.length < 4) {
+        callback(new Error('아이디는 4자리 이상이어야 합니다'));
+      } else if ((/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/).test(value)) {
+        callback(new Error('아이디에 한글을 넣을 수 없습니다'));
+      }
     }
     callback();
+  }
+  
+  validatePassword1 = (rule, value, callback) => {
+    if (value) {
+      if (this.state.password2Dirty) {
+        this.props.form.validateFields(['password2'], (err, values) => {});
+      }
+      
+      if (value.length < 4) {
+        callback(new Error('비밀번호는 4자리 이상이어야 합니다'));
+      } else if ((/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/).test(value)) {
+        callback(new Error('비밀번호에 한글을 넣을 수 없습니다'));
+      }
+    }
+    callback();
+  }
+
+  validatePassword2 = (rule, value, callback) => {
+    const password1 = this.props.form.getFieldValue('password1');
+    if (value && value !== password1) {
+      callback(new Error('위에서 입력하신 비밀번호와 다릅니다!'));
+    } else {
+      callback();
+    }
   };
 
   render() {
     if (auth.getToken()) {
       return <Redirect to="/"/>
     }
-    
+
     const { getFieldDecorator } = this.props.form;
-
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-      },
-    };
-    
-    const tailFormItemLayout = {
-      wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0,
-        },
-        sm: {
-          span: 16,
-          offset: 8,
-        },
-      },
-    };
-
     return (
       <div className="register-form-container">
         <Title>회원가입</Title>
-        <Form {...formItemLayout} onSubmit={this.handleSubmit} className="register-form">
+        <Form onSubmit={this.onSubmit} className="register-form">
           <Form.Item label="유저이름">
             {getFieldDecorator('username', {
-              rules: [{
-                required: true,
-                message: '유저이름을 입력해주세요!',
-              }],
+              rules: [
+                {
+                  required: true,
+                  message: '유저이름을 입력해주세요!',
+                },
+                {
+                  validator: this.validateID,
+                },
+              ],
             })(<Input />)}
           </Form.Item>
           <Form.Item label="비밀번호" hasFeedback>
@@ -156,7 +117,7 @@ class RegistrationForm extends React.Component<Props, State> {
                   message: '비밀번호를 입력해주세요!',
                 },
                 {
-                  validator: this.validateToNextPassword,
+                  validator: this.validatePassword1,
                 },
               ],
             })(<Input.Password />)}
@@ -169,7 +130,7 @@ class RegistrationForm extends React.Component<Props, State> {
                   message: '위에서 입력하신 비밀번호를 다시 입력해주세요!',
                 },
                 {
-                  validator: this.compareToFirstPassword,
+                  validator: this.validatePassword2,
                 },
               ],
             })(<Input.Password onBlur={this.handleConfirmBlur} />)}
@@ -188,8 +149,8 @@ class RegistrationForm extends React.Component<Props, State> {
               rules: [{ required: true, message: '회원가입 코드를 입력해주세요!' }],
             })(<Input />)}
           </Form.Item>
-          <Form.Item {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
+          <Form.Item>
+            <Button className="register-form-button" type="primary" htmlType="submit">
               Register
             </Button>
           </Form.Item>
@@ -200,118 +161,3 @@ class RegistrationForm extends React.Component<Props, State> {
 }
 
 export default Form.create({ name: 'register' })(RegistrationForm);
-
-// import { List, InputItem, Button } from 'antd-mobile';
-// import { createForm } from 'rc-form';
-// import { Redirect } from 'react-router-dom';
-
-// import { api, auth } from 'utils';
-
-// const Item = List.Item;
-
-// interface Props {
-//   form
-// }
-
-// interface State {
-  
-// }
-
-// class BasicInput extends React.Component<Props, State> {
-
-
-  
-//   password = ''
-  
-  
-//   validatePassword2 = (rule, value, callback) => {
-//     if (value !== this.password) {
-//       callback(new Error('비밀번호가 다릅니다'));
-//     } else {
-//       callback();
-//     }
-//   }
-  
-//   validateRegisterCode = (rule, value, callback) => {
-//     if (!value || value === '') {
-//       callback(new Error('가입 코드를 입력해주세요'))
-//     } else {
-//       callback();
-//     }
-//   }
-
-//   render() {
-//     if (auth.getToken()) {
-//       return <Redirect to="/"/>
-//     }
-    
-//     const { getFieldProps, getFieldError } = this.props.form;
-
-//     const idRule = [ { validator: this.validateID } ]
-//     const pwRule = [ { validator: this.validatePassword } ]
-//     const pwRule2 = [ { validator: this.validatePassword2 } ]
-//     const codeRule = [ { validator: this.validateRegisterCode } ]
-
-//     return (
-//       <form>
-//         <List
-//           renderHeader={() => '회원가입'}
-//           renderFooter={() => {
-//             let msg = ''
-//             msg += (getFieldError('id')) ? `${getFieldError('id')}. ` : '';
-//             msg += (getFieldError('password')) ? `${getFieldError('password')}. ` : '';
-//             msg += (getFieldError('password2')) ? `${getFieldError('password2')}. ` : '';
-//             msg += (getFieldError('register_code')) ? `${getFieldError('register_code')}. ` : '';
-//             return msg
-//           }}
-//         >
-//           <InputItem
-//             labelNumber={7}
-//             {...getFieldProps('id', { rules: idRule })}
-//             error={getFieldError('id')}
-//             onErrorClick={() => { this.forceUpdate() }}
-//             placeholder="아이디"
-//           >
-//             아이디
-//           </InputItem>
-//           <InputItem
-//             labelNumber={7}
-//             {...getFieldProps('password', { rules: pwRule })}
-//             error={getFieldError('password')}
-//             onErrorClick={() => { this.forceUpdate() }}
-//             placeholder="비밀번호"
-//             type="password"
-//           >
-//             비밀번호
-//           </InputItem>
-//           <InputItem
-//             labelNumber={7}
-//             {...getFieldProps('password2', { rules: pwRule2 })}
-//             error={getFieldError('password2')}
-//             onErrorClick={() => { this.forceUpdate() }}
-//             placeholder="비밀번호 확인"
-//             type="password"
-//           >
-//             비밀번호 확인
-//           </InputItem>
-//           <InputItem
-//             labelNumber={7}
-//             {...getFieldProps('register_code', { rules: codeRule })}
-//             error={getFieldError('register_code')}
-//             onErrorClick={() => { this.forceUpdate() }}
-//             placeholder="회원가입 코드"
-//           >
-//             회원가입 코드
-//           </InputItem>
-//           <Item>
-//             <Button type="primary" size="small" inline onClick={this.onSubmit}>회원가입</Button>
-//           </Item>
-//         </List>
-//       </form>
-//     );
-//   }
-// }
-
-// const BasicInputWrapper = createForm()(BasicInput);
-
-// export default BasicInputWrapper; 

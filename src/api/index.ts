@@ -18,15 +18,18 @@ async function request(path: string, method: string, data: any = undefined) {
   } catch (err) {
     console.log(err.config);
     
-    if (err.response.status === 401) {
+    if (err.response && err.response.status === 401) {
       auth.clearToken();
     }
     
     if (err.response && err.response.data && err.response.data.msg) {
+      console.log(err.response);
       throw err.response.data.msg;
     } else if (err.response && err.response.data) {
+      console.log(err.response);
       throw JSON.stringify(err.response.data);
     } else {
+      console.log(err.request);
       throw err.message;
     }
   }
@@ -72,7 +75,7 @@ export async function register(username: string, password: string, register_code
   const body = {
     username: publicKey.encrypt(username, 'base64'),
     password: publicKey.encrypt(password, 'base64'),
-    register_code: publicKey.encrypt(register_code, 'base64'),
+    reg_code: publicKey.encrypt(register_code, 'base64'),
   }
   return (await request(url, method, body)).token;
 }
