@@ -1,4 +1,4 @@
-import { MoviePreview, Video, File, Encode } from 'models'
+import { Movie, Video, File, Encode } from 'models'
 import * as NodeRSA from 'node-rsa';
 import { auth } from 'utils';
 const axios = require('axios');
@@ -35,7 +35,7 @@ async function request(path: string, method: string, data: any = undefined) {
   }
 }
 
-export async function getMoviePreviewList(): Promise<MoviePreview[]> {
+export async function getMoviePreviewList(): Promise<Movie[]> {
   const url = `/movies`;
   const method = 'get';
   return await request(url, method);

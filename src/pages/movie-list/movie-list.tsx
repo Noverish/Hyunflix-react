@@ -3,7 +3,7 @@ import { PageHeader, List, Pagination } from 'antd';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { MovieItem, MainLayout } from 'components';
-import { MoviePreview } from 'models';
+import { Movie } from 'models';
 import { getMoviePreviewList } from 'api';
 import './movie-list.css';
 
@@ -12,21 +12,21 @@ interface Props extends RouteComponentProps {
 }
 
 interface State {
-  moviePreviews: MoviePreview[]
+  movies: Movie[]
   page: number
 }
 
 class MoviePage extends React.Component<Props, State> {
   state = {
-    moviePreviews: [],
+    movies: [],
     page: 1
   }
   
   componentDidMount() {
     getMoviePreviewList()
-      .then((moviePreviews: MoviePreview[]) => {
+      .then((movies: Movie[]) => {
         this.setState({
-          moviePreviews
+          movies
         })
       })
       .catch((msg) => {
@@ -40,7 +40,7 @@ class MoviePage extends React.Component<Props, State> {
   
   render() {
     const page = this.state.page;
-    const subItems = this.state.moviePreviews.slice((page - 1) * 10, (page) * 10);
+    const subItems = this.state.movies.slice((page - 1) * 10, (page) * 10);
     
     return (
       <MainLayout>
@@ -48,13 +48,13 @@ class MoviePage extends React.Component<Props, State> {
         <div className="movie-page-item-list">
           <List
             dataSource={subItems}
-            renderItem={ moviePreview => (
-              <MovieItem moviePreview={moviePreview}/>
+            renderItem={ movie => (
+              <MovieItem movie={movie}/>
             )}
           />
         </div>
         <div className="pagination-layout">
-          <Pagination current={page} total={this.state.moviePreviews.length} onChange={this.onChange} />
+          <Pagination current={page} total={this.state.movies.length} onChange={this.onChange} />
         </div>
       </MainLayout>
     )
