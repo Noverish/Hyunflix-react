@@ -4,8 +4,17 @@
   align-items: center;
 }
 
-.movie-list-header {
-  width: 100%;
+.movie-page-header {
+  display: flex;
+  align-items: center;;
+}
+
+.movie-page-header > .ant-page-header-heading {
+  flex: 1 1 auto;
+}
+
+.movie-page-header > .ant-page-header-content {
+  padding: 0;
 }
 
 .movie-list-container {
