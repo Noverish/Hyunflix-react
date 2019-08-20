@@ -12,3 +12,4 @@ export { default as MovieDetailPage } from './movie-detail/movie-detail';
 export { default as ExplorerPage } from './explorer/explorer';
 export { default as EncodePage } from './encode/encode';
 export { default as EncodeNewPage } from './encode/encode-new';
+export { default as MusicPage } from './music/music';

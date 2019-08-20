@@ -29,6 +29,7 @@ class App2 extends Component {
           <Route path="/home" component={pages.HomePage} />
           <Route path="/movies/:movie_id" component={pages.MovieDetailPage} />
           <Route path="/movies/" component={pages.MovieListPage} />
+          <Route path="/musics/" component={pages.MusicPage} />
           <Route path="/explorer/*" component={pages.ExplorerPage} />
           <Route path="/explorer/" component={pages.ExplorerPage} />
           <Route path="/encode/new" component={pages.EncodeNewPage} />
