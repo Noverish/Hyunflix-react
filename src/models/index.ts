@@ -2,6 +2,8 @@ export interface MoviePreview {
   movie_id: number;
   title: string;
   path: string;
+  duration: number;
+  resolution: string;
   date: string;
 }
 

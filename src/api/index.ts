@@ -41,8 +41,8 @@ export async function getMoviePreviewList(): Promise<MoviePreview[]> {
   return await request(url, method);
 }
 
-export async function getMovieDetail(path: string): Promise<Video> {
-  const url = `/movies${path}`;
+export async function getMovieDetail(movie_id: number): Promise<Video> {
+  const url = `/movies/${movie_id}`;
   const method = 'get';
   return await request(url, method);
 }

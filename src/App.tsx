@@ -27,7 +27,7 @@ class App2 extends Component {
         <Switch>
           <Route exact path="/" render={ props => <Redirect to="/home" /> } />
           <Route path="/home" component={pages.HomePage} />
-          <Route path="/movies/*" component={pages.MovieDetailPage} />
+          <Route path="/movies/:movie_id" component={pages.MovieDetailPage} />
           <Route path="/movies/" component={pages.MovieListPage} />
           <Route path="/explorer/*" component={pages.ExplorerPage} />
           <Route path="/explorer/" component={pages.ExplorerPage} />

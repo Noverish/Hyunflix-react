@@ -20,12 +20,15 @@ class MovieDetailPage extends React.Component<Props, State> {
   }
   
   componentDidMount() {
-    const path = `/${this.props.match.params[0] || ''}`;
-    getMovieDetail(path)
+    const movie_id = parseInt(this.props.match.params['movie_id']);
+    // TODO 숫자 아닐 때 대처
+    
+    getMovieDetail(movie_id)
       .then((video: Video) => {
         this.setState({ video })
       })
       .catch((msg) => {
+        // TODO 존재하지 않을 때 대처
         alert(msg);
       })
   }
