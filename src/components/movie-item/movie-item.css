@@ -35,6 +35,7 @@
 .movie-preview-resolution > div {
   width: 50px;
   text-align: center;
+  padding: 0;
 }
 
 .movie-preview-resolution > div:first-child {

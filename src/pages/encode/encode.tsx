@@ -1,6 +1,8 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { Button, Pagination, List } from 'antd';
+import * as socketio from 'socket.io-client';
+import { List as IList } from 'immutable';
 
 import { MainLayout, EncodeItem } from 'components';
 import { Encode } from 'models';
@@ -12,24 +14,56 @@ interface Props extends RouteComponentProps {
 }
 
 interface State {
-  encodes: Encode[]
+  encodes: IList<Encode>
   page: number
 }
 
 class EncodePage extends React.Component<Props, State> {
+  socket: socketio.Socket | null = null;
+  
   state = {
-    encodes: [],
+    encodes: IList([]),
     page: 1
   }
   
   componentDidMount() {
     this.refresh();
+    
+    this.socket = socketio.connect("http://home.hyunsub.kim:8080", { path: '/socket.io/api' });
+    this.socket.on('message', (data: Buffer) => {
+      const payload = JSON.parse(data.toString());
+      const encodes = this.state.encodes;
+      
+      const index = encodes.findIndex((item: Encode) => {
+        return item._id === payload['_id'];
+      });
+      
+      if (index >= 0) {
+        // TODO ts-ignore
+        // @ts-ignore
+        const newEncodes = encodes.update(index, (item: Encode) => {
+            item.progress = parseFloat(payload['progress'].toFixed(2));
+            return item;
+          }
+        );
+        
+        this.setState({ encodes: newEncodes })
+      }
+    });
+  }
+  
+  componentWillUnmount() {
+    if(this.socket) {
+      this.socket.disconnect();
+    }
   }
   
   refresh = () => {
     encodeStatus()
       .then((encodes: Encode[]) => {
-        this.setState({ encodes })
+        this.setState({ 
+          encodes: IList(encodes)
+        })
       })
       .catch((msg) => {
         alert(msg);
@@ -38,7 +72,8 @@ class EncodePage extends React.Component<Props, State> {
   
   render() {
     const page = this.state.page;
-    const subItems = this.state.encodes.slice((page - 1) * 10, (page) * 10);
+    const encodes: Encode[] = this.state.encodes.toArray();
+    const subItems: Encode[] = encodes.slice((page - 1) * 10, (page) * 10);
     
     return (
       <MainLayout>
@@ -56,7 +91,7 @@ class EncodePage extends React.Component<Props, State> {
             />
           </div>
           <div className="pagination-layout">
-            <Pagination current={page} total={this.state.encodes.length} onChange={this.onChange} />
+            <Pagination current={page} total={encodes.length} onChange={this.onChange} />
           </div>
         </div>
       </MainLayout>
