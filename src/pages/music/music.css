@@ -1,0 +1,8 @@
+.music-two-layout {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.music-two-layout > * {
+  flex: 1 1 auto;
+}

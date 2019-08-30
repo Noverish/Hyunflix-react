@@ -139,3 +139,9 @@ export async function resumeEncoding() {
   const method = 'post';
   return await request(url, method);
 }
+
+export async function getAllMusics() {
+  const url = `/musics`;
+  const method = 'get';
+  return await request(url, method);
+}

@@ -42,3 +42,11 @@ export interface Encode {
   progress: number;
   date: string;
 }
+
+export interface Music {
+  music_id: number;
+  title: string;
+  path: string;
+  duration: number;
+  artist: string;
+}

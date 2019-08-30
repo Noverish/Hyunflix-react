@@ -1,24 +1,89 @@
 import React from 'react';
+import { Typography } from 'antd';
 
-import { MainLayout } from 'components';
+import { getAllMusics } from 'api';
+import { MainLayout, MusicPlayList } from 'components';
+import { Music } from 'models';
+import './music.css';
 
 interface Props {
   
 }
 
 interface State {
-  
+  musics: Music[];
+  nowPlaying: Music | null;
 }
 
 class MusicPage extends React.Component<Props, State> {
+  audioTag: HTMLAudioElement | null = null;
+  playlist: Music[] = [];
+  
+  state = {
+    musics: [],
+    nowPlaying: null,
+  }
+  
+  componentDidMount() {
+    getAllMusics()
+      .then((musics: Music[]) => {
+        this.setState({ musics })
+      })
+      .catch((msg: string) => {
+        alert(msg);
+      })
+  }
+  
   render() {
+    const nowPlaying: Music | null = this.state.nowPlaying;
+    const source = (nowPlaying)
+      ? <source src={`http://home.hyunsub.kim:8081${nowPlaying!.path}`} type="audio/mpeg" />
+      : null
+    
+    const title = (nowPlaying)
+      ? <Typography.Title style={{textAlign: 'center'}}>{nowPlaying!.title}</Typography.Title>
+      : null
+    
     return (
       <MainLayout>
-        <audio controls loop style={{ width: '100%' }}>
-          <source src="http://home.hyunsub.kim:8081/archive/Musics/Others/추억/듣기용/Wizard Of OZ.mp3" type="audio/mpeg" />
+        {title}
+        <audio controls autoPlay style={{ width: '100%' }} onEnded={this.onMusicEnded} ref={ref => { this.audioTag = ref }}>
+          {source}
         </audio>
+        <MusicPlayList musics={this.state.musics} onPlaylistChanged={this.onPlaylistChanged} />
       </MainLayout>
     )
+  }
+  
+  componentDidUpdate() {
+    if(this.audioTag) {
+      this.audioTag.load();
+    }
+  }
+  
+  onPlaylistChanged = (playlist: Music[]) => {
+    this.playlist = playlist;
+    
+    if(this.state.nowPlaying === null) {
+      this.setState({
+        nowPlaying: playlist[0],
+      })
+    }
+  }
+  
+  onMusicEnded = (e) => {
+    const nowPlaying: Music = this.state.nowPlaying!;
+    
+    if(this.playlist.includes(nowPlaying)) {
+      const index: number = this.playlist.indexOf(nowPlaying);
+      this.setState({
+        nowPlaying: this.playlist[index + 1],
+      })
+    } else {
+      this.setState({
+        nowPlaying: this.playlist[0],
+      }) 
+    }
   }
 }
 
