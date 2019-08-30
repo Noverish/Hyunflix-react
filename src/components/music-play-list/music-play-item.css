@@ -5,3 +5,8 @@
 .music-play-item > span:nth-child(2) {
   flex-grow: 1;
 }
+
+.music-play-item.selected {
+  background: #e6f7ff;
+  color: #1890ff;
+}

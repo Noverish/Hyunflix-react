@@ -8,6 +8,8 @@ import { Music } from 'models';
 interface Props {
   musics: Music[];
   onPlaylistChanged: (musics: Music[]) => void;
+  onItemClick: (music: Music) => void;
+  nowPlaying: Music | null;
 }
 
 interface State {
@@ -26,7 +28,7 @@ export default class extends React.Component<Props, State> {
   renderHeader = () => {
     return (
       <div>
-        <Button type="primary" icon="plus" onClick={this.onAddBtnClicked}>
+        <Button type="primary" size="large" icon="plus" onClick={this.onAddBtnClicked}>
           곡 추가
         </Button>
         <MusicAddModal visible={this.state.addModalVisible} musics={this.props.musics} onAdd={this.onAdd} />
@@ -43,7 +45,14 @@ export default class extends React.Component<Props, State> {
           header={this.renderHeader()}
           bordered
           dataSource={playlist}
-          renderItem={(music: Music, index: number) => <MusicPlayItem index={index} music={music} /> }
+          renderItem={(music: Music, index: number) =>
+            <MusicPlayItem
+              index={index}
+              music={music}
+              onClick={this.props.onItemClick}
+              selected={this.props.nowPlaying === music}
+            />
+          }
         />
       </div>
     )

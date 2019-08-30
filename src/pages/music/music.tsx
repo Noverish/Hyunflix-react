@@ -50,7 +50,7 @@ class MusicPage extends React.Component<Props, State> {
         <audio controls autoPlay style={{ width: '100%' }} onEnded={this.onMusicEnded} ref={ref => { this.audioTag = ref }}>
           {source}
         </audio>
-        <MusicPlayList musics={this.state.musics} onPlaylistChanged={this.onPlaylistChanged} />
+        <MusicPlayList musics={this.state.musics} onPlaylistChanged={this.onPlaylistChanged} onItemClick={this.changeMusic} nowPlaying={this.state.nowPlaying}/>
       </MainLayout>
     )
   }
@@ -76,14 +76,23 @@ class MusicPage extends React.Component<Props, State> {
     
     if(this.playlist.includes(nowPlaying)) {
       const index: number = this.playlist.indexOf(nowPlaying);
-      this.setState({
-        nowPlaying: this.playlist[index + 1],
-      })
+      this.changeMusic(this.playlist[index + 1]);
     } else {
-      this.setState({
-        nowPlaying: this.playlist[0],
-      }) 
+      this.changeMusic(this.playlist[0]);
     }
+  }
+  
+  changeMusic = (music: Music) => {
+    const index: number = this.playlist.indexOf(music);
+    
+    if(index < 0) {
+      console.log('ERROR CODE 1000');
+      return;
+    }
+    
+    this.setState({
+      nowPlaying: this.playlist[index],
+    });
   }
 }
 
