@@ -3,28 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/jest": "24.0.13",
-    "@types/node": "12.0.7",
-    "@types/react-dom": "16.8.4",
-    "@types/react-router-dom": "^4.3.4",
-    "antd": "^3.20.1",
+    "@types/jest": "^24.0.18",
+    "@types/node": "^12.7.3",
+    "@types/react-dom": "^16.9.0",
+    "@types/react-router-dom": "^4.3.5",
+    "antd": "^3.22.2",
     "axios": "^0.19.0",
     "hangul-js": "^0.2.5",
     "immutable": "^4.0.0-rc.12",
     "node-rsa": "^1.0.5",
     "path": "^0.12.7",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-helmet": "^5.2.1",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.0.1",
+    "react-scripts": "^3.1.1",
     "socket.io-client": "^2.2.0",
-    "typescript": "3.5.1",
-    "video.js": "^7.5.5",
-    "videojs-landscape-fullscreen": "^1.0.3"
+    "typescript": "^3.6.2",
+    "video.js": "^7.6.0"
   },
   "scripts": {
-    "start": "PORT=80 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -43,9 +41,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@types/immutable": "^3.8.7",
-    "@types/react": "^16.8.19"
   }
 }
