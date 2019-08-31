@@ -6,5 +6,7 @@ export { default as EncodeItem } from './encode-item/encode-item';
 export { default as RenameModal } from './rename-modal/rename-modal';
 export { default as VideoPage } from './video-page/video-page';
 
+export { default as EncodeModal } from './encode-modal/encode-modal';
+
 export { default as MusicPlayList } from './music-play-list/music-play-list';
 export { default as MusicAddModal } from './music-add-modal/music-add-modal';

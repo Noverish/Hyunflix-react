@@ -14,7 +14,7 @@
   margin: 8px;
 }
 
-.encode-item-target {
+.encode-item-inpath {
   flex-grow: 1;
   flex-shrink: 1;
   word-break: break-all;

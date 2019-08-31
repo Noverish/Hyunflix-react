@@ -1,52 +1,22 @@
 import React from 'react';
-import { Button, Modal, Icon } from 'antd';
-import { extname, basename } from 'path';
+import { Button, Icon } from 'antd';
+import { extname } from 'path';
 
 import { File } from 'models';
-import { encodeFile } from 'api';
-import { RenameModal } from 'components';
 import './file-item.css';
 
 interface Props {
-  file: File
-  callback: (File) => void
+  file: File;
+  onClick: (File) => void;
+  onRenameClick: (File) => void;
+  onEncodeClick: (File) => void;
 }
 
 interface State {
-  renameModalVisible: boolean;
-  encodeModalVisible: boolean;
+  
 }
 
 class Fileitem extends React.Component<Props, State> {
-  state = {
-    renameModalVisible: false,
-    encodeModalVisible: false
-  }
-  
-  showModal = (e) => {
-    this.setState({
-      encodeModalVisible: true
-    })
-  }
-  
-  handleOk = e => {
-    encodeFile(this.props.file.path)
-      .then(() => {
-        this.setState({
-          encodeModalVisible: false,
-        });
-      })
-      .catch((msg) => {
-        alert(msg);
-      });
-      
-  };
-
-  handleCancel = e => {
-    this.setState({
-      encodeModalVisible: false,
-    });
-  };
   
   render () {
     const isVideo = ['.mp4', '.avi', '.mkv'].includes(extname(this.props.file.name));
@@ -84,24 +54,9 @@ class Fileitem extends React.Component<Props, State> {
         </div>
         <div className="file-item-etc-layout">
           <div className="file-item-size">{this.props.file.size}</div>
-          <Button className="file-item-button" onClick={this.showRenameModal}><Icon type="edit"/></Button>
-          <RenameModal
-            value={this.props.file.path}
-            visible={this.state.renameModalVisible}
-            closeCallback={this.renameModalClosed}
-            successCallback={this.renameModalSuccessed}
-          />
-          
+          <Button className="file-item-button" onClick={this.onRenameClick}><Icon type="edit"/></Button>
+          <Button className="file-item-button" onClick={this.onEncodeClick} disabled={!isVideo}><Icon type="filter"/></Button>
           <Button className="file-item-button"><Icon type="delete"/></Button>
-          <Button className="file-item-button" onClick={this.showModal} disabled={!isVideo}><Icon type="filter"/></Button>
-          <Modal
-            title="비디오 인코딩"
-            visible={this.state.encodeModalVisible}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
-          >
-            인코딩 하시겠습니까?
-          </Modal>
         </div>
       </div>
     )
@@ -109,22 +64,41 @@ class Fileitem extends React.Component<Props, State> {
   
   onClick = (e) => {
     e.preventDefault();
-    this.props.callback(this.props.file)
+    this.props.onClick(this.props.file);
   }
   
-  showRenameModal = () => {
-    this.setState({ renameModalVisible: true })
+  onRenameClick = (e) => {
+    this.props.onRenameClick(this.props.file);
   }
   
-  renameModalClosed = () => {
-    this.setState({ renameModalVisible: false })
+  onEncodeClick = (e) => {
+    this.props.onEncodeClick(this.props.file);
   }
   
-  renameModalSuccessed = (fromPath, toPath) => {
-    this.props.file.path = toPath;
-    this.props.file.name = basename(toPath);
-    this.forceUpdate();
-  }
+  // showEncodeModal = (e) => {
+  //   this.setState({
+  //     encodeModalVisible: true
+  //   })
+  // }
+  
+  // encodeModalCallback = (command: string | null) => {
+  //   console.log(command);
+  //   this.setState({ encodeModalVisible: false })
+  // }
+  
+  // showRenameModal = () => {
+  //   this.setState({ renameModalVisible: true })
+  // }
+  
+  // renameModalClosed = () => {
+  //   this.setState({ renameModalVisible: false })
+  // }
+  
+  // renameModalSuccessed = (fromPath, toPath) => {
+  //   this.props.file.path = toPath;
+  //   this.props.file.name = basename(toPath);
+  //   this.forceUpdate();
+  // }
 }
 
 export default Fileitem;

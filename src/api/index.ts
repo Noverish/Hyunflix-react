@@ -121,10 +121,10 @@ export async function encodeStatus(): Promise<Encode[]> {
   return await request(url, method);
 }
 
-export async function encodeFile(target: string) {
-  const url = `/encode/file`;
+export async function encodeFile(inpath: string, options: string, outpath: string) {
+  const url = `/encode`;
   const method = 'post';
-  const body = { target }
+  const body = { inpath, options, outpath };
   return await request(url, method, body);
 }
 
@@ -142,6 +142,12 @@ export async function resumeEncoding() {
 
 export async function getAllMusics() {
   const url = `/musics`;
+  const method = 'get';
+  return await request(url, method);
+}
+
+export async function encodePresets() {
+  const url = `/encode/presets`;
   const method = 'get';
   return await request(url, method);
 }

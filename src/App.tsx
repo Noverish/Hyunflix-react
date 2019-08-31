@@ -32,7 +32,6 @@ class App2 extends Component {
           <Route path="/musics/" component={pages.MusicPage} />
           <Route path="/explorer/*" component={pages.ExplorerPage} />
           <Route path="/explorer/" component={pages.ExplorerPage} />
-          <Route path="/encode/new" component={pages.EncodeNewPage} />
           <Route path="/encode/" component={pages.EncodePage} />
           <Route component={pages.NotFoundPage} />
         </Switch>

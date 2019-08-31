@@ -1,13 +1,13 @@
 import React from 'react';
 import { Modal, Input, message } from 'antd';
+
 import { rename } from 'api';
 import './rename-modal.css';
 
 interface Props {
-  value: string;
+  path: string;
   visible: boolean;
-  closeCallback: () => void;
-  successCallback: (fromPath: string, toPath: string) => void;
+  onClose: () => void;
 }
 
 interface State {
@@ -21,45 +21,37 @@ export default class RenameModal extends React.Component<Props, State> {
     confirmLoading: false
   }
   
-  handleOk = () => {
-    this.setState({ confirmLoading: true });
-    const fromPath = this.props.value;
-    const toPath = this.input!.state.value;
-    
-    rename(fromPath, toPath)
-      .then(() => {
-        this.close();
-        this.props.successCallback(fromPath, toPath);
-        message.success('이름 변경에 성공했습니다');
-      })
-      .catch((msg) => {
-        this.close();
-        alert(msg);
-      })
-  }
-  
-  handleCancel = () => {
-    this.close();
-  }
-  
-  close = () => {
-    this.props.closeCallback();
-    this.setState({
-      confirmLoading: false,
-    });
-  }
-  
   render() {
     return (
       <Modal
         title="이름 변경"
         visible={this.props.visible}
-        onOk={this.handleOk}
-        onCancel={this.handleCancel}
+        onOk={this.onOk}
+        onCancel={this.onCancel}
         confirmLoading={this.state.confirmLoading}
       >
-        <Input ref={ref => { this.input = ref; }} defaultValue={this.props.value} />
+        <Input ref={ref => { this.input = ref }} defaultValue={this.props.path} />
       </Modal>
     )
+  }
+  
+  onOk = () => {
+    this.setState({ confirmLoading: true });
+    const fromPath = this.props.path;
+    const toPath = this.input!.state.value;
+    
+    rename(fromPath, toPath)
+      .then(() => {
+        this.props.onClose();
+        message.success('이름 변경에 성공했습니다');
+      })
+      .catch((msg) => {
+        this.props.onClose();
+        alert(msg);
+      })
+  }
+  
+  onCancel = () => {
+    this.props.onClose();
   }
 }

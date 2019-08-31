@@ -12,7 +12,7 @@ const encodeItem: React.FunctionComponent<Props> = ({ encode }) => {
   return (
     <div className="encode-item">
       <div className="encode-item-id">{encode._id}</div>
-      <div className="encode-item-target">{encode.target}</div>
+      <div className="encode-item-inpath">{encode.inpath}</div>
       <div className="encode-item-etc-layout">
         { progress2tag(encode.progress) }
         <Progress className="encode-item-progress" percent={encode.progress} size="small" />

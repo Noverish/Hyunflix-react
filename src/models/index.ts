@@ -37,8 +37,9 @@ export interface File {
 
 export interface Encode {
   _id: number;
-  target: string;
-  status: string;
+  inpath: string;
+  outpath: string;
+  options: string;
   progress: number;
   date: string;
 }
