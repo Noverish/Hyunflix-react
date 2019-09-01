@@ -2,78 +2,48 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
 import { Result } from 'antd';
-import { extname } from 'path';
 
-import { readdir } from 'actions';
-import { MainLayout, VideoPage } from 'components';
-import FileListPage from './file-list';
-import * as api from 'api';
+import { explore } from 'actions';
+import VideoPage from '../video/video-page';
+import FolderPage from './folder-page';
+import { MainLayout } from 'components';
 import { File, Video } from 'models';
 
 interface Props extends RouteComponentProps {
-  onReaddir;
-}
-
-interface State {
-  path: string;
-  exists: boolean;
-  isdir: boolean;
-  files: File[];
+  onExplore;
+  files: File[] | null;
   video: Video | null;
 }
 
+interface State {
+  
+}
+
 class ExplorerPage extends React.Component<Props, State> {
-  state = {
-    path: '',
-    exists: true,
-    isdir: true,
-    files: [],
-    video: null,
-  }
+  path: string = '';
   
   componentDidMount() {
-    this.refresh()
-      .catch(err => {
-        console.log(err);
-      });
+    this.refresh();
   }
   
   componentDidUpdate() {
-    this.refresh()
-      .catch(err => {
-        console.log(err);
-      });
+    this.refresh();
   }
   
-  refresh = async () => {
+  refresh = () => {
     const path = `/${this.props.match.params[0] || ''}`;
-    if(this.state.path === path) {
-      return;
-    }
     
-    const exists = await api.exists(path);
-    if(!exists) {
-      this.setState({ path, exists: false, isdir: false, files: [], video: null })
-      return;
-    }
-    
-    const isdir = await api.isdir(path);
-    if(isdir) {
-      this.props.onReaddir(path);
-      // const files: File[] = await api.readdir(path);
-      // this.setState({ path, exists: true, isdir: true, files: files, video: null })
-    } else {
-      if(extname(path) === '.mp4') {
-        const video: Video = await api.video(path);
-        this.setState({ path, exists: true, isdir: false, files: [], video: video })
-      } else {
-        this.setState({ path, exists: true, isdir: false, files: [], video: null })
-      }
+    if(this.path !== path) {
+      this.props.onExplore(path);
+      this.path = path;
     }
   }
   
   render() {
-    if(!this.state.exists) {
+    const files: File[] | null = this.props.files;
+    const video: Video | null = this.props.video;
+    
+    if(!files && !video) {
       return (
         <MainLayout>
           <Result
@@ -85,38 +55,33 @@ class ExplorerPage extends React.Component<Props, State> {
       )
     }
     
-    if(!this.state.isdir) {
-      if(this.state.video) {
-        return (
-          <MainLayout>
-            <VideoPage video={this.state.video!} />
-          </MainLayout>
-        )
-      } else {
-        return (
-          <MainLayout>
-            <Result
-              status="500"
-              title="500"
-              subTitle="준비중"
-            />
-          </MainLayout>
-        )
-      }
+    if (files) {
+      return (
+        <FolderPage files={files} />
+      )
+    } else if (video) {
+      return (
+        <VideoPage video={video} />  
+      )
+    } else {
+      return (
+        <MainLayout />
+      )
     }
-        
-    return (
-      <MainLayout>
-        <FileListPage />
-      </MainLayout>
-    )
   }
 }
 
 let mapDispatchToProps = (dispatch) => {
   return {
-    onReaddir: (path) => dispatch(readdir(path)),
+    onExplore: (path) => dispatch(explore(path)),
   }
 }
 
-export default connect(undefined, mapDispatchToProps)(ExplorerPage);
+let mapStateToProps = (state) => {
+  return {
+    files: state.explorer.files,
+    video: state.explorer.video,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ExplorerPage);

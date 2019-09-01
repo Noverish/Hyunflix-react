@@ -6,10 +6,6 @@ import { logout } from 'actions';
 import { MainLayout } from 'components'
 import './home.css';
 
-import { default as Counter } from './counter';
-import { default as Option } from './options';
-import { default as Buttons } from './buttons';
-
 interface Props extends RouteComponentProps {
   onLogout;
 }
@@ -26,11 +22,6 @@ class HomePage extends React.Component<Props, State> {
   render() {
     return (
       <MainLayout>
-        <div style={ {textAlign: 'center'} }>
-            <Counter/>
-            <Option/>
-            <Buttons/>
-        </div>
         <button type='button' onClick={this.onClick}>logout</button>
       </MainLayout>
     )

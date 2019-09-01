@@ -1,41 +1,33 @@
 import React from 'react';
 import { PageHeader, List, Pagination, Input } from 'antd';
 import { RouteComponentProps } from 'react-router-dom';
+import { connect } from 'react-redux';
 
+import { movieList } from 'actions';
 import { MovieItem, MainLayout } from 'components';
 import { Movie } from 'models';
-import { getMoviePreviewList } from 'api';
 import './movie-list.css';
 
 const { Search } = Input;
 
 interface Props extends RouteComponentProps {
-  
+  onMovieList;
+  movies: Movie[];
 }
 
 interface State {
-  movies: Movie[]
   searchQuery: string;
   page: number;
 }
 
 class MoviePage extends React.Component<Props, State> {
   state = {
-    movies: [],
     searchQuery: '',
     page: 1
   }
   
   componentDidMount() {
-    getMoviePreviewList()
-      .then((movies: Movie[]) => {
-        this.setState({
-          movies
-        })
-      })
-      .catch((msg) => {
-        
-      })
+    this.props.onMovieList();
   }
   
   onBack = () => {
@@ -44,7 +36,7 @@ class MoviePage extends React.Component<Props, State> {
   
   render() {
     const page = this.state.page;
-    const searched = this.state.movies.filter((m: Movie) => m.title.indexOf(this.state.searchQuery) >= 0 );
+    const searched = this.props.movies.filter((m: Movie) => m.title.indexOf(this.state.searchQuery) >= 0 );
     const subItems = searched.slice((page - 1) * 10, (page) * 10);
     
     return (
@@ -81,4 +73,16 @@ class MoviePage extends React.Component<Props, State> {
   }
 }
 
-export default MoviePage;
+let mapDispatchToProps = (dispatch) => {
+  return {
+    onMovieList: () => dispatch(movieList()),
+  }
+}
+
+let mapStateToProps = (state) => {
+  return {
+    movies: state.movie.movies,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MoviePage);

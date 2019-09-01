@@ -1,5 +1,5 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
-import { LOGIN, LOGOUT, REGISTER, tokenSuccess, tokenFail } from 'actions';
+import { LOGIN, LOGOUT, REGISTER, tokenSuccess } from 'actions';
 import * as Api from 'api';
 
 export function* fetchLogin(action) {
@@ -9,7 +9,7 @@ export function* fetchLogin(action) {
     const token = yield call([Api, 'login'], username, password);
     yield put(tokenSuccess(token));
   } catch (errMsg) {
-    yield put(tokenFail(errMsg));
+    
   }
 }
 
@@ -25,7 +25,7 @@ export function* fetchRegister(action) {
     const token = yield call([Api, 'register'], username, password, regCode);
     yield put(tokenSuccess(token));
   } catch (errMsg) {
-    yield put(tokenFail(errMsg));
+    
   }
 }
 

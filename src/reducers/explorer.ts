@@ -1,26 +1,20 @@
-import { READDIR_SUCCESS, READDIR_FAIL } from '../actions';
+import { EXPLORE_SUCCESS } from '../actions';
+import { File, Video } from 'models';
 
-import { File } from 'models';
-
-const explorerInitialState = {
-  files: new Array<File>(),
-  errMsg: ''
+interface ExplorerReducer {
+  files: File[] | null;
+  video: Video | null;
 }
 
-const reducer = (state = explorerInitialState, action) => {
+const initalState: ExplorerReducer = {
+  files: null,
+  video: null,
+}
+
+const reducer = (state = initalState, action) => {
   switch(action.type) {
-    case READDIR_SUCCESS: 
-      return {
-        ...state,
-        files: action.files,
-      };
-    case READDIR_FAIL:
-      return {
-        ...state,
-        errMsg: action.errMsg,
-      }
-    default:
-      return state;
+    case EXPLORE_SUCCESS: return { ...state, files: action.files, video: action.video };
+    default: return state;
   }
 }
 

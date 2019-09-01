@@ -1,20 +1,14 @@
-import { File } from 'models';
+import { File, Video } from 'models';
 
-export const READDIR = "READDIR";
-export const READDIR_SUCCESS = "READDIR_SUCCESS";
-export const READDIR_FAIL = "READDIR_FAIL";
+export const EXPLORE = 'EXPLORE';
+export const EXPLORE_SUCCESS = 'EXPLORE_SUCCESS';
 
-export const readdir = (path: string) => ({
-  type: READDIR,
-  path: path
+export const explore = (path: string) => ({
+  type: EXPLORE,
+  path,
 });
 
-export const readdirSuccess = (files: File[]) => ({
-  type: READDIR_SUCCESS,
-  files: files
-});
-
-export const readdirFail = (errMsg: string) => ({
-  type: READDIR_FAIL,
-  errMsg: errMsg
+export const exploreSuccess = (files: File[] | null, video: Video | null) => ({
+  type: EXPLORE_SUCCESS,
+  files, video
 });

@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { PageHeader, Typography, Dropdown, Button, Menu, Icon } from 'antd';
 
-import { VideoPlayer } from 'components';
+import { VideoPlayer, MainLayout } from 'components';
 import { Video } from 'models';
 
 const { Title, Text } = Typography;
@@ -58,7 +58,7 @@ class MovieDetailPage extends React.Component<Props, State> {
     )
     
     return (
-      <React.Fragment>
+      <MainLayout>
         <PageHeader onBack={this.onBack} title={this.props.video.title} />
         <div ref={ref => {
           this.videoContainer = ref;
@@ -73,7 +73,7 @@ class MovieDetailPage extends React.Component<Props, State> {
           </div>
           <Text type="secondary">{this.props.video.date}</Text>
         </div>
-      </React.Fragment>
+      </MainLayout>
     )
   }
   

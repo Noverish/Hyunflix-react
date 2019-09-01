@@ -1,10 +1,9 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
-import { connect } from 'react-redux';
 
-import { FileItem, RenameModal, EncodeModal } from 'components';
+import { FileItem, RenameModal, EncodeModal, MainLayout } from 'components';
 import { File } from 'models';
-import './file-list.css';
+import './folder-page.css';
 
 interface Props extends RouteComponentProps {
   files: File[]
@@ -15,7 +14,7 @@ interface State {
   encodeModalFile: File | null;
 }
 
-class FileListPage extends React.Component<Props, State> {
+class FolderPage extends React.Component<Props, State> {
   state = {
     renameModalFile: null,
     encodeModalFile: null,
@@ -51,11 +50,13 @@ class FileListPage extends React.Component<Props, State> {
       : null
     
     return (
-      <div>
-        {fileItems}
-        {renameModal}
-        {encodeModal}
-      </div>
+      <MainLayout>
+        <div>
+          {fileItems}
+          {renameModal}
+          {encodeModal}
+        </div>
+      </MainLayout>
     )
   }
   
@@ -80,10 +81,4 @@ class FileListPage extends React.Component<Props, State> {
   }
 }
 
-let mapStateToProps = (state) => {
-  return {
-    files: state.explorer.files
-  };
-}
-
-export default connect(mapStateToProps)(withRouter(FileListPage));
+export default withRouter(FolderPage);

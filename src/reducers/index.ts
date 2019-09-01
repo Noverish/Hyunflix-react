@@ -1,13 +1,13 @@
 import { combineReducers } from 'redux';
 
-import counter from './counter';
 import explorer from './explorer';
 import auth from './auth';
+import movie from './movie';
 
 const counterApp = combineReducers({
-  counter,
   explorer,
   auth,
+  movie,
 });
 
 export default counterApp;

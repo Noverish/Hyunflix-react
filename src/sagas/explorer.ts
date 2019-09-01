@@ -1,22 +1,43 @@
 import { put, call, takeEvery } from 'redux-saga/effects'
-import { READDIR, readdirSuccess, readdirFail } from 'actions';
+import { extname } from 'path';
+
+import { EXPLORE, exploreSuccess } from 'actions';
 import * as Api from 'api';
-import { File } from 'models';
+import { File, Video } from 'models';
 
 export function* fetchReaddir(action) {
   const path: string = action.path;
   try {
-    const files: File[] = yield call([Api, 'readdir'], path);
-    yield put(readdirSuccess(files));
+    const exists: boolean = yield call([Api, 'exists'], path);
+    
+    if(!exists) {
+      yield put(exploreSuccess(null, null));
+      return;
+    }
+    
+    const isdir: boolean = yield call([Api, 'isdir'], path);
+    if(isdir) {
+      const files: File[] = yield call([Api, 'readdir'], path);
+      yield put(exploreSuccess(files, null));
+      return;
+    }
+    
+    if(extname(path) === '.mp4') {
+      const video: Video = yield call([Api, 'video'], path);
+      yield put(exploreSuccess(null, video));
+      return;
+    }
+    
+    yield put(exploreSuccess(null, null));
   } catch (errMsg) {
-    yield put(readdirFail(errMsg));
+    
   }
 }
 
-export function* watchReaddir() {
-  yield takeEvery(READDIR, fetchReaddir);
+export function* watchExlorer() {
+  yield takeEvery(EXPLORE, fetchReaddir);
 }
 
 export default [
-  watchReaddir()
+  watchExlorer()
 ]
