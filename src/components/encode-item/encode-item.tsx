@@ -9,13 +9,15 @@ interface Props {
 }
 
 const encodeItem: React.FunctionComponent<Props> = ({ encode }) => {
+  const percent = parseFloat(encode.progress.toFixed(2));
+  
   return (
     <div className="encode-item">
       <div className="encode-item-id">{encode._id}</div>
       <div className="encode-item-inpath">{encode.inpath}</div>
       <div className="encode-item-etc-layout">
         { progress2tag(encode.progress) }
-        <Progress className="encode-item-progress" percent={encode.progress} size="small" />
+        <Progress className="encode-item-progress" percent={percent} size="small" />
         <div className="encode-item-date">{encode.date}</div>
       </div>
     </div>

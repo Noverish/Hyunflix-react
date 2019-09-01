@@ -2,19 +2,21 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { Button, Pagination, List, message } from 'antd';
 import * as socketio from 'socket.io-client';
-import { List as IList } from 'immutable';
+import { connect } from 'react-redux';
 
+import { encodeList, encodeListSuccess } from 'actions';
 import { MainLayout, EncodeItem } from 'components';
 import { Encode } from 'models';
-import { encodeStatus, pauseEncoding, resumeEncoding } from 'api';
+import { pauseEncoding, resumeEncoding } from 'api';
 import './encode.css';
 
 interface Props extends RouteComponentProps {
-  
+  onEncodeList;
+  onEncodeListUpdate;
+  encodes: Encode[]
 }
 
 interface State {
-  encodes: IList<Encode>
   page: number
 }
 
@@ -22,33 +24,24 @@ class EncodePage extends React.Component<Props, State> {
   socket: socketio.Socket | null = null;
   
   state = {
-    encodes: IList([]),
     page: 1
   }
   
   componentDidMount() {
-    this.refresh();
+    this.props.onEncodeList();
     
     this.socket = socketio.connect("http://home.hyunsub.kim:8080", { path: '/socket.io/api' });
     this.socket.on('message', (data: Buffer) => {
       const payload = JSON.parse(data.toString());
-      const encodes = this.state.encodes;
+      const encodes = this.props.encodes;
       
       const index = encodes.findIndex((item: Encode) => {
         return item._id === payload['_id'];
       });
       
-      if (index >= 0) {
-        // TODO ts-ignore
-        // @ts-ignore
-        const newEncodes = encodes.update(index, (item: Encode) => {
-            item.progress = parseFloat(payload['progress'].toFixed(2));
-            return item;
-          }
-        );
-        
-        this.setState({ encodes: newEncodes })
-      }
+      encodes[index].progress = payload['progress'];
+      
+      this.props.onEncodeListUpdate([...encodes]);
     });
   }
   
@@ -58,21 +51,9 @@ class EncodePage extends React.Component<Props, State> {
     }
   }
   
-  refresh = () => {
-    encodeStatus()
-      .then((encodes: Encode[]) => {
-        this.setState({ 
-          encodes: IList(encodes)
-        })
-      })
-      .catch((msg) => {
-        
-      })
-  }
-  
   render() {
     const page = this.state.page;
-    const encodes: Encode[] = this.state.encodes.toArray();
+    const encodes: Encode[] = this.props.encodes;
     const subItems: Encode[] = encodes.slice((page - 1) * 10, (page) * 10);
     
     return (
@@ -123,4 +104,17 @@ class EncodePage extends React.Component<Props, State> {
   }
 }
 
-export default EncodePage;
+let mapDispatchToProps = (dispatch) => {
+  return {
+    onEncodeList: (path) => dispatch(encodeList()),
+    onEncodeListUpdate: (encodes: Encode[]) => dispatch(encodeListSuccess(encodes)),
+  }
+}
+
+let mapStateToProps = (state) => {
+  return {
+    encodes: state.encode.encodes,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EncodePage);
