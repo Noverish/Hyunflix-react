@@ -1,15 +1,17 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
+import { connect } from 'react-redux';
 import { Result } from 'antd';
 import { extname } from 'path';
 
+import { readdir } from 'actions';
 import { MainLayout, VideoPage } from 'components';
 import FileListPage from './file-list';
 import * as api from 'api';
 import { File, Video } from 'models';
 
 interface Props extends RouteComponentProps {
-  
+  onReaddir;
 }
 
 interface State {
@@ -59,8 +61,9 @@ class ExplorerPage extends React.Component<Props, State> {
     
     const isdir = await api.isdir(path);
     if(isdir) {
-      const files: File[] = await api.readdir(path);
-      this.setState({ path, exists: true, isdir: true, files: files, video: null })
+      this.props.onReaddir(path);
+      // const files: File[] = await api.readdir(path);
+      // this.setState({ path, exists: true, isdir: true, files: files, video: null })
     } else {
       if(extname(path) === '.mp4') {
         const video: Video = await api.video(path);
@@ -112,4 +115,10 @@ class ExplorerPage extends React.Component<Props, State> {
   }
 }
 
-export default ExplorerPage;
+let mapDispatchToProps = (dispatch) => {
+  return {
+    onReaddir: (path) => dispatch(readdir(path)),
+  }
+}
+
+export default connect(undefined, mapDispatchToProps)(ExplorerPage);

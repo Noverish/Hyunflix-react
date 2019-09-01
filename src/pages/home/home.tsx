@@ -4,6 +4,10 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { MainLayout } from 'components'
 import './home.css';
 
+import { default as Counter } from './counter';
+import { default as Option } from './options';
+import { default as Buttons } from './buttons';
+
 interface Props extends RouteComponentProps {
   
 }
@@ -21,7 +25,11 @@ class HomePage extends React.Component<Props, State> {
   render() {
     return (
       <MainLayout>
-        <h1>empty</h1>
+        <div style={ {textAlign: 'center'} }>
+            <Counter/>
+            <Option/>
+            <Buttons/>
+        </div>
       </MainLayout>
     )
   }

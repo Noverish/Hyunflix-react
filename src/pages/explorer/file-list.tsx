@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
+import { connect } from 'react-redux';
 
 import { FileItem, RenameModal, EncodeModal } from 'components';
 import { File } from 'models';
@@ -79,4 +80,10 @@ class FileListPage extends React.Component<Props, State> {
   }
 }
 
-export default withRouter(FileListPage);
+let mapStateToProps = (state) => {
+  return {
+    files: state.explorer.files
+  };
+}
+
+export default connect(mapStateToProps)(withRouter(FileListPage));
