@@ -34,7 +34,7 @@ class MoviePage extends React.Component<Props, State> {
         })
       })
       .catch((msg) => {
-        alert(msg);
+        
       })
   }
   

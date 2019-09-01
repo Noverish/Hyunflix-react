@@ -35,7 +35,6 @@ class ExplorerPage extends React.Component<Props, State> {
     this.refresh()
       .catch(err => {
         console.log(err);
-        alert(err);
       });
   }
   
@@ -43,7 +42,6 @@ class ExplorerPage extends React.Component<Props, State> {
     this.refresh()
       .catch(err => {
         console.log(err);
-        alert(err);
       });
   }
   
@@ -109,7 +107,7 @@ class ExplorerPage extends React.Component<Props, State> {
         
     return (
       <MainLayout>
-        <FileListPage files={this.state.files} />
+        <FileListPage />
       </MainLayout>
     )
   }

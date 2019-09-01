@@ -1,6 +1,8 @@
 import { Movie, Video, File, Encode } from 'models'
+import { message } from 'antd';
+import { tokenExpire } from 'actions';
 import * as NodeRSA from 'node-rsa';
-import { auth } from 'utils';
+import { store } from '../index';
 const axios = require('axios');
 
 const SERVER: string = 'http://home.hyunsub.kim:8080';
@@ -9,29 +11,37 @@ async function request(path: string, method: string, data: any = undefined) {
   const url = `${SERVER}${path}`;
   const headers = {};
   
-  if(auth.getToken()) {
-    headers['Authorization'] = 'Bearer ' + auth.getToken()
+  const token = store.getState().auth.token;
+  if(token) {
+    headers['Authorization'] = `Bearer ${token}`
   }
   
   try {
     return (await axios({ url, method, headers, data })).data;
   } catch (err) {
-    console.log(err.config);
+    console.log({
+      message: err.message,
+      response: err.response,
+      config: err.config,
+      request: err.request,
+    });
     
     if (err.response && err.response.status === 401) {
-      auth.clearToken();
+      store.dispatch(tokenExpire());
     }
     
+    let errMsg = '';
+    
     if (err.response && err.response.data && err.response.data.msg) {
-      console.log(err.response);
-      throw err.response.data.msg;
+      errMsg = err.response.data.msg;
     } else if (err.response && err.response.data) {
-      console.log(err.response);
-      throw JSON.stringify(err.response.data);
+      errMsg = JSON.stringify(err.response.data);
     } else {
-      console.log(err.request);
-      throw err.message;
+      errMsg = err.message;
     }
+    
+    message.error(errMsg);
+    throw errMsg;
   }
 }
 

@@ -3,15 +3,19 @@ import ReactDOM from 'react-dom';
 import App from './App';
 
 import { createStore, applyMiddleware } from 'redux';
+import logger from 'redux-logger';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import reducer from './reducers';
 import rootSaga from './sagas';
 
+const persistedState = localStorage.getItem('reduxState') ? JSON.parse(localStorage.getItem('reduxState')!) : {}
+
 const sagaMiddleware = createSagaMiddleware()
-const store = createStore(
+export const store = createStore(
   reducer,
-  applyMiddleware(sagaMiddleware)
+  persistedState,
+  applyMiddleware(sagaMiddleware, logger),
 )
 sagaMiddleware.run(rootSaga)
 
@@ -21,3 +25,7 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
+
+store.subscribe(()=>{
+  localStorage.setItem('reduxState', JSON.stringify(store.getState()))
+})

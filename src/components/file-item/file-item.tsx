@@ -74,31 +74,6 @@ class Fileitem extends React.Component<Props, State> {
   onEncodeClick = (e) => {
     this.props.onEncodeClick(this.props.file);
   }
-  
-  // showEncodeModal = (e) => {
-  //   this.setState({
-  //     encodeModalVisible: true
-  //   })
-  // }
-  
-  // encodeModalCallback = (command: string | null) => {
-  //   console.log(command);
-  //   this.setState({ encodeModalVisible: false })
-  // }
-  
-  // showRenameModal = () => {
-  //   this.setState({ renameModalVisible: true })
-  // }
-  
-  // renameModalClosed = () => {
-  //   this.setState({ renameModalVisible: false })
-  // }
-  
-  // renameModalSuccessed = (fromPath, toPath) => {
-  //   this.props.file.path = toPath;
-  //   this.props.file.name = basename(toPath);
-  //   this.forceUpdate();
-  // }
 }
 
 export default Fileitem;

@@ -47,7 +47,6 @@ export default class RenameModal extends React.Component<Props, State> {
       })
       .catch((msg) => {
         this.props.onClose();
-        alert(msg);
       })
   }
   

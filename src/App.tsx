@@ -1,30 +1,26 @@
 import React, { Component } from 'react';
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 import * as pages from 'pages';
-import { auth } from './utils';
 
 import 'antd/dist/antd.css';
 import './App.css';
 
-class App extends Component {
-  render() {
-    return (
-      <BrowserRouter>
-        <Switch>
-          <Route path="/login" component={pages.LoginPage} />
-          <Route path="/register" component={pages.RegisterPage} />
-          <Route path="/"component={App2} />
-        </Switch>
-      </BrowserRouter>
-    );
-  }
+interface Props {
+  token: string;
 }
 
-class App2 extends Component {
+interface State {
+  
+}
+
+class App extends Component<Props, State> {
   render() {
-    if (auth.getToken()) {
-      return (
+    let inner = (this.props.token)
+      ? (
         <Switch>
+          <Route path="/login" render={ props => <Redirect to="/home" /> } />
+          <Route path="/register" render={ props => <Redirect to="/home" /> } />
           <Route exact path="/" render={ props => <Redirect to="/home" /> } />
           <Route path="/home" component={pages.HomePage} />
           <Route path="/movies/:movie_id" component={pages.MovieDetailPage} />
@@ -35,11 +31,26 @@ class App2 extends Component {
           <Route path="/encode/" component={pages.EncodePage} />
           <Route component={pages.NotFoundPage} />
         </Switch>
-      ) 
-    } else {
-      return ( <Redirect to="/login"/> )
-    }
+      ) : (
+        <Switch>
+          <Route path="/login" component={pages.LoginPage} />
+          <Route path="/register" component={pages.RegisterPage} />
+          <Route render={ props => <Redirect to="/login" /> } />
+        </Switch>
+      );
+    
+    return (
+      <BrowserRouter>
+        {inner}
+      </BrowserRouter>
+    )
   }
 }
 
-export default App;
+let mapStateToProps = (state) => {
+  return {
+    token: state.auth.token
+  };
+}
+
+export default connect(mapStateToProps)(App);

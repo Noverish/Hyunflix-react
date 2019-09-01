@@ -1,17 +1,16 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { Form, Icon, Input, Button, Checkbox, Typography } from 'antd';
+import { connect } from 'react-redux';
+import { Form, Icon, Input, Button, Checkbox, Typography, message } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Redirect } from 'react-router-dom';
 
-import { login } from 'api';
-import * as auth from 'utils/auth';
+import { login } from 'actions';
 import './login.css';
 
 const { Title } = Typography;
 
 interface Props extends FormComponentProps, RouteComponentProps {
-  
+  onLogin;
 }
 
 interface State {
@@ -19,29 +18,18 @@ interface State {
 }
 
 class NormalLoginForm extends React.Component<Props, State> {
-  state = {
-    goToRegister: false
-  }
-  
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (err) {
-        alert(err);
+        message.error(err);
         return;
       }
     
       const username = values['username'];
       const password = values['password'];
       
-      login(username, password)
-        .then((token) => {
-          auth.setToken(token);
-          this.forceUpdate();
-        })
-        .catch((msg) => {
-          alert(msg);
-        })
+      this.props.onLogin(username, password);
     });
   };
   
@@ -51,10 +39,6 @@ class NormalLoginForm extends React.Component<Props, State> {
   }
 
   render() {
-    if (auth.getToken()) {
-      return <Redirect to="/"/>
-    }
-
     const { getFieldDecorator } = this.props.form;
     return (
       <div className="login-form-container">
@@ -97,65 +81,11 @@ class NormalLoginForm extends React.Component<Props, State> {
   }
 }
 
-export default Form.create({ name: 'normal_login' })(NormalLoginForm);;
+let mapDispatchToProps = (dispatch) => {
+  return {
+    onLogin: (username, password) => dispatch(login(username, password)),
+  }
+}
 
-// import { List, InputItem, Button } from 'antd-mobile';
-// import { createForm } from 'rc-form';
-
-// import { api, auth } from 'utils'
-
-// const Item = List.Item;
-
-// interface Props {
-//   form
-// }
-
-// interface State {
-//   register: boolean
-// }
-
-// class BasicInput extends React.Component<Props, State> {
-//   state = {
-//     register: false
-//   }
-  
-//   onSubmit = () => {
-//   }
-  
-  
-//   render() {
-    
-    
-//     const { getFieldProps } = this.props.form;
-
-//     return (
-//       <form>
-//         <List
-//           renderHeader={() => '로그인'}
-//         >
-//           <InputItem
-//             {...getFieldProps('id')}
-//             placeholder="아이디"
-//           >
-//             아이디
-//           </InputItem>
-//           <InputItem
-//             {...getFieldProps('password')}
-//             type="password"
-//             placeholder="비밀번호"
-//           >
-//             비밀번호
-//           </InputItem>
-//           <Item>
-//             <Button type="primary" size="small" inline onClick={this.onSubmit}>로그인</Button>
-//             <Button size="small" inline style={{ marginLeft: '2.5px' }} onClick={this.onRegister}>회원가입</Button>
-//           </Item>
-//         </List>
-//       </form>
-//     );
-//   }
-// }
-
-// const BasicInputWrapper = createForm()(BasicInput);
-
-// export default BasicInputWrapper;
+const form = Form.create({ name: 'normal_login' })(NormalLoginForm)
+export default connect(undefined, mapDispatchToProps)(form);

@@ -29,7 +29,6 @@ class MovieDetailPage extends React.Component<Props, State> {
       })
       .catch((msg) => {
         // TODO 존재하지 않을 때 대처
-        alert(msg);
       })
   }
   

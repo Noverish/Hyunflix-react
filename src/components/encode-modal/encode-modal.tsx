@@ -35,7 +35,9 @@ class EncodeModal extends React.Component<Props, State> {
   componentDidMount() {
     encodePresets()
       .then(presets => this.setState({ encodePresets: presets }))
-      .catch(msg => alert(msg));
+      .catch(msg => {
+        
+      });
   }
   
   render () {
@@ -113,7 +115,6 @@ class EncodeModal extends React.Component<Props, State> {
       })
       .catch((msg) => {
         this.props.onClose();
-        alert(msg);
       })
   }
   

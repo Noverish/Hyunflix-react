@@ -1,6 +1,6 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { Button, Pagination, List } from 'antd';
+import { Button, Pagination, List, message } from 'antd';
 import * as socketio from 'socket.io-client';
 import { List as IList } from 'immutable';
 
@@ -66,7 +66,7 @@ class EncodePage extends React.Component<Props, State> {
         })
       })
       .catch((msg) => {
-        alert(msg);
+        
       })
   }
   
@@ -105,20 +105,20 @@ class EncodePage extends React.Component<Props, State> {
   onPauseClicked = () => {
     pauseEncoding()
       .then(() => {
-        alert('success');
+        message.success('success');
       })
       .catch((msg) => {
-        alert(msg);
+        
       })
   }
   
   onResumeClicked = () => {
     resumeEncoding()
       .then(() => {
-        alert('success');
+        message.success('success');
       })
       .catch((msg) => {
-        alert(msg);
+        
       })
   }
 }

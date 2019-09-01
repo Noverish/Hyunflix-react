@@ -1,6 +1,8 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { connect } from 'react-redux';
 
+import { logout } from 'actions';
 import { MainLayout } from 'components'
 import './home.css';
 
@@ -9,7 +11,7 @@ import { default as Option } from './options';
 import { default as Buttons } from './buttons';
 
 interface Props extends RouteComponentProps {
-  
+  onLogout;
 }
 
 interface State {
@@ -18,8 +20,7 @@ interface State {
 
 class HomePage extends React.Component<Props, State> {
   onClick = (e) => {
-    e.preventDefault();
-    this.props.history.push('/movies');
+    this.props.onLogout();
   }
   
   render() {
@@ -30,9 +31,16 @@ class HomePage extends React.Component<Props, State> {
             <Option/>
             <Buttons/>
         </div>
+        <button type='button' onClick={this.onClick}>logout</button>
       </MainLayout>
     )
   }
 }
 
-export default withRouter(HomePage);
+let mapDispatchToProps = (dispatch) => {
+  return {
+    onLogout: () => dispatch(logout()),
+  }
+}
+
+export default connect(undefined, mapDispatchToProps)(withRouter(HomePage));

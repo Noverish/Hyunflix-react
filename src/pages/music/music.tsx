@@ -30,7 +30,7 @@ class MusicPage extends React.Component<Props, State> {
         this.setState({ musics })
       })
       .catch((msg: string) => {
-        alert(msg);
+        
       })
   }
   

@@ -1,16 +1,15 @@
 import React from 'react';
 import { Form, Input, Tooltip, Icon, Button, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import { register } from 'api';
-import * as auth from 'utils/auth';
+import { register } from 'actions';
 import './register.css';
 
 const { Title } = Typography;
 
 interface Props extends FormComponentProps {
-  
+  onRegister;
 }
 
 interface State {
@@ -26,8 +25,8 @@ class RegistrationForm extends React.Component<Props, State> {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll({ force: true }, (err, values) => {
       if (err) {
-        console.log(err);
-        alert('입력하신 내용에 오류가 있습니다');
+        // console.log(err);
+        // alert('입력하신 내용에 오류가 있습니다');
         return;
       }
       
@@ -35,14 +34,7 @@ class RegistrationForm extends React.Component<Props, State> {
       const password1 = values['password1'];
       const reg_code = values['reg_code'];
       
-      register(username, password1, reg_code)
-        .then((token) => {
-          auth.setToken(token);
-          this.forceUpdate();
-        })
-        .catch((msg) => {
-          alert(msg);
-        })
+      this.props.onRegister(username, password1, reg_code);
     });
   };
   
@@ -87,10 +79,6 @@ class RegistrationForm extends React.Component<Props, State> {
   };
 
   render() {
-    if (auth.getToken()) {
-      return <Redirect to="/"/>
-    }
-
     const { getFieldDecorator } = this.props.form;
     return (
       <div className="register-form-container">
@@ -160,4 +148,11 @@ class RegistrationForm extends React.Component<Props, State> {
   }
 }
 
-export default Form.create({ name: 'register' })(RegistrationForm);
+let mapDispatchToProps = (dispatch) => {
+  return {
+    onRegister: (username, password, regCode) => dispatch(register(username, password, regCode)),
+  }
+}
+
+const form =  Form.create({ name: 'register' })(RegistrationForm);
+export default connect(undefined, mapDispatchToProps)(form);
