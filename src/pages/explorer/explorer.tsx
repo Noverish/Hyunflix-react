@@ -2,15 +2,16 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
 import { Result } from 'antd';
+import { Dispatch } from 'redux';
 
-import { explore } from 'actions';
+import { explore, ExploreAction } from 'actions';
 import VideoPage from '../video/video-page';
 import FolderPage from './folder-page';
 import { MainLayout } from 'components';
 import { File, Video } from 'models';
 
 interface Props extends RouteComponentProps {
-  onExplore;
+  onExplore(path: string): ExploreAction;
   files: File[] | null;
   video: Video | null;
 }
@@ -71,7 +72,7 @@ class ExplorerPage extends React.Component<Props, State> {
   }
 }
 
-let mapDispatchToProps = (dispatch) => {
+let mapDispatchToProps = (dispatch: Dispatch<ExploreAction>) => {
   return {
     onExplore: (path) => dispatch(explore(path)),
   }

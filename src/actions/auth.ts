@@ -4,25 +4,61 @@ export const REGISTER = 'REGISTER';
 export const TOKEN_SUCCESS = 'TOKEN_SUCCESS';
 export const TOKEN_EXPIRE = 'TOKEN_EXPIRE';
 
-export const login = (username, password) => ({
-  type: LOGIN,
-  username, password
-});
+export interface LoginAction {
+  type: typeof LOGIN;
+  username: string;
+  password: string;
+}
 
-export const logout = () => ({
-  type: LOGOUT,
-});
+export interface LogoutAction {
+  type: typeof LOGOUT;
+}
 
-export const register = (username, password, regCode) => ({
-  type: REGISTER,
-  username, password, regCode
-});
+export interface RegisterAction {
+  type: typeof REGISTER;
+  username: string;
+  password: string;
+  regCode: string;
+}
 
-export const tokenSuccess = (token) => ({
-  type: TOKEN_SUCCESS,
-  token
-})
+export interface TokenSuccessAction {
+  type: typeof TOKEN_SUCCESS;
+  token: string;
+}
 
-export const tokenExpire = () => ({
-  type: TOKEN_EXPIRE,
-})
+export interface TokenExpireAction {
+  type: typeof TOKEN_EXPIRE;
+}
+
+export function login(username: string, password: string): LoginAction {
+  return {
+    type: LOGIN,
+    username, password,
+  }
+}
+
+export function logout(): LogoutAction {
+  return {
+    type: LOGOUT,
+  }
+}
+
+export function register(username: string, password: string, regCode: string): RegisterAction {
+  return {
+    type: REGISTER,
+    username, password, regCode,
+  }
+}
+
+export function tokenSuccess(token: string): TokenSuccessAction {
+  return {
+    type: TOKEN_SUCCESS,
+    token,
+  }
+}
+
+export function tokenExpire(): TokenExpireAction {
+  return {
+    type: TOKEN_EXPIRE,
+  }
+}

@@ -1,19 +1,21 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
-import { movieDetail } from 'actions';
+import { movieDetail, MovieDetailAction } from 'actions';
 import VideoPage from './video-page';
 import { MainLayout } from 'components';
 import { Video } from 'models';
 import './movie-detail.css';
 
 interface Props extends RouteComponentProps {
-  onMovieDetail
-  video: Video | null
+  onMovieDetail(movieId: number): MovieDetailAction;
+  video: Video | null;
 }
 
 interface State {
+  
 }
 
 class MovieDetailPage extends React.Component<Props, State> {
@@ -39,7 +41,7 @@ class MovieDetailPage extends React.Component<Props, State> {
   }
 }
 
-let mapDispatchToProps = (dispatch) => {
+let mapDispatchToProps = (dispatch: Dispatch<MovieDetailAction>) => {
   return {
     onMovieDetail: (movieId: number) => dispatch(movieDetail(movieId)),
   }

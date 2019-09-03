@@ -1,11 +1,11 @@
 import { put, call, takeEvery } from 'redux-saga/effects'
 import { extname } from 'path';
 
-import { EXPLORE, exploreSuccess } from 'actions';
+import { EXPLORE, exploreSuccess, ExploreAction } from 'actions';
 import * as Api from 'api';
 import { File, Video } from 'models';
 
-export function* fetchReaddir(action) {
+export function* fetchReaddir(action: ExploreAction) {
   const path: string = action.path;
   try {
     const exists: boolean = yield call([Api, 'exists'], path);

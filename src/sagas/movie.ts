@@ -1,8 +1,8 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
-import { MOVIE_LIST, MOVIE_DETAIL, movieListSuccess, movieDetailSuccess } from 'actions';
+import { MOVIE_LIST, MOVIE_DETAIL, movieListSuccess, movieDetailSuccess, MovieListAction, MovieDetailAction } from 'actions';
 import * as Api from 'api';
 
-export function* fetchMovieList(action) {
+export function* fetchMovieList(action: MovieListAction) {
   try {
     const movies = yield call([Api, 'getMoviePreviewList']);
     yield put(movieListSuccess(movies));
@@ -11,7 +11,7 @@ export function* fetchMovieList(action) {
   }
 }
 
-export function* fetchMovieDetail(action) {
+export function* fetchMovieDetail(action: MovieDetailAction) {
   const movieId: number = action.movieId;
   try {
     const video = yield call([Api, 'getMovieDetail'], movieId);

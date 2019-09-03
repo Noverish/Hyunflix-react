@@ -3,16 +3,17 @@ import { RouteComponentProps } from 'react-router';
 import { Button, Pagination, List, message } from 'antd';
 import * as socketio from 'socket.io-client';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
-import { encodeList, encodeListSuccess } from 'actions';
+import { encodeList, encodeListSuccess, EncodeListAction, EncodeListSuccessAction } from 'actions';
 import { MainLayout, EncodeItem } from 'components';
 import { Encode } from 'models';
 import { pauseEncoding, resumeEncoding } from 'api';
 import './encode.css';
 
 interface Props extends RouteComponentProps {
-  onEncodeList;
-  onEncodeListUpdate;
+  onEncodeList(): EncodeListAction;
+  onEncodeListUpdate(encodes: Encode[]): EncodeListSuccessAction;
   encodes: Encode[]
 }
 
@@ -52,7 +53,7 @@ class EncodePage extends React.Component<Props, State> {
   }
   
   render() {
-    const page = this.state.page;
+    const page: number = this.state.page;
     const encodes: Encode[] = this.props.encodes;
     const subItems: Encode[] = encodes.slice((page - 1) * 10, (page) * 10);
     
@@ -79,7 +80,7 @@ class EncodePage extends React.Component<Props, State> {
     )
   }
   
-  onChange = (page) => {
+  onChange = (page: number) => {
     this.setState({ page })
   }
   
@@ -104,10 +105,10 @@ class EncodePage extends React.Component<Props, State> {
   }
 }
 
-let mapDispatchToProps = (dispatch) => {
+let mapDispatchToProps = (dispatch: Dispatch<EncodeListAction | EncodeListSuccessAction>) => {
   return {
-    onEncodeList: (path) => dispatch(encodeList()),
-    onEncodeListUpdate: (encodes: Encode[]) => dispatch(encodeListSuccess(encodes)),
+    onEncodeList: () => dispatch(encodeList()),
+    onEncodeListUpdate: (encodes) => dispatch(encodeListSuccess(encodes)),
   }
 }
 

@@ -1,26 +1,26 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
-import { LOGIN, LOGOUT, REGISTER, tokenSuccess } from 'actions';
+import { LOGIN, LOGOUT, REGISTER, tokenSuccess, LoginAction, LogoutAction, RegisterAction } from 'actions';
 import * as Api from 'api';
 
-export function* fetchLogin(action) {
-  const username = action.username;
-  const password = action.password;
+export function* fetchLogin(action: LoginAction) {
+  const username: string = action.username;
+  const password: string = action.password;
   try {
-    const token = yield call([Api, 'login'], username, password);
+    const token: string = yield call([Api, 'login'], username, password);
     yield put(tokenSuccess(token));
   } catch (errMsg) {
     
   }
 }
 
-export function* fetchLogout(action) {
+export function* fetchLogout(action: LogoutAction) {
   yield put(tokenSuccess(''));
 }
 
-export function* fetchRegister(action) {
-  const username = action.username;
-  const password = action.password;
-  const regCode = action.regCode;
+export function* fetchRegister(action: RegisterAction) {
+  const username: string = action.username;
+  const password: string = action.password;
+  const regCode: string = action.regCode;
   try {
     const token = yield call([Api, 'register'], username, password, regCode);
     yield put(tokenSuccess(token));

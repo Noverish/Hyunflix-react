@@ -1,15 +1,15 @@
 import { ENCODE_LIST_SUCCESS } from 'actions';
 import { Encode } from 'models';
 
-interface EncodeReducerState {
+interface State {
   encodes: Encode[];
 }
 
-const initalState: EncodeReducerState = {
+const initalState: State = {
   encodes: [],
 }
 
-const reducer = (state = initalState, action) => {
+const reducer = (state: State = initalState, action) => {
   switch(action.type) {
     case ENCODE_LIST_SUCCESS: return { ...state, encodes: action.encodes };
     default: return state;

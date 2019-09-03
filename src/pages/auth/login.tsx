@@ -3,14 +3,15 @@ import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Form, Icon, Input, Button, Checkbox, Typography, message } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
+import { Dispatch } from 'redux';
 
-import { login } from 'actions';
+import { login, LoginAction } from 'actions';
 import './login.css';
 
 const { Title } = Typography;
 
 interface Props extends FormComponentProps, RouteComponentProps {
-  onLogin;
+  onLogin(username: string, password: string): LoginAction;
 }
 
 interface State {
@@ -81,7 +82,7 @@ class NormalLoginForm extends React.Component<Props, State> {
   }
 }
 
-let mapDispatchToProps = (dispatch) => {
+let mapDispatchToProps = (dispatch: Dispatch<LoginAction>) => {
   return {
     onLogin: (username, password) => dispatch(login(username, password)),
   }

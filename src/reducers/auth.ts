@@ -1,10 +1,14 @@
 import { TOKEN_SUCCESS, TOKEN_EXPIRE } from '../actions';
 
-const initalState = {
+interface State {
+  token: string;
+}
+
+const initalState: State = {
   token: '',
 }
 
-const reducer = (state = initalState, action) => {
+const reducer = (state: State = initalState, action) => {
   switch(action.type) {
     case TOKEN_SUCCESS: return { ...state, token: action.token };
     case TOKEN_EXPIRE:  return { ...state, token: '' };

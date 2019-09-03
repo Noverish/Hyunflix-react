@@ -2,18 +2,19 @@ import React from 'react';
 import { Form, Input, Tooltip, Icon, Button, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
-import { register } from 'actions';
+import { register, RegisterAction } from 'actions';
 import './register.css';
 
 const { Title } = Typography;
 
 interface Props extends FormComponentProps {
-  onRegister;
+  onRegister(username: string, password: string, regCode: string): RegisterAction;
 }
 
 interface State {
-  password2Dirty: boolean
+  password2Dirty: boolean;
 }
 
 class RegistrationForm extends React.Component<Props, State> {
@@ -148,7 +149,7 @@ class RegistrationForm extends React.Component<Props, State> {
   }
 }
 
-let mapDispatchToProps = (dispatch) => {
+let mapDispatchToProps = (dispatch: Dispatch<RegisterAction>) => {
   return {
     onRegister: (username, password, regCode) => dispatch(register(username, password, regCode)),
   }

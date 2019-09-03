@@ -2,8 +2,9 @@ import React from 'react';
 import { PageHeader, List, Pagination, Input } from 'antd';
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
-import { movieList } from 'actions';
+import { movieList, MovieListAction } from 'actions';
 import { MovieItem, MainLayout } from 'components';
 import { Movie } from 'models';
 import './movie-list.css';
@@ -11,7 +12,7 @@ import './movie-list.css';
 const { Search } = Input;
 
 interface Props extends RouteComponentProps {
-  onMovieList;
+  onMovieList(): MovieListAction;
   movies: Movie[];
 }
 
@@ -73,7 +74,7 @@ class MoviePage extends React.Component<Props, State> {
   }
 }
 
-let mapDispatchToProps = (dispatch) => {
+let mapDispatchToProps = (dispatch: Dispatch<MovieListAction>) => {
   return {
     onMovieList: () => dispatch(movieList()),
   }
