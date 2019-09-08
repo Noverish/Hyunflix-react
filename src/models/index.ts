@@ -33,6 +33,7 @@ export interface File {
   name: string;
   isdir: boolean;
   size: string;
+  url: string;
 }
 
 export interface Encode {

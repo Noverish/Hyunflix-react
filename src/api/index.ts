@@ -5,7 +5,7 @@ import * as NodeRSA from 'node-rsa';
 import { store } from '../index';
 const axios = require('axios');
 
-const SERVER: string = 'http://home.hyunsub.kim:8080';
+export const SERVER: string = 'http://home.hyunsub.kim:8080';
 
 async function request(path: string, method: string, data: any = undefined) {
   const url = `${SERVER}${path}`;

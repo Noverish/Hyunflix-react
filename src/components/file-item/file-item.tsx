@@ -34,12 +34,11 @@ class Fileitem extends React.Component<Props, State> {
           <span>{this.props.file.name}</span>
         </a>
       )
-    } else if (extname(this.props.file.name) === '.mp3') {
+    } else if (extname(this.props.file.name)) {
       link = (
         <a
           className="file-item-name"
-          href={'http://home.hyunsub.kim:8081' + this.props.file.path}
-          target="_blank"
+          href={this.props.file.url}
           rel="noopener noreferrer"
         >
           <span>{this.props.file.name}</span>

@@ -8,7 +8,7 @@ import { Dispatch } from 'redux';
 import { encodeList, encodeListSuccess, EncodeListAction, EncodeListSuccessAction } from 'actions';
 import { MainLayout, EncodeItem } from 'components';
 import { Encode } from 'models';
-import { pauseEncoding, resumeEncoding } from 'api';
+import { pauseEncoding, resumeEncoding, SERVER } from 'api';
 import './encode.css';
 
 interface Props extends RouteComponentProps {
@@ -31,7 +31,7 @@ class EncodePage extends React.Component<Props, State> {
   componentDidMount() {
     this.props.onEncodeList();
     
-    this.socket = socketio.connect("http://home.hyunsub.kim:8080", { path: '/socket.io/api' });
+    this.socket = socketio.connect(SERVER, { path: '/socket.io/api' });
     this.socket.on('message', (data: Buffer) => {
       const payload = JSON.parse(data.toString());
       const encodes = this.props.encodes;
