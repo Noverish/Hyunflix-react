@@ -37,7 +37,7 @@ class MusicPage extends React.Component<Props, State> {
   render() {
     const nowPlaying: Music | null = this.state.nowPlaying;
     const source = (nowPlaying)
-      ? <source src={`http://home.hyunsub.kim:8081${nowPlaying!.path}`} type="audio/mpeg" />
+      ? <source src={nowPlaying!.url} type="audio/mpeg" />
       : null
     
     const title = (nowPlaying)

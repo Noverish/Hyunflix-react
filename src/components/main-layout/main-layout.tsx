@@ -15,11 +15,7 @@ interface State {
 
 class LayoutComp extends React.Component<Props, State> {
   menuClicked = (e) => {
-    if(e.key === 'explorer') {
-      this.props.history.push(`/${e.key}/archive`);
-    } else {
-      this.props.history.push(`/${e.key}`);
-    }
+    this.props.history.push(`/${e.key}`);
   }
   
   render() {

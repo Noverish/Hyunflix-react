@@ -119,8 +119,8 @@ function renderTitle(title: string, query: string) {
 
 function convert(musics: Music[]) {
   const root: MusicTreeNode = {
-    title: 'archive',
-    key: '/archive',
+    title: 'Musics',
+    key: '/Musics',
     children: []
   };
   
@@ -131,7 +131,7 @@ function convert(musics: Music[]) {
     comps.shift();
     
     let nowNode = root;
-    let nowPath = '/archive';
+    let nowPath = '/Musics';
     
     while(comps.length) {
       const comp: string = comps.shift()!;

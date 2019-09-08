@@ -34,7 +34,7 @@ export default class VideoPlayer extends React.Component<Props, State> {
         kind: 'subtitles',
         srclang: subtitle.language,
         label: subtitle.language,
-        src: 'http://home.hyunsub.kim:8200' + subtitle.path,
+        src: subtitle.url,
         default: subtitle.language === 'ko'
       })
     }
@@ -58,7 +58,7 @@ export default class VideoPlayer extends React.Component<Props, State> {
     for(const video of this.props.video.srcs) {
       if(this.props.resolution === video.resolution) {
         videoOption.sources[0] = {
-          src: 'http://home.hyunsub.kim:8200' + video.path, // TODO 파일 서버 주소 API 서버에서 받아오기
+          src: video.url,
           type: 'video/mp4'
         }
       }

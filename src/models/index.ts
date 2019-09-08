@@ -9,21 +9,21 @@ export interface Movie {
 
 export interface VideoSubtitle {
   language: string;
-  path: string;
+  url: string;
 }
 
 export interface VideoSrc {
   resolution: string;
   width: number;
   height: number;
-  path: string;
+  url: string;
 }
 
 export interface Video {
   title: string;
   subtitles: VideoSubtitle[];
   srcs: VideoSrc[];
-  thumbnail: string | null;
+  thumbnailUrl: string | null;
   date: string;
   duration: number;
 }
@@ -50,4 +50,5 @@ export interface Music {
   path: string;
   duration: number;
   artist: string;
+  url: string;
 }
