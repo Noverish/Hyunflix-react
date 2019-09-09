@@ -23,7 +23,6 @@ class AdminLayout extends React.Component<Props, State> {
   };
   
   render() {
-    console.log('render');
     const { isMobile, collapsed } = this.state;
     const selectedKeys = [this.props.location.pathname.split('/')[1]];
     

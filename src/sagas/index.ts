@@ -1,4 +1,6 @@
-import { all } from 'redux-saga/effects'
+import { all } from 'redux-saga/effects';
+import logger from 'redux-logger';
+
 import explorer from './explorer';
 import auth from './auth';
 import movie from './movie';
@@ -10,5 +12,6 @@ export default function* rootSaga() {
     ...auth,
     ...movie,
     ...encode,
+    process.env.NODE_ENV === 'development' && logger,
   ])
 }
