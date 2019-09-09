@@ -1,10 +1,14 @@
 export interface Movie {
-  movie_id: number;
+  videoId: number;
   title: string;
   path: string;
   duration: number;
-  resolution: string[];
+  width: number;
+  height: number;
+  bitrate: number;
+  size: number;
   date: string;
+  resolution: string;
 }
 
 export interface VideoSubtitle {

@@ -26,8 +26,16 @@ export default class VideoPlayer extends React.Component<Props, State> {
   player;
   videoNode;
   
-  constructor(props: Props) {
-    super(props);
+  componentDidMount() {
+    this.refresh()
+  }
+  
+  componentDidUpdate() {
+    this.refresh();
+  }
+  
+  refresh() {
+    this.captionOptions = [];
     
     for(const subtitle of this.props.video.subtitles) {
       this.captionOptions.push({
@@ -38,17 +46,7 @@ export default class VideoPlayer extends React.Component<Props, State> {
         default: subtitle.language === 'ko'
       })
     }
-  }
-  
-  componentDidMount() {
-    this.refresh()
-  }
-  
-  componentDidUpdate() {
-    this.refresh();
-  }
-  
-  refresh() {
+    
     const videoOption = {
       autoplay: false,
       controls: true,

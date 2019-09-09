@@ -17,27 +17,25 @@ interface State {
 class MovieItem extends React.Component<Props, State> {
   
   onClick = (e) => {
-    const link = `/movies/${this.props.movie.movie_id}`;
+    const link = `/movies/${this.props.movie.videoId}`;
     e.preventDefault();
     this.props.history.push(link);
   }
   
   render() {
-    const link = `/movies/${this.props.movie.movie_id}`;
+    const link = `/movies/${this.props.movie.videoId}`;
     
-    const resolutionTags = this.props.movie.resolution.map(r => {
-      return <Tag color={resoltuion2Color(r)} key={r}>{r}</Tag>
-    })
+    const r = this.props.movie.resolution;
     
     return (
       <a href={link} className="movie-preview" onClick={this.onClick}>
         <div>
-          <span className="movie-preview-id">{this.props.movie.movie_id}</span>
+          <span className="movie-preview-id">{this.props.movie.videoId}</span>
           <span className="movie-preview-title">{this.props.movie.title}</span>
         </div>
         <div>
           <span className="movie-preview-duration">{time.second2String(this.props.movie.duration)}</span>
-          <span className="movie-preview-resolution">{resolutionTags}</span>
+          <span className="movie-preview-resolution"><Tag color={resoltuion2Color(r)} key={r}>{r}</Tag></span>
           <span className="movie-preview-date">{this.props.movie.date}</span>
         </div>
       </a>
