@@ -6,3 +6,7 @@ export { default as MovieListPage } from './video/movie-list';
 export { default as MovieDetailPage } from './video/movie-detail';
 export { default as MusicPage } from './music/music';
 export { default as AdminPage } from './admin';
+
+export { default as TVSeriesPage } from './video/tv-program-series';
+export { default as TVEpisodesPage } from './video/tv-program-episodes';
+export { default as TVEpisodeDetailPage } from './video/tv-program-detail';

@@ -9,3 +9,6 @@ export { default as EncodeModal } from './encode-modal/encode-modal';
 
 export { default as MusicPlayList } from './music-play-list/music-play-list';
 export { default as MusicAddModal } from './music-add-modal/music-add-modal';
+
+export { default as SeriesItem } from './tv-program/series-item';
+export { default as EpisodeItem } from './tv-program/episode-item';

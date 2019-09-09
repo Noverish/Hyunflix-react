@@ -35,6 +35,7 @@ class LayoutComp extends React.Component<Props, State> {
             <Menu.Item key="home">Home</Menu.Item>
             <Menu.Item key="movies">영화</Menu.Item>
             <Menu.Item key="musics">음악</Menu.Item>
+            <Menu.Item key="tv-programs">예능/드라마</Menu.Item>
           </Menu>
         </Header>
         <Content className="main-layout-content">

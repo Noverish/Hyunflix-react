@@ -161,3 +161,22 @@ export async function encodePresets() {
   const method = 'get';
   return await request(url, method);
 }
+
+export async function seriesList() {
+  const url = `/tv-programs`;
+  const method = 'get';
+  return await request(url, method);
+}
+
+export async function episodeList(series: string) {
+  const url = `/tv-programs/${series}`;
+  const method = 'get';
+  return await request(url, method);
+}
+
+export async function episodeDetail(series: string, episodeNumber: Number) {
+  const url = `/tv-programs/${series}/${episodeNumber}`;
+  const method = 'get';
+  console.log(url);
+  return await request(url, method);
+}

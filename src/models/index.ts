@@ -57,3 +57,12 @@ export interface Music {
   artist: string;
   url: string;
 }
+
+export interface TVProgram {
+  videoId: number;
+  seriesName: string;
+  episodeName: string;
+  episodeNumber: number;
+  broadcastDate: string;
+  date: string;
+}
