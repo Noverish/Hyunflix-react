@@ -22,7 +22,6 @@ class Fileitem extends React.Component<Props, State> {
     const isVideo = ['.mp4', '.avi', '.mkv'].includes(extname(this.props.file.name));
     
     // TODO href 제대로 나오게 수정
-    // TODO file server 주소 다른 곳에서 가져오게 하기
     let link: React.ReactNode = <span className="file-item-name">{this.props.file.name}</span>
     if ((this.props.file.isdir || extname(this.props.file.name) === '.mp4')) {
       link = (

@@ -1,7 +1,8 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
+import { PageHeader, Divider } from 'antd';
 
-import { FileItem, RenameModal, EncodeModal, MainLayout } from 'components';
+import { FileItem, RenameModal, EncodeModal } from 'components';
 import { File } from 'models';
 import './folder-page.css';
 
@@ -50,13 +51,13 @@ class FolderPage extends React.Component<Props, State> {
       : null
     
     return (
-      <MainLayout>
-        <div>
-          {fileItems}
-          {renameModal}
-          {encodeModal}
-        </div>
-      </MainLayout>
+      <div>
+        <PageHeader onBack={() => null} title="Title" subTitle="This is a subtitle" />
+        <Divider style={{ margin: "0" }}/>
+        {fileItems}
+        {renameModal}
+        {encodeModal}
+      </div>
     )
   }
   

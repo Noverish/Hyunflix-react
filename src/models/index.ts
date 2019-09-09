@@ -37,7 +37,7 @@ export interface File {
 }
 
 export interface Encode {
-  _id: number;
+  encodeId: number;
   inpath: string;
   outpath: string;
   options: string;

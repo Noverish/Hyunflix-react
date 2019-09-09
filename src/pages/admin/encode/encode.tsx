@@ -1,12 +1,12 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { Button, Pagination, List, message } from 'antd';
+import { Button, Pagination, List, message, PageHeader, Divider } from 'antd';
 import * as socketio from 'socket.io-client';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { encodeList, encodeListSuccess, EncodeListAction, EncodeListSuccessAction } from 'actions';
-import { MainLayout, EncodeItem } from 'components';
+import { EncodeItem } from 'components';
 import { Encode } from 'models';
 import { pauseEncoding, resumeEncoding, SERVER } from 'api';
 import './encode.css';
@@ -37,7 +37,7 @@ class EncodePage extends React.Component<Props, State> {
       const encodes = this.props.encodes;
       
       const index = encodes.findIndex((item: Encode) => {
-        return item._id === payload['_id'];
+        return item.encodeId === payload['_id'];
       });
       
       encodes[index].progress = payload['progress'];
@@ -58,25 +58,25 @@ class EncodePage extends React.Component<Props, State> {
     const subItems: Encode[] = encodes.slice((page - 1) * 10, (page) * 10);
     
     return (
-      <MainLayout>
-        <div className="encode-page-layout">
-          <div className="encode-page-button-bar">
-            <Button type="primary" onClick={this.onPauseClicked}>Pause</Button>
-            <Button type="primary" onClick={this.onResumeClicked}>Resume</Button>
-          </div>
-          <div className="encode-page-item-list">
-            <List
-              dataSource={subItems}
-              renderItem={(item: Encode) => (
-                <EncodeItem encode={item} key={item._id} />
-              )}
-            />
-          </div>
-          <div className="pagination-layout">
-            <Pagination current={page} total={encodes.length} onChange={this.onChange} />
-          </div>
+      <div className="encode-page-layout">
+        <PageHeader onBack={() => null} title="Title" subTitle="This is a subtitle" />
+        <Divider style={{ margin: "0" }}/>
+        <div className="encode-page-button-bar">
+          <Button type="primary" onClick={this.onPauseClicked}>Pause</Button>
+          <Button type="primary" onClick={this.onResumeClicked}>Resume</Button>
         </div>
-      </MainLayout>
+        <div className="encode-page-item-list">
+          <List
+            dataSource={subItems}
+            renderItem={(item: Encode) => (
+              <EncodeItem encode={item} key={item.encodeId} />
+            )}
+          />
+        </div>
+        <div className="pagination-layout">
+          <Pagination current={page} total={encodes.length} onChange={this.onChange} />
+        </div>
+      </div>
     )
   }
   

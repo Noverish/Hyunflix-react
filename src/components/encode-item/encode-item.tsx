@@ -13,7 +13,7 @@ const encodeItem: React.FunctionComponent<Props> = ({ encode }) => {
   
   return (
     <div className="encode-item">
-      <div className="encode-item-id">{encode._id}</div>
+      <div className="encode-item-id">{encode.encodeId}</div>
       <div className="encode-item-inpath">{encode.inpath}</div>
       <div className="encode-item-etc-layout">
         { progress2tag(encode.progress) }

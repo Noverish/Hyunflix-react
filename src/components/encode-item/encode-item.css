@@ -3,6 +3,7 @@
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
+  padding: 8px;
   border-bottom: 0.5px solid #dddddd;
 }
 
@@ -11,13 +12,14 @@
 }
 
 .encode-item-id {
-  margin: 8px;
+  margin-right: 8px;
 }
 
 .encode-item-inpath {
   flex-grow: 1;
   flex-shrink: 1;
   word-break: break-all;
+  margin-right: 8px;
 }
 
 .encode-item-etc-layout {
@@ -29,13 +31,13 @@
 }
 
 .encode-item-status {
-  width: 75px;
+  width: 64px;
   text-align: center;
+  margin-right: 8px;
 }
 
 .encode-item-progress {
   width: 100px !important;
-  margin-left: 8px !important;
   margin-right: 24px !important;
 }
 

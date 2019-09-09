@@ -5,9 +5,8 @@ import { Result } from 'antd';
 import { Dispatch } from 'redux';
 
 import { explore, ExploreAction } from 'actions';
-import VideoPage from '../video/video-page';
+import VideoPage from 'pages/video/video-page';
 import FolderPage from './folder-page';
-import { MainLayout } from 'components';
 import { File, Video } from 'models';
 
 interface Props extends RouteComponentProps {
@@ -32,7 +31,8 @@ class ExplorerPage extends React.Component<Props, State> {
   }
   
   refresh = () => {
-    const path = `/${this.props.match.params[0] || ''}`;
+    const params = this.props.match.params[0];
+    const path = (params) ? params : '/';
     
     if(this.path !== path) {
       this.props.onExplore(path);
@@ -46,13 +46,11 @@ class ExplorerPage extends React.Component<Props, State> {
     
     if(!files && !video) {
       return (
-        <MainLayout>
-          <Result
-            status="404"
-            title="404"
-            subTitle="존재하지 않는 경로입니다"
-          />
-        </MainLayout>
+        <Result
+          status="404"
+          title="404"
+          subTitle="존재하지 않는 경로입니다"
+        />
       )
     }
     
@@ -66,7 +64,7 @@ class ExplorerPage extends React.Component<Props, State> {
       )
     } else {
       return (
-        <MainLayout />
+        <div>ERROR CODE 1002</div>
       )
     }
   }

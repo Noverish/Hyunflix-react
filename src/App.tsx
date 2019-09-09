@@ -26,9 +26,10 @@ class App extends Component<Props, State> {
           <Route path="/movies/:movie_id" component={pages.MovieDetailPage} />
           <Route path="/movies/" component={pages.MovieListPage} />
           <Route path="/musics/" component={pages.MusicPage} />
-          <Route path="/explorer/*" component={pages.ExplorerPage} />
-          <Route path="/explorer/" component={pages.ExplorerPage} />
-          <Route path="/encode/" component={pages.EncodePage} />
+          
+          <Route path="/explorer" component={pages.AdminPage} />
+          <Route path="/encode" component={pages.AdminPage} />
+          
           <Route component={pages.NotFoundPage} />
         </Switch>
       ) : (
