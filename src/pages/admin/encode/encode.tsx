@@ -37,7 +37,7 @@ class EncodePage extends React.Component<Props, State> {
       const encodes = this.props.encodes;
       
       const index = encodes.findIndex((item: Encode) => {
-        return item.encodeId === payload['_id'];
+        return item.encodeId === payload['encodeId'];
       });
       
       encodes[index].progress = payload['progress'];

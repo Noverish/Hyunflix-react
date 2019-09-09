@@ -50,6 +50,10 @@ class AdminLayout extends React.Component<Props, State> {
                 <Icon type="youtube" />
                 <span className="nav-text">비디오 인코딩</span>
               </Menu.Item>
+              <Menu.Item key="home">
+                <Icon type="home" />
+                <span className="nav-text">홈으로</span>
+              </Menu.Item>
             </Menu>
           </Sider>
           <div className="sider-rest" onClick={this.toggle}/>
