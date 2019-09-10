@@ -10,3 +10,5 @@ export { default as AdminPage } from './admin';
 export { default as TVSeriesPage } from './video/tv-program-series';
 export { default as TVEpisodesPage } from './video/tv-program-episodes';
 export { default as TVEpisodeDetailPage } from './video/tv-program-detail';
+
+export { default as VideoArticleList } from './article/video-article-list';

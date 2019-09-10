@@ -177,6 +177,11 @@ export async function episodeList(series: string) {
 export async function episodeDetail(series: string, episodeNumber: Number) {
   const url = `/tv-programs/${series}/${episodeNumber}`;
   const method = 'get';
-  console.log(url);
+  return await request(url, method);
+}
+
+export async function videoArticleList() {
+  const url = `/articles/videos`;
+  const method = 'get';
   return await request(url, method);
 }

@@ -5,6 +5,7 @@ import auth from './auth';
 import movie from './movie';
 import encode from './encode';
 import tvProgram from './tv-program';
+import article from './article';
 
 const counterApp = combineReducers({
   explorer,
@@ -12,6 +13,7 @@ const counterApp = combineReducers({
   movie,
   encode,
   tvProgram,
+  article,
 });
 
 export default counterApp;

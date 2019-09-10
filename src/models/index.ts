@@ -66,3 +66,17 @@ export interface TVProgram {
   broadcastDate: string;
   date: string;
 }
+
+export interface VideoArticle {
+  articleId: number;
+  videoId: number;
+  category: string;
+  title: string;
+  date: string;
+  path: string;
+  duration: number;
+  width: number;
+  height: number;
+  bitrate: number;
+  size: number;
+}

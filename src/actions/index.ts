@@ -3,3 +3,4 @@ export * from './auth';
 export * from './movie';
 export * from './encode';
 export * from './tv-program';
+export * from './article';
