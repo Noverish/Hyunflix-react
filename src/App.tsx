@@ -27,6 +27,7 @@ class App extends Component<Props, State> {
           <Route path="/movies/" component={pages.MovieListPage} />
           <Route path="/musics/" component={pages.MusicPage} />
           
+          <Route path="/articles/videos/:articleId" component={pages.VideoArticleContent} />
           <Route path="/articles/videos" component={pages.VideoArticleList} />
           
           <Route path="/tv-programs/:series/:episodeNumber" component={pages.TVEpisodeDetailPage} />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { PageHeader, List, Pagination, Input } from 'antd';
+import { PageHeader, List, Pagination } from 'antd';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -37,6 +37,7 @@ class VideoArticleListPage extends React.Component<Props, State> {
     return (
       <MainLayout>
         <div>
+          <PageHeader onBack={() => null} title="Title" subTitle="This is a subtitle" />
           <List
             dataSource={sliced}
             renderItem={article => <VideoArticleItem article={article}/>}

@@ -1,12 +1,12 @@
 import React from 'react';
 import videojs from 'video.js';
-import { Video } from 'models';
+import { Subtitle } from 'models';
 
 interface Props {
-  video: Video
-  width: number
-  height: number
-  resolution: string
+  width: number;
+  height: number;
+  src: string;
+  subtitles: Subtitle[];
 }
 
 interface State {
@@ -22,60 +22,17 @@ interface CaptionOption {
 }
 
 export default class VideoPlayer extends React.Component<Props, State> {
-  captionOptions: CaptionOption[] = [];
-  player;
-  videoNode;
+  player: videojs.Player | null = null;
+  videoNode: HTMLVideoElement | null = null;
   
-  componentDidMount() {
-    this.refresh()
-  }
-  
-  componentDidUpdate() {
-    this.refresh();
-  }
-  
-  refresh() {
-    this.captionOptions = [];
-    
-    for(const subtitle of this.props.video.subtitles) {
-      this.captionOptions.push({
-        kind: 'subtitles',
-        srclang: subtitle.language,
-        label: subtitle.language,
-        src: subtitle.url,
-        default: subtitle.language === 'ko'
-      })
-    }
-    
+  initPlayer = () => {
     const videoOption = {
       autoplay: false,
       controls: true,
-      sources: [{ src: '', type: ''}]
+      sources: []
     }
     
-    for(const video of this.props.video.srcs) {
-      if(this.props.resolution === video.resolution) {
-        videoOption.sources[0] = {
-          src: video.url,
-          type: 'video/mp4'
-        }
-      }
-    }
-    
-    if(this.player) {
-      if(this.player.currentSrc() !== videoOption.sources[0].src) {
-        this.player.src(videoOption.sources[0]);
-        this.onPlayerReady();
-      }
-    } else {
-      this.player = videojs(this.videoNode, videoOption, this.onPlayerReady);
-    }
-  }
-
-  onPlayerReady = () => {
-    for(const option of this.captionOptions) {
-      this.player.addRemoteTextTrack(option, false);
-    }
+    this.player = videojs(this.videoNode, videoOption, this.onPlayerReady);
     
     const textTractSettings = {
       "backgroundColor": "#000",
@@ -83,9 +40,27 @@ export default class VideoPlayer extends React.Component<Props, State> {
       "edgeStyle": "uniform",
     }
     
-    var settings = this.player.textTrackSettings;
+    // TODO ts ignore
+    // @ts-ignore
+    var settings = this.player!.textTrackSettings;
     settings.setValues(textTractSettings);
     settings.updateDisplay();
+  }
+
+  onPlayerReady = () => {
+    const { subtitles, src } = this.props;
+    
+    this.player!.src({ src, type: 'video/mp4' });
+    
+    for(const subtitle of subtitles) {
+      this.player!.addRemoteTextTrack({
+        kind: 'subtitles',
+        srclang: subtitle.language,
+        label: subtitle.language,
+        src: subtitle.url,
+        default: subtitle.language === 'ko'
+      }, false /* manualCleanup */);
+    }
   }
 
   componentWillUnmount() {
@@ -98,17 +73,24 @@ export default class VideoPlayer extends React.Component<Props, State> {
   // so videojs won't create additional wrapper in the DOM
   // see https://github.com/videojs/video.js/pull/3856
   render() {
+    if (this.player) {
+      this.onPlayerReady();
+    }
+    
     const style = {
       width: `${this.props.width}px`,
       height: `${this.props.height}px`,
-      maxWidth: '1280px',
-      maxHeight: '720px'
     }
     
     return (
       <div data-vjs-player style={style}>
         <video
-          ref={ node => this.videoNode = node }
+          ref={node => { // TODO 왜 인지 모르겠는데 null이 나온다
+            if(!this.videoNode && node) {
+              this.videoNode = node;
+              this.initPlayer();
+            }
+          }}
           className="video-js"
         ></video>
       </div>

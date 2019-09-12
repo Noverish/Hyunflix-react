@@ -73,10 +73,15 @@ export interface VideoArticle {
   category: string;
   title: string;
   date: string;
-  path: string;
+  url: string;
   duration: number;
   width: number;
   height: number;
   bitrate: number;
   size: number;
+}
+
+export interface Subtitle {
+  language: string;
+  url: string;
 }

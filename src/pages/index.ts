@@ -12,3 +12,4 @@ export { default as TVEpisodesPage } from './video/tv-program-episodes';
 export { default as TVEpisodeDetailPage } from './video/tv-program-detail';
 
 export { default as VideoArticleList } from './article/video-article-list';
+export { default as VideoArticleContent } from './article/video-article-content';

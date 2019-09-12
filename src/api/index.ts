@@ -185,3 +185,9 @@ export async function videoArticleList() {
   const method = 'get';
   return await request(url, method);
 }
+
+export async function videoArticleContent(articleId: number) {
+  const url = `/articles/videos/${articleId}`;
+  const method = 'get';
+  return await request(url, method);
+}

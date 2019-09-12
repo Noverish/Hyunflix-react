@@ -15,12 +15,20 @@ interface State {
 
 class LayoutComp extends React.Component<Props, State> {
   menuClicked = (e) => {
-    this.props.history.push(`/${e.key}`);
+    this.props.history.push(e.key);
   }
   
   render() {
     const path = this.props.match.path;
-    const first = path.split('/')[1];
+    
+    const items = [
+      { name: 'Home', path: '/home' },
+      { name: 'Video', path: '/articles/videos' },
+      { name: 'Music', path: '/musics' },
+    ]
+    
+    const itemComps = items.map(i => <Menu.Item key={i.path}>{i.name}</Menu.Item>)
+    const selectedKeys: string[] = items.filter(i => path.startsWith(i.path)).map(i => i.path);
     
     return (
       <Layout className="main-layout">
@@ -28,14 +36,11 @@ class LayoutComp extends React.Component<Props, State> {
           <Menu
             theme="dark"
             mode="horizontal"
-            selectedKeys={[first]}
+            selectedKeys={selectedKeys}
             style={{ lineHeight: '64px' }}
             onClick={this.menuClicked}
           >
-            <Menu.Item key="home">Home</Menu.Item>
-            <Menu.Item key="movies">영화</Menu.Item>
-            <Menu.Item key="musics">음악</Menu.Item>
-            <Menu.Item key="tv-programs">예능/드라마</Menu.Item>
+            {itemComps}
           </Menu>
         </Header>
         <Content className="main-layout-content">

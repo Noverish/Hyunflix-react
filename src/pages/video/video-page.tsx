@@ -64,7 +64,7 @@ class MovieDetailPage extends React.Component<Props, State> {
           this.videoContainer = ref;
           this.resize();
         }}>
-          <VideoPlayer video={this.props.video} width={width} height={height} resolution={this.state.resolution}/>
+        
         </div>
         <div style={{ padding: '12px' }}>
           <div>
