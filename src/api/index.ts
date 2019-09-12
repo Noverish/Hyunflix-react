@@ -1,4 +1,4 @@
-import { Movie, Video, File, Encode } from 'models'
+import { Video, File, Encode } from 'models'
 import { message } from 'antd';
 import { tokenExpire } from 'actions';
 import * as NodeRSA from 'node-rsa';
@@ -43,18 +43,6 @@ async function request(path: string, method: string, data: any = undefined) {
     message.error(errMsg);
     throw errMsg;
   }
-}
-
-export async function getMoviePreviewList(): Promise<Movie[]> {
-  const url = `/movies`;
-  const method = 'get';
-  return await request(url, method);
-}
-
-export async function getMovieDetail(movie_id: number): Promise<Video> {
-  const url = `/movies/${movie_id}`;
-  const method = 'get';
-  return await request(url, method);
 }
 
 export async function getRSAKey(): Promise<string> {
@@ -158,24 +146,6 @@ export async function getAllMusics() {
 
 export async function encodePresets() {
   const url = `/encode/presets`;
-  const method = 'get';
-  return await request(url, method);
-}
-
-export async function seriesList() {
-  const url = `/tv-programs`;
-  const method = 'get';
-  return await request(url, method);
-}
-
-export async function episodeList(series: string) {
-  const url = `/tv-programs/${series}`;
-  const method = 'get';
-  return await request(url, method);
-}
-
-export async function episodeDetail(series: string, episodeNumber: Number) {
-  const url = `/tv-programs/${series}/${episodeNumber}`;
   const method = 'get';
   return await request(url, method);
 }

@@ -23,16 +23,11 @@ class App extends Component<Props, State> {
           <Route path="/register" render={ props => <Redirect to="/home" /> } />
           <Route exact path="/" render={ props => <Redirect to="/home" /> } />
           <Route path="/home" component={pages.HomePage} />
-          <Route path="/movies/:movie_id" component={pages.MovieDetailPage} />
-          <Route path="/movies/" component={pages.MovieListPage} />
-          <Route path="/musics/" component={pages.MusicPage} />
           
           <Route path="/articles/videos/:articleId" component={pages.VideoArticleContent} />
           <Route path="/articles/videos" component={pages.VideoArticleList} />
           
-          <Route path="/tv-programs/:series/:episodeNumber" component={pages.TVEpisodeDetailPage} />
-          <Route path="/tv-programs/:series" component={pages.TVEpisodesPage} />
-          <Route path="/tv-programs" component={pages.TVSeriesPage} />
+          <Route path="/musics/" component={pages.MusicPage} />
           
           <Route path="/explorer" component={pages.AdminPage} />
           <Route path="/encode" component={pages.AdminPage} />

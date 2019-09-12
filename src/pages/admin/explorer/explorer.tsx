@@ -5,7 +5,6 @@ import { Result } from 'antd';
 import { Dispatch } from 'redux';
 
 import { explore, ExploreAction } from 'actions';
-import VideoPage from 'pages/video/video-page';
 import FolderPage from './folder-page';
 import { File, Video } from 'models';
 
@@ -60,7 +59,7 @@ class ExplorerPage extends React.Component<Props, State> {
       )
     } else if (video) {
       return (
-        <VideoPage video={video} />  
+        <div>준비중</div>
       )
     } else {
       return (
