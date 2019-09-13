@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography } from 'antd';
 
-import { getAllMusics } from 'api';
+import { musicList } from 'api';
 import { MainLayout, MusicPlayList } from 'components';
 import { Music } from 'models';
 import './music.css';
@@ -25,7 +25,7 @@ class MusicPage extends React.Component<Props, State> {
   }
   
   componentDidMount() {
-    getAllMusics()
+    musicList()
       .then((musics: Music[]) => {
         this.setState({ musics })
       })

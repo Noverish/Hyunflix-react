@@ -1,0 +1,9 @@
+.article-list-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.article-list-page .pagenation {
+  align-self: center;
+  margin-top: 24px;
+}

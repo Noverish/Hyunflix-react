@@ -1,9 +1,10 @@
 import React from 'react';
-import { List, Button } from 'antd';
+import { List, Button, Pagination } from 'antd';
 
 import { MusicAddModal } from 'components';
 import { default as MusicPlayItem } from './music-play-item';
 import { Music } from 'models';
+import { PAGE_SIZE } from 'config';
 
 interface Props {
   musics: Music[];
@@ -16,6 +17,7 @@ interface State {
   query: string;
   playlist: Music[];
   addModalVisible: boolean;
+  page: number;
 }
 
 export default class extends React.Component<Props, State> {
@@ -23,6 +25,7 @@ export default class extends React.Component<Props, State> {
     query: '',
     playlist: [],
     addModalVisible: false,
+    page: 1,
   }
   
   renderHeader = () => {
@@ -37,14 +40,17 @@ export default class extends React.Component<Props, State> {
   }
   
   render() {
+    const { page } = this.state;
     const playlist: Music[] = this.state.playlist;
+    
+    const sliced = playlist.slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
     
     return (
       <div>
         <List
           header={this.renderHeader()}
           bordered
-          dataSource={playlist}
+          dataSource={sliced}
           renderItem={(music: Music, index: number) =>
             <MusicPlayItem
               index={index}
@@ -54,6 +60,7 @@ export default class extends React.Component<Props, State> {
             />
           }
         />
+        <Pagination className="pagenation" current={page} total={playlist.length} pageSize={PAGE_SIZE} onChange={this.onPageChange} />
       </div>
     )
   }
@@ -74,5 +81,9 @@ export default class extends React.Component<Props, State> {
     this.setState({
       addModalVisible: true,
     });
+  }
+  
+  onPageChange = (page: number) => {
+    this.setState({ page })
   }
 }

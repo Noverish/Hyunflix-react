@@ -32,7 +32,7 @@ class MovieItem extends React.Component<Props, State> {
     return (
       <a href={link} className="article-item" onClick={this.onClick}>
         <div>
-          <span className="id">{article.videoId}</span>
+          <span className="id">{article.articleId}</span>
           <span className="title">{article.title}</span>
         </div>
         <div>

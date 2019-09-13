@@ -36,13 +36,13 @@ class VideoArticleListPage extends React.Component<Props, State> {
     
     return (
       <MainLayout>
-        <div>
-          <PageHeader onBack={() => null} title="Title" subTitle="This is a subtitle" />
+        <div className="article-list-page">
+          <PageHeader onBack={() => null} title="Video" subTitle="영화, 드라마, 예능" />
           <List
             dataSource={sliced}
             renderItem={article => <VideoArticleItem article={article}/>}
           />
-          <Pagination className="pagenation" current={page} total={articles.length} onChange={this.onPageChange} />
+          <Pagination className="pagenation" current={page} total={articles.length} pageSize={PAGE_SIZE} onChange={this.onPageChange} />
         </div>
       </MainLayout>
     )
@@ -61,7 +61,7 @@ let mapDispatchToProps = (dispatch: Dispatch<VideoArticleListAction>) => {
 
 let mapStateToProps = (state) => {
   return {
-    articles: state.article.articles,
+    articles: state.video.articles,
   }
 }
 

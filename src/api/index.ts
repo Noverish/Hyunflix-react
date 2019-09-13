@@ -88,7 +88,7 @@ export async function encodeFile(inpath: string, options: string, outpath: strin
   return await request(url, method, body);
 }
 
-export async function getAllMusics() {
+export async function musicList() {
   const url = `/musics`;
   const method = 'get';
   return await request(url, method);

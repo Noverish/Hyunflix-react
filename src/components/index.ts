@@ -10,3 +10,4 @@ export { default as MusicPlayList } from './music-play-list/music-play-list';
 export { default as MusicAddModal } from './music-add-modal/music-add-modal';
 
 export { default as VideoArticleItem } from './article-item/video-article-item';
+export { default as MusicArticleItem } from './article-item/music-article-item';

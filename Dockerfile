@@ -1,11 +1,10 @@
 # REACT
-FROM node:10.16.1-alpine as builder
+FROM node:10.16.3-alpine as builder
 
-RUN apk update
-RUN apk upgrade
-RUN apk add --update tzdata
-ENV TZ=Asia/Seoul
-RUN rm -rf /var/cache/apk/*
+RUN apk add --no-cache tzdata
+ENV TZ='Asia/Seoul'
+
+WORKDIR /app
 
 COPY node_modules/ /app/node_modules
 COPY public/       /app/public
@@ -13,22 +12,18 @@ COPY src/          /app/src
 COPY package.json  /app
 COPY tsconfig.json /app
 
-WORKDIR /app
-
 RUN npm run build
 
 # NGINX
 FROM nginx:1.17.3-alpine
 
-RUN apk update
-RUN apk upgrade
-RUN apk add --update tzdata
-ENV TZ=Asia/Seoul
-RUN rm -rf /var/cache/apk/*
+RUN apk add --no-cache tzdata
+ENV TZ='Asia/Seoul'
 
 COPY default.conf /etc/nginx/conf.d/default.conf
 
 COPY --from=builder /app/build /usr/share/nginx/html
 
 EXPOSE 80
+
 CMD ["nginx", "-g", "daemon off;"]

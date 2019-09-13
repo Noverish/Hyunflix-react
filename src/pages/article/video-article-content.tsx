@@ -84,8 +84,8 @@ let mapDispatchToProps = (dispatch: Dispatch<VideoArticleContentAction>) => {
 
 let mapStateToProps = (state) => {
   return {
-    article: state.article.article,
-    subtitles: state.article.subtitles,
+    article: state.video.article,
+    subtitles: state.video.subtitles,
   }
 }
 

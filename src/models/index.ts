@@ -16,7 +16,7 @@ export interface Encode {
 }
 
 export interface Music {
-  music_id: number;
+  musicId: number;
   title: string;
   path: string;
   duration: number;

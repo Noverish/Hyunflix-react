@@ -4,14 +4,16 @@ import logger from 'redux-logger';
 import explorer from './explorer';
 import auth from './auth';
 import encode from './encode';
-import article from './article';
+import video from './video';
+import music from './music';
 
 export default function* rootSaga() {
   yield all([
     ...explorer,
     ...auth,
     ...encode,
-    ...article,
+    ...video,
+    ...music,
     process.env.NODE_ENV === 'development' && logger,
   ])
 }
