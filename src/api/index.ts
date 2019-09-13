@@ -1,13 +1,13 @@
 import { File, Encode } from 'models'
 import { message } from 'antd';
 import { tokenExpire } from 'actions';
-import * as NodeRSA from 'node-rsa';
 import { store } from '../index';
 const axios = require('axios');
 
 export const SERVER: string = 'http://home.hyunsub.kim:8080';
 
 export * from './ffmpeg';
+export * from './auth';
 
 export async function request(path: string, method: string, data: any = undefined) {
   const url = path.startsWith('/') ? `${SERVER}${path}` : path;
@@ -45,39 +45,6 @@ export async function request(path: string, method: string, data: any = undefine
     message.error(errMsg);
     throw errMsg;
   }
-}
-
-export async function getRSAKey(): Promise<string> {
-  const url = '/auth/rsa-key';
-  const method = 'get';
-  return (await request(url, method)).key;
-}
-
-export async function login(username: string, password: string): Promise<string> {
-  const publicKeyString: string = await getRSAKey();
-  const publicKey = new NodeRSA(publicKeyString, 'pkcs8-public');
-  
-  const url = `/auth/login`;
-  const method = 'post';
-  const body = {
-    username: publicKey.encrypt(username, 'base64'),
-    password: publicKey.encrypt(password, 'base64'),
-  }
-  return (await request(url, method, body)).token;
-}
-
-export async function register(username: string, password: string, register_code: string): Promise<string> {
-  const publicKeyString: string = await getRSAKey();
-  const publicKey = new NodeRSA(publicKeyString, 'pkcs8-public');
-  
-  const url = `/auth/register`;
-  const method = 'post';
-  const body = {
-    username: publicKey.encrypt(username, 'base64'),
-    password: publicKey.encrypt(password, 'base64'),
-    reg_code: publicKey.encrypt(register_code, 'base64'),
-  }
-  return (await request(url, method, body)).token;
 }
 
 export async function readdir(path: string): Promise<File[]> {
