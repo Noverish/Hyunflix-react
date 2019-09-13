@@ -1,4 +1,4 @@
-import { File, Video } from 'models';
+import { File } from 'models';
 
 export const EXPLORE = 'EXPLORE';
 export const EXPLORE_SUCCESS = 'EXPLORE_SUCCESS';
@@ -11,7 +11,6 @@ export interface ExploreAction {
 export interface ExploreSuccessAction {
   type: typeof EXPLORE_SUCCESS;
   files: File[] | null;
-  video: Video | null;
 }
 
 export function explore(path: string): ExploreAction {
@@ -21,9 +20,9 @@ export function explore(path: string): ExploreAction {
   }
 }
 
-export function exploreSuccess(files: File[] | null, video: Video | null): ExploreSuccessAction {
+export function exploreSuccess(files: File[] | null): ExploreSuccessAction {
   return {
     type: EXPLORE_SUCCESS,
-    files, video,
+    files,
   }
 }

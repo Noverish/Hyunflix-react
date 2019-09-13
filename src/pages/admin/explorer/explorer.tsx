@@ -6,12 +6,11 @@ import { Dispatch } from 'redux';
 
 import { explore, ExploreAction } from 'actions';
 import FolderPage from './folder-page';
-import { File, Video } from 'models';
+import { File } from 'models';
 
 interface Props extends RouteComponentProps {
   onExplore(path: string): ExploreAction;
   files: File[] | null;
-  video: Video | null;
 }
 
 interface State {
@@ -41,9 +40,8 @@ class ExplorerPage extends React.Component<Props, State> {
   
   render() {
     const files: File[] | null = this.props.files;
-    const video: Video | null = this.props.video;
     
-    if(!files && !video) {
+    if(!files) {
       return (
         <Result
           status="404"
@@ -56,10 +54,6 @@ class ExplorerPage extends React.Component<Props, State> {
     if (files) {
       return (
         <FolderPage files={files} />
-      )
-    } else if (video) {
-      return (
-        <div>준비중</div>
       )
     } else {
       return (
@@ -78,7 +72,6 @@ let mapDispatchToProps = (dispatch: Dispatch<ExploreAction>) => {
 let mapStateToProps = (state) => {
   return {
     files: state.explorer.files,
-    video: state.explorer.video,
   }
 }
 

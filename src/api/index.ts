@@ -1,4 +1,4 @@
-import { Video, File, Encode } from 'models'
+import { File, Encode } from 'models'
 import { message } from 'antd';
 import { tokenExpire } from 'actions';
 import * as NodeRSA from 'node-rsa';
@@ -7,8 +7,10 @@ const axios = require('axios');
 
 export const SERVER: string = 'http://home.hyunsub.kim:8080';
 
-async function request(path: string, method: string, data: any = undefined) {
-  const url = `${SERVER}${path}`;
+export * from './ffmpeg';
+
+export async function request(path: string, method: string, data: any = undefined) {
+  const url = path.startsWith('/') ? `${SERVER}${path}` : path;
   const headers = {};
   
   const token = store.getState().auth.token;
@@ -106,13 +108,6 @@ export async function exists(path: string): Promise<boolean> {
   return (await request(url, method, body)).exists;
 }
 
-export async function video(path: string): Promise<Video> {
-  const url = `/explorer/video`;
-  const method = 'post';
-  const body = { path }
-  return await request(url, method, body);
-}
-
 export async function encodeStatus(): Promise<Encode[]> {
   const url = `/encode/status`;
   const method = 'get';
@@ -124,18 +119,6 @@ export async function encodeFile(inpath: string, options: string, outpath: strin
   const method = 'post';
   const body = { inpath, options, outpath };
   return await request(url, method, body);
-}
-
-export async function pauseEncoding() {
-  const url = `/encode/pause`;
-  const method = 'post';
-  return await request(url, method);
-}
-
-export async function resumeEncoding() {
-  const url = `/encode/resume`;
-  const method = 'post';
-  return await request(url, method);
 }
 
 export async function getAllMusics() {

@@ -8,7 +8,8 @@ import { Dispatch } from 'redux';
 import { encodeList, encodeListSuccess, EncodeListAction, EncodeListSuccessAction } from 'actions';
 import { EncodeItem } from 'components';
 import { Encode } from 'models';
-import { pauseEncoding, resumeEncoding, SERVER } from 'api';
+import { ffmpegPause, ffmpegResume } from 'api';
+import { FFMPEG_SERVER, FFMPEG_SOCKET_PATH } from 'config';
 import './encode.css';
 
 interface Props extends RouteComponentProps {
@@ -31,7 +32,7 @@ class EncodePage extends React.Component<Props, State> {
   componentDidMount() {
     this.props.onEncodeList();
     
-    this.socket = socketio.connect(SERVER, { path: '/socket.io/api' });
+    this.socket = socketio.connect(FFMPEG_SERVER, { path: FFMPEG_SOCKET_PATH });
     this.socket.on('message', (data: Buffer) => {
       const payload = JSON.parse(data.toString());
       const encodes = this.props.encodes;
@@ -40,9 +41,10 @@ class EncodePage extends React.Component<Props, State> {
         return item.encodeId === payload['encodeId'];
       });
       
-      encodes[index].progress = payload['progress'];
-      
-      this.props.onEncodeListUpdate([...encodes]);
+      if (index >= 0) {
+        encodes[index].progress = payload['progress'];
+        this.props.onEncodeListUpdate([...encodes]);
+      }
     });
   }
   
@@ -85,7 +87,7 @@ class EncodePage extends React.Component<Props, State> {
   }
   
   onPauseClicked = () => {
-    pauseEncoding()
+    ffmpegPause()
       .then(() => {
         message.success('success');
       })
@@ -95,7 +97,7 @@ class EncodePage extends React.Component<Props, State> {
   }
   
   onResumeClicked = () => {
-    resumeEncoding()
+    ffmpegResume()
       .then(() => {
         message.success('success');
       })
