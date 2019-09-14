@@ -7,7 +7,8 @@ import { time } from 'utils';
 import './article-item.css';
 
 interface Props extends RouteComponentProps {
-  article: VideoArticle
+  highlight: string;
+  article: VideoArticle;
 }
 
 interface State {
@@ -23,6 +24,7 @@ class MovieItem extends React.Component<Props, State> {
   }
   
   render() {
+    const { highlight } = this.props;
     const article = this.props.article;
     const link = `/articles/videos/${this.props.article.articleId}`;
     
@@ -33,7 +35,7 @@ class MovieItem extends React.Component<Props, State> {
       <a href={link} className="article-item" onClick={this.onClick}>
         <div>
           <span className="id">{article.articleId}</span>
-          <span className="title">{article.title}</span>
+          <span className="title">{renderTitle(article.title, highlight)}</span>
         </div>
         <div>
           <span className="duration">{time.second2String(article.duration)}</span>
@@ -43,6 +45,23 @@ class MovieItem extends React.Component<Props, State> {
       </a>
     )
   }
+}
+
+function renderTitle(title: string, query: string) {
+  const index = title.indexOf(query);
+  const beforeStr = title.substr(0, index);
+  const afterStr = title.substr(index + query.length);
+  return (index > -1)
+    ? (
+      <span>
+        {beforeStr}
+        <span style={{ color: '#f50' }}>{query}</span>
+        {afterStr}
+      </span>
+    )
+    : (
+      <span>{title}</span>
+    );
 }
 
 function resoltuion2Color(resolution: string) {

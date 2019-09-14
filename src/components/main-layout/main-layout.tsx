@@ -24,7 +24,7 @@ class LayoutComp extends React.Component<Props, State> {
     const items = [
       { name: 'Home', path: '/home' },
       { name: 'Video', path: '/articles/videos' },
-      { name: 'Music', path: '/musics' },
+      { name: 'Music', path: '/articles/musics' },
     ]
     
     const itemComps = items.map(i => <Menu.Item key={i.path}>{i.name}</Menu.Item>)

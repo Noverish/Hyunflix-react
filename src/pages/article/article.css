@@ -3,7 +3,40 @@
   flex-direction: column;
 }
 
+.article-list-page .page-header {
+  border-top: 1px solid #dddddd;
+}
+
 .article-list-page .pagenation {
   align-self: center;
   margin-top: 24px;
+}
+
+@media only screen and (min-width: 769px) {
+  .article-list-page .page-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .article-list-page .ant-page-header {
+    flex-grow: 1;
+  }
+  
+  .article-list-page .ant-input-search {
+    width: 300px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .article-list-page .page-header {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .article-list-page .ant-input-search {
+    align-self: center;
+    width: 250px;
+    margin-bottom: 8px;
+  }
 }
