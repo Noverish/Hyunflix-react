@@ -1,41 +1,38 @@
 import React from 'react';
-import { Typography } from 'antd';
+import { Typography, Button } from 'antd';
+import { connect } from 'react-redux';
 
-import { musicList } from 'api';
-import { MainLayout, MusicPlayList } from 'components';
+import { musicPlaylistAdd, musicListAsync, musicNowPlayingChange } from 'actions';
+import { MainLayout, MusicPlayList, MusicAddModal } from 'components';
 import { Music } from 'models';
 import './music.css';
 
 interface Props {
-  
+  musicListAsyncRequest(): ReturnType<typeof musicListAsync.request>;
+  musicPlaylistAdd(playlist: Music[]): ReturnType<typeof musicPlaylistAdd>;
+  musicNowPlayingChange(music: Music | null): ReturnType<typeof musicNowPlayingChange>;
+  playlist: Music[];
+  nowPlaying: Music | null;
 }
 
 interface State {
-  musics: Music[];
-  nowPlaying: Music | null;
+  addModalVisible: boolean;
 }
 
 class MusicPage extends React.Component<Props, State> {
   audioTag: HTMLAudioElement | null = null;
-  playlist: Music[] = [];
   
   state = {
-    musics: [],
-    nowPlaying: null,
+    addModalVisible: false,
   }
   
   componentDidMount() {
-    musicList()
-      .then((musics: Music[]) => {
-        this.setState({ musics })
-      })
-      .catch((msg: string) => {
-        
-      })
+    this.props.musicListAsyncRequest();
   }
   
   render() {
-    const nowPlaying: Music | null = this.state.nowPlaying;
+    const { nowPlaying } = this.props;
+    
     const source = (nowPlaying)
       ? <source src={nowPlaying!.url} type="audio/mpeg" />
       : null
@@ -50,7 +47,9 @@ class MusicPage extends React.Component<Props, State> {
         <audio controls autoPlay style={{ width: '100%' }} onEnded={this.onMusicEnded} ref={ref => { this.audioTag = ref }}>
           {source}
         </audio>
-        <MusicPlayList musics={this.state.musics} onPlaylistChanged={this.onPlaylistChanged} onItemClick={this.changeMusic} nowPlaying={this.state.nowPlaying}/>
+        <Button type="primary" size="large" icon="plus" onClick={this.onAddBtnClicked}>곡 추가</Button>
+        <MusicAddModal visible={this.state.addModalVisible} dismissCallback={this.onAddModalDismiss} />
+        <MusicPlayList />
       </MainLayout>
     )
   }
@@ -61,39 +60,35 @@ class MusicPage extends React.Component<Props, State> {
     }
   }
   
-  onPlaylistChanged = (playlist: Music[]) => {
-    this.playlist = playlist;
-    
-    if(this.state.nowPlaying === null) {
-      this.setState({
-        nowPlaying: playlist[0],
-      })
-    }
+  onAddBtnClicked = () => {
+    this.setState({ addModalVisible: true });
+  }
+  
+  onAddModalDismiss = () => {
+    this.setState({ addModalVisible: false });
   }
   
   onMusicEnded = (e) => {
-    const nowPlaying: Music = this.state.nowPlaying!;
+    const { playlist, nowPlaying, musicNowPlayingChange } = this.props;
     
-    if(this.playlist.includes(nowPlaying)) {
-      const index: number = this.playlist.indexOf(nowPlaying);
-      this.changeMusic(this.playlist[index + 1]);
-    } else {
-      this.changeMusic(this.playlist[0]);
+    if (nowPlaying !== null) {
+      const index: number = playlist.indexOf(nowPlaying);
+      musicNowPlayingChange(playlist[(index + 1) % playlist.length]);
     }
-  }
-  
-  changeMusic = (music: Music) => {
-    const index: number = this.playlist.indexOf(music);
-    
-    if(index < 0) {
-      console.log('ERROR CODE 1000');
-      return;
-    }
-    
-    this.setState({
-      nowPlaying: this.playlist[index],
-    });
   }
 }
 
-export default MusicPage;
+const mapDispatchToProps = {
+  musicPlaylistAdd,
+  musicListAsyncRequest: musicListAsync.request,
+  musicNowPlayingChange,
+}
+
+const mapStateToProps = (state) => {
+  return {
+    playlist: state.music.playlist,
+    nowPlaying: state.music.nowPlaying,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MusicPage);

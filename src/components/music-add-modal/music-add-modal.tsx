@@ -1,13 +1,17 @@
 import React from 'react';
 import { Tree, Modal, Input } from 'antd';
 import * as hangul from 'hangul-js';
+import { connect } from 'react-redux';
 
+import { musicPlaylistAdd } from 'actions';
 import { Music } from 'models';
 
 interface Props {
-  visible: boolean;
+  musicPlaylistAdd(playlist: Music[]): ReturnType<typeof musicPlaylistAdd>;
   musics: Music[];
-  onAdd: (musics: Music[]) => void;
+  
+  dismissCallback(): void;
+  visible: boolean;
 }
 
 interface State {
@@ -16,7 +20,7 @@ interface State {
   expandedKeys: string[];
 }
 
-export default class MusicAddModal extends React.Component<Props, State> {
+class MusicAddModal extends React.Component<Props, State> {
   checkedKeys: string[] = []
   state = {
     query: '',
@@ -86,13 +90,32 @@ export default class MusicAddModal extends React.Component<Props, State> {
     const keys = this.checkedKeys.filter((k: string) => k.endsWith('.mp3'));
     const musics = this.props.musics.filter((m: Music) => keys.includes(m.path));
     
-    this.props.onAdd(musics);
+    this.props.musicPlaylistAdd(musics);
+    this.props.dismissCallback();
   }
   
   onCancel = () => {
-    this.props.onAdd([]);
+    this.props.dismissCallback();
   }
 }
+
+const mapDispatchToProps = {
+  musicPlaylistAdd,
+}
+
+const mapStateToProps = (state) => {
+  return {
+    musics: state.music.musics,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MusicAddModal);
+
+
+
+
+
+
 
 interface MusicTreeNode {
   title: string;

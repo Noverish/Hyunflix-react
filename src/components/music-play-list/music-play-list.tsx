@@ -1,61 +1,45 @@
 import React from 'react';
-import { List, Button, Pagination } from 'antd';
+import { List, Pagination } from 'antd';
+import { connect } from 'react-redux';
 
-import { MusicAddModal } from 'components';
+import { musicNowPlayingChange } from 'actions';
 import { default as MusicPlayItem } from './music-play-item';
 import { Music } from 'models';
 import { PAGE_SIZE } from 'config';
 
 interface Props {
-  musics: Music[];
-  onPlaylistChanged: (musics: Music[]) => void;
-  onItemClick: (music: Music) => void;
+  musicNowPlayingChange(music: Music | null): ReturnType<typeof musicNowPlayingChange>;
+  playlist: Music[];
   nowPlaying: Music | null;
 }
 
 interface State {
   query: string;
-  playlist: Music[];
-  addModalVisible: boolean;
   page: number;
 }
 
-export default class extends React.Component<Props, State> {
+class MusicPlaylist extends React.Component<Props, State> {
   state = {
     query: '',
-    playlist: [],
-    addModalVisible: false,
     page: 1,
-  }
-  
-  renderHeader = () => {
-    return (
-      <div>
-        <Button type="primary" size="large" icon="plus" onClick={this.onAddBtnClicked}>
-          곡 추가
-        </Button>
-        <MusicAddModal visible={this.state.addModalVisible} musics={this.props.musics} onAdd={this.onAdd} />
-      </div>
-    )
   }
   
   render() {
     const { page } = this.state;
-    const playlist: Music[] = this.state.playlist;
+    const playlist: Music[] = this.props.playlist;
     
     const sliced = playlist.slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
     
     return (
       <div>
         <List
-          header={this.renderHeader()}
           bordered
           dataSource={sliced}
-          renderItem={(music: Music, index: number) =>
+          renderItem={music =>
             <MusicPlayItem
-              index={index}
+              index={playlist.indexOf(music)}
               music={music}
-              onClick={this.props.onItemClick}
+              onClick={this.onItemClick}
               selected={this.props.nowPlaying === music}
             />
           }
@@ -65,25 +49,24 @@ export default class extends React.Component<Props, State> {
     )
   }
   
-  onAdd = (musics: Music[]) => {
-    const playlist: Music[] = this.state.playlist;
-    const newPlaylist: Music[] = playlist.concat(musics);
-    
-    this.setState({
-      playlist: newPlaylist,
-      addModalVisible: false,
-    });
-    
-    this.props.onPlaylistChanged(newPlaylist);
-  }
-  
-  onAddBtnClicked = () => {
-    this.setState({
-      addModalVisible: true,
-    });
+  onItemClick = (music: Music) => {
+    this.props.musicNowPlayingChange(music);
   }
   
   onPageChange = (page: number) => {
-    this.setState({ page })
+    this.setState({ page });
   }
 }
+
+const mapDispatchToProps = {
+  musicNowPlayingChange,
+}
+
+const mapStateToProps = (state) => {
+  return {
+    playlist: state.music.playlist,
+    nowPlaying: state.music.nowPlaying,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MusicPlaylist);
