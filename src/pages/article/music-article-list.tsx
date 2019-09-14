@@ -2,16 +2,15 @@ import React from 'react';
 import { PageHeader, List, Pagination } from 'antd';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
-import { musicList, MusicListAction } from 'actions';
+import { musicListAsync } from 'actions';
 import { MainLayout, MusicArticleItem } from 'components';
 import { Music } from 'models';
 import { PAGE_SIZE } from 'config';
 import './article.css';
 
 interface Props extends RouteComponentProps {
-  onMusicList(): MusicListAction;
+  musicListRequest(): ReturnType<typeof musicListAsync.request>;
   musics: Music[]
 }
 
@@ -25,7 +24,7 @@ class MusicListPage extends React.Component<Props, State> {
   }
   
   componentDidMount() {
-    this.props.onMusicList();
+    this.props.musicListRequest();
   }
   
   render() {
@@ -53,10 +52,8 @@ class MusicListPage extends React.Component<Props, State> {
   }
 }
 
-let mapDispatchToProps = (dispatch: Dispatch<MusicListAction>) => {
-  return {
-    onMusicList: () => dispatch(musicList()),
-  }
+const mapDispatchToProps = {
+  musicListRequest: musicListAsync.request,
 }
 
 let mapStateToProps = (state) => {

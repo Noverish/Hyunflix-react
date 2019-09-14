@@ -2,6 +2,7 @@ import { File, Encode } from 'models'
 import { message } from 'antd';
 import { tokenExpire } from 'actions';
 import { store } from '../index';
+import { Music } from 'models'
 const axios = require('axios');
 
 export const SERVER: string = 'http://home.hyunsub.kim:8080';
@@ -88,7 +89,7 @@ export async function encodeFile(inpath: string, options: string, outpath: strin
   return await request(url, method, body);
 }
 
-export async function musicList() {
+export async function musicList(): Promise<Music[]> {
   const url = `/musics`;
   const method = 'get';
   return await request(url, method);

@@ -1,21 +1,22 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
-import { MUSIC_LIST, musicListSuccess, MusicListAction } from 'actions';
+import { getType } from 'typesafe-actions';
+
+import { musicListAsync } from 'actions';
 import * as Api from 'api';
 import { Music } from 'models';
 
-export function* fetchMusicList(action: MusicListAction) {
+function* fetchMusicList(action: ReturnType<typeof musicListAsync.request>): Generator {
   try {
-    const musics: Music[] = yield call([Api, 'musicList']);
-    yield put(musicListSuccess(musics));
-  } catch (errMsg) {
-    
+    const musics: Music[] = (yield call([Api, 'musicList'])) as Music[];
+    yield put(musicListAsync.success(musics));
+  } catch (err) {
+    yield put(musicListAsync.failure(err));
   }
 }
 
 export function* watchMusicList() {
-  yield takeEvery(MUSIC_LIST, fetchMusicList);
+  yield takeEvery(getType(musicListAsync.request), fetchMusicList);
 }
-
 
 export default [
   watchMusicList(),
