@@ -7,6 +7,10 @@
   border-top: 1px solid #dddddd;
 }
 
+.article-list-page .button-group {
+  margin-left: 8px;
+}
+
 .article-list-page .pagenation {
   align-self: center;
   margin-top: 24px;
@@ -32,11 +36,19 @@
   .article-list-page .page-header {
     display: flex;
     flex-direction: column;
+    align-items: center;
+  }
+  
+  .article-list-page .ant-page-header {
+    align-self: stretch;
   }
   
   .article-list-page .ant-input-search {
-    align-self: center;
     width: 250px;
+    margin-bottom: 8px;
+  }
+  
+  .article-list-page .button-group {
     margin-bottom: 8px;
   }
 }
