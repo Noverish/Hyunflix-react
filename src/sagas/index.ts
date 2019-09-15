@@ -5,6 +5,7 @@ import auth from './auth';
 import encode from './encode';
 import video from './video';
 import music from './music';
+import user from './user';
 
 export default function* rootSaga() {
   yield all([
@@ -13,5 +14,6 @@ export default function* rootSaga() {
     ...encode,
     ...video,
     ...music,
+    ...user,
   ])
 }

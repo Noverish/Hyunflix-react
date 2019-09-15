@@ -3,6 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 
 import ExplorerPage from './explorer/explorer';
 import EncodePage from './encode/encode';
+import RegisterCodePage from './register-code/register-code';
 import AdminLayout from './admin-layout';
 import './index.css';
 
@@ -22,6 +23,7 @@ class SiderDemo extends React.Component {
         <Switch>
           <Route path="/explorer*" component={ExplorerPage} />
           <Route path="/encode" component={EncodePage} />
+          <Route path="/register-codes" component={RegisterCodePage} />
           <Route render={props => <Redirect to="/explorer" />} />
         </Switch>
       </AdminLayout>

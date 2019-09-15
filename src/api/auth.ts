@@ -2,6 +2,7 @@ import * as NodeRSA from 'node-rsa';
 
 import { request } from './';
 import { AUTH_SERVER } from 'config';
+import { RegCode } from 'models';
 
 export async function getRSAKey(): Promise<string> {
   const url = `${AUTH_SERVER}/rsa-key`;
@@ -34,4 +35,17 @@ export async function register(username: string, password: string, register_code
     reg_code: publicKey.encrypt(register_code, 'base64'),
   }
   return (await request(url, method, body)).token;
+}
+
+export async function regCodeList(): Promise<RegCode[]> {
+  const url = `${AUTH_SERVER}/register-codes`;
+  const method = 'get';
+  return await request(url, method);
+}
+
+export async function regCodeAdd(realname: string, code: string) {
+  const url = `${AUTH_SERVER}/register-codes`;
+  const method = 'post';
+  const body = { realname, code };
+  return await request(url, method, body);
 }

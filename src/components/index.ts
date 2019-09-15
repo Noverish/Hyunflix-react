@@ -12,3 +12,4 @@ export { default as MusicPlayer } from './music-playlist/music-player';
 
 export { default as VideoArticleItem } from './article-item/video-article-item';
 export { default as MusicArticleItem } from './article-item/music-article-item';
+export { default as RegCodeArticleItem } from './article-item/regcode-article-item';

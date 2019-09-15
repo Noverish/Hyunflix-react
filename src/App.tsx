@@ -30,6 +30,7 @@ class App extends Component<Props, State> {
           
           <Route path="/explorer" component={pages.AdminPage} />
           <Route path="/encode" component={pages.AdminPage} />
+          <Route path="/register-codes" component={pages.AdminPage} />
           
           <Route component={pages.NotFoundPage} />
         </Switch>

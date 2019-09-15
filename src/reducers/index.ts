@@ -5,6 +5,7 @@ import auth from './auth';
 import encode from './encode';
 import video from './video';
 import music from './music';
+import user from './user';
 
 const counterApp = combineReducers({
   explorer,
@@ -12,6 +13,7 @@ const counterApp = combineReducers({
   encode,
   video,
   music,
+  user,
 });
 
 export default counterApp;

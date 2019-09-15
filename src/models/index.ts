@@ -51,3 +51,11 @@ export interface Subtitle {
   language: string;
   url: string;
 }
+
+export interface RegCode {
+  codeId: number;
+  userId: number | null;
+  realname: string;
+  code: string;
+  date: string;
+}
