@@ -43,7 +43,7 @@ export async function regCodeList(): Promise<RegCode[]> {
   return await request(url, method);
 }
 
-export async function regCodeAdd(realname: string, code: string) {
+export async function regCodeAdd(realname: string, code: string): Promise<RegCode> {
   const url = `${AUTH_SERVER}/register-codes`;
   const method = 'post';
   const body = { realname, code };

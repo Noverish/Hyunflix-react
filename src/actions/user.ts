@@ -1,4 +1,4 @@
-import { createAsyncAction, createStandardAction } from 'typesafe-actions';
+import { createAsyncAction } from 'typesafe-actions';
 
 import { RegCode } from 'models';
 
@@ -12,7 +12,7 @@ export const regCodeAddAsync = createAsyncAction(
   'REG_CODE_ADD_REQUEST',
   'REG_CODE_ADD_SUCCESS',
   'REG_CODE_ADD_FAILURE'
-)<RegCodeAddParam, undefined, string>();
+)<RegCodeAddParam, RegCode, string>();
 
 export interface RegCodeAddParam {
   realname: string;

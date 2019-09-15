@@ -1,7 +1,7 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 
-import { regCodeListAsync, regCodeAddAsync, RegCodeAddParam } from 'actions';
+import { regCodeListAsync, regCodeAddAsync } from 'actions';
 import * as Api from 'api';
 import { RegCode } from 'models';
 
@@ -19,8 +19,8 @@ function* fetchRegCodeAdd(action: ReturnType<typeof regCodeAddAsync.request>): G
   const code = action.payload.code;
   
   try {
-    yield call([Api, 'regCodeAdd'], realname, code);
-    yield put(regCodeAddAsync.success());
+    const regCode: RegCode = (yield call([Api, 'regCodeAdd'], realname, code)) as RegCode;
+    yield put(regCodeAddAsync.success(regCode));
   } catch (err) {
     yield put(regCodeAddAsync.failure(err));
   }
