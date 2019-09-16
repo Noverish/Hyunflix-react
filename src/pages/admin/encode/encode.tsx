@@ -10,7 +10,6 @@ import { EncodeItem } from 'components';
 import { Encode } from 'models';
 import { ffmpegPause, ffmpegResume } from 'api';
 import { FFMPEG_SERVER, FFMPEG_SOCKET_PATH } from 'config';
-import './encode.css';
 
 interface Props extends RouteComponentProps {
   onEncodeList(): EncodeListAction;
@@ -60,24 +59,21 @@ class EncodePage extends React.Component<Props, State> {
     const subItems: Encode[] = encodes.slice((page - 1) * 10, (page) * 10);
     
     return (
-      <div className="encode-page-layout">
-        <PageHeader onBack={() => null} title="Title" subTitle="This is a subtitle" />
-        <Divider style={{ margin: "0" }}/>
-        <div className="encode-page-button-bar">
-          <Button type="primary" onClick={this.onPauseClicked}>Pause</Button>
-          <Button type="primary" onClick={this.onResumeClicked}>Resume</Button>
+      <div className="article-list-page">
+        <div className="page-header">
+          <PageHeader onBack={() => null} title="비디오 인코딩" />
+          <Button.Group className="button-group">
+            <Button icon="caret-right" onClick={this.onResumeClicked}>Resume</Button>
+            <Button icon="pause" onClick={this.onPauseClicked}>Pause</Button>
+          </Button.Group>
         </div>
-        <div className="encode-page-item-list">
-          <List
-            dataSource={subItems}
-            renderItem={(item: Encode) => (
-              <EncodeItem encode={item} key={item.encodeId} />
-            )}
-          />
-        </div>
-        <div className="pagination-layout">
-          <Pagination current={page} total={encodes.length} onChange={this.onChange} />
-        </div>
+        <List
+          dataSource={subItems}
+          renderItem={(item: Encode) => (
+            <EncodeItem encode={item} key={item.encodeId} />
+          )}
+        />
+        <Pagination current={page} total={encodes.length} onChange={this.onChange} />
       </div>
     )
   }

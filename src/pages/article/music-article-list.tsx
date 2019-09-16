@@ -61,7 +61,7 @@ class MusicListPage extends React.Component<Props, State> {
             dataSource={sliced}
             renderItem={music => <MusicArticleItem music={music} highlight={query} />}
           />
-          <Pagination className="pagenation" current={page} total={searched.length} pageSize={PAGE_SIZE} onChange={this.onPageChange} />
+          <Pagination current={page} total={searched.length} pageSize={PAGE_SIZE} onChange={this.onPageChange} />
         </div>
       </MainLayout>
     )

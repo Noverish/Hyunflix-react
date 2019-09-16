@@ -52,7 +52,7 @@ class FolderPage extends React.Component<Props, State> {
     
     return (
       <div>
-        <PageHeader onBack={() => null} title="Title" subTitle="This is a subtitle" />
+        <PageHeader onBack={() => null} title="파일 탐색기" />
         <Divider style={{ margin: "0" }}/>
         {fileItems}
         {renameModal}

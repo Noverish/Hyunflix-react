@@ -52,7 +52,7 @@ class VideoArticleListPage extends React.Component<Props, State> {
             dataSource={sliced}
             renderItem={article => <VideoArticleItem article={article} highlight={query} />}
           />
-          <Pagination className="pagenation" current={page} total={searched.length} pageSize={PAGE_SIZE} onChange={this.onPageChange} />
+          <Pagination current={page} total={searched.length} pageSize={PAGE_SIZE} onChange={this.onPageChange} />
         </div>
       </MainLayout>
     )
