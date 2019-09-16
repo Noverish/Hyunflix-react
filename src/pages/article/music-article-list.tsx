@@ -4,7 +4,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as hangul from 'hangul-js';
 
-import { musicListAsync } from 'actions';
+import { musicListAsync, musicPlaylistAdd } from 'actions';
 import { MainLayout, MusicArticleItem, MusicPlayModal, MusicPlayer } from 'components';
 import { Music } from 'models';
 import { PAGE_SIZE } from 'config';
@@ -15,6 +15,7 @@ const { Search } = Input;
 
 interface Props extends RouteComponentProps {
   musicListRequest(): ReturnType<typeof musicListAsync.request>;
+  musicPlaylistAdd(musics: Music[]): ReturnType<typeof musicPlaylistAdd>;
   musics: Music[];
 }
 
@@ -52,7 +53,8 @@ class MusicListPage extends React.Component<Props, State> {
             <PageHeader onBack={() => null} title="Music" subTitle="가요, 팝송, BGM" />
             <Search onChange={this.onQueryChange} enterButton />
             <Button.Group className="button-group">
-              <Button type="primary" onClick={this.onPlaylistClicked}>Show Playlist</Button>
+              <Button onClick={this.onPlaylistClicked} icon="menu">Show Playlist</Button>
+              <Button onClick={this.onAddAllClicked} icon="plus">Add all to Playlist</Button>
             </Button.Group>
           </div>
           <List
@@ -67,6 +69,16 @@ class MusicListPage extends React.Component<Props, State> {
   
   onPlaylistClicked = () => {
     this.setState({ showPlayModal: true });
+  }
+  
+  onAddAllClicked = () => {
+    const { musics } = this.props;
+    const { query } = this.state;
+    
+    const searcher = new hangul.Searcher(query);
+    const searched = (query) ? musics.filter((m: Music) => searcher.search(m.path) > 0) : musics;
+    
+    this.props.musicPlaylistAdd(searched);
   }
   
   onMusicPlayModalDismiss = () => {
@@ -84,6 +96,7 @@ class MusicListPage extends React.Component<Props, State> {
 
 const mapDispatchToProps = {
   musicListRequest: musicListAsync.request,
+  musicPlaylistAdd,
 }
 
 let mapStateToProps = (state) => {

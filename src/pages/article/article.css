@@ -7,10 +7,6 @@
   border-top: 1px solid #dddddd;
 }
 
-.article-list-page .button-group {
-  margin-left: 8px;
-}
-
 .article-list-page .pagenation {
   align-self: center;
   margin-top: 24px;
@@ -28,7 +24,11 @@
   }
   
   .article-list-page .ant-input-search {
-    width: 300px;
+    width: 200px;
+  }
+  
+  .article-list-page .button-group {
+    margin-left: 8px;
   }
 }
 
@@ -44,11 +44,17 @@
   }
   
   .article-list-page .ant-input-search {
-    width: 250px;
+    width: 300px;
     margin-bottom: 8px;
   }
   
   .article-list-page .button-group {
+    width: 300px;
     margin-bottom: 8px;
+    display: flex;
+  }
+  
+  .article-list-page .button-group > * {
+    flex-grow: 1;
   }
 }
