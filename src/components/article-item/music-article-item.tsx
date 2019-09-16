@@ -26,7 +26,7 @@ class MusicItem extends React.Component<Props, State> {
     e.preventDefault();
     const { playlist, music } = this.props;
     
-    const checked = playlist.includes(music);
+    const checked: boolean = playlist.some(m => m.musicId === music.musicId);
     
     if (!checked) {
       this.props.musicPlaylistAdd([music]);
@@ -37,10 +37,9 @@ class MusicItem extends React.Component<Props, State> {
   }
   
   render() {
-    const { highlight } = this.props;
-    const music = this.props.music;
-    const checked = this.props.playlist.includes(music);
-    const link = `/articles/musics/${this.props.music.musicId}`;
+    const { highlight, playlist, music } = this.props;
+    const checked: boolean = playlist.some(m => m.musicId === music.musicId);
+    const link = `/articles/musics/${music.musicId}`;
     
     return (
       <a href={link} className="article-item" onClick={this.onClick}>

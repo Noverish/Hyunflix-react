@@ -33,13 +33,13 @@ class MovieItem extends React.Component<Props, State> {
     
     return (
       <a href={link} className="article-item" onClick={this.onClick}>
-        <div>
+        <div className="first-section">
           <span className="id">{article.articleId}</span>
           <span className="title">{renderTitle(article.title, highlight)}</span>
         </div>
-        <div>
+        <div className="second-section">
           <span className="duration">{time.second2String(article.duration)}</span>
-          <span className="resolution"><Tag color={resoltuion2Color(r)} key={r}>{r}</Tag></span>
+          <Tag className="resolution" color={resoltuion2Color(r)} key={r}>{r}</Tag>
           <span className="date">{article.date}</span>
         </div>
       </a>

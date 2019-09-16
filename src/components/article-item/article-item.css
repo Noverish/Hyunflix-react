@@ -36,13 +36,10 @@
   font-size: 11px;
 }
 
-.article-item .resolution > div {
+.article-item .resolution {
   width: 50px;
   text-align: center;
   padding: 0;
-}
-
-.article-item .resolution > div:first-child {
   margin-left: 8px;
 }
 
