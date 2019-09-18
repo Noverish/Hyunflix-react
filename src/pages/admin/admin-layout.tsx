@@ -23,8 +23,23 @@ class AdminLayout extends React.Component<Props, State> {
   };
   
   render() {
+    const path = this.props.location.pathname;
     const { isMobile, collapsed } = this.state;
-    const selectedKeys = [this.props.location.pathname.split('/')[1]];
+    
+    const items = [
+      { name: '파일 탐색기',   path: '/admin/explorer',       icon: 'folder' },
+      { name: '비디오 인코딩', path: '/admin/encode',         icon: 'youtube' },
+      { name: '회원가입 코드', path: '/admin/register-codes', icon: 'bold' },
+      { name: '홈으로',        path: '/home',                 icon: 'home' },
+    ]
+    
+    const itemComps = items.map(i => (
+      <Menu.Item key={i.path}>
+        <Icon type={i.icon} />
+        <span className="nav-text">{i.name}</span>
+      </Menu.Item>
+    ))
+    const selectedKeys: string[] = items.filter(i => path.startsWith(i.path)).map(i => i.path);
     
     const siderLayoutClass = (collapsed)
       ? "sider-layout collapsed"
@@ -42,22 +57,7 @@ class AdminLayout extends React.Component<Props, State> {
           >
             <div className="logo" />
             <Menu theme="dark" mode="inline" selectedKeys={selectedKeys} onClick={this.menuClicked}>
-              <Menu.Item key="explorer">
-                <Icon type="folder" />
-                <span className="nav-text">파일 탐색기</span>
-              </Menu.Item>
-              <Menu.Item key="encode">
-                <Icon type="youtube" />
-                <span className="nav-text">비디오 인코딩</span>
-              </Menu.Item>
-              <Menu.Item key="register-codes">
-                <Icon type="bold" />
-                <span className="nav-text">회원가입 코드</span>
-              </Menu.Item>
-              <Menu.Item key="home">
-                <Icon type="home" />
-                <span className="nav-text">홈으로</span>
-              </Menu.Item>
+              {itemComps}
             </Menu>
           </Sider>
           <div className="sider-rest" onClick={this.toggle}/>
@@ -87,7 +87,7 @@ class AdminLayout extends React.Component<Props, State> {
   };
   
   menuClicked = (e) => {
-    this.props.history.push(`/${e.key}`);
+    this.props.history.push(e.key);
     this.toggle();
   }
   

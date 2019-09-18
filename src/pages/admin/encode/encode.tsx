@@ -1,6 +1,6 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { Button, Pagination, List, message, PageHeader, Divider } from 'antd';
+import { Button, Pagination, List, message, PageHeader } from 'antd';
 import * as socketio from 'socket.io-client';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';

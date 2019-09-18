@@ -1,19 +1,20 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
+import { connect } from 'react-redux';
 import './main-layout.css';
 
 const { Header, Content, Footer } = Layout;
 
 interface Props extends RouteComponentProps {
-  
+  userId: number;
 }
 
 interface State {
   
 }
 
-class LayoutComp extends React.Component<Props, State> {
+class MainLayout extends React.Component<Props, State> {
   menuClicked = (e) => {
     this.props.history.push(e.key);
   }
@@ -26,6 +27,10 @@ class LayoutComp extends React.Component<Props, State> {
       { name: 'Video', path: '/articles/videos' },
       { name: 'Music', path: '/articles/musics' },
     ]
+    
+    if (this.props.userId === 1) {
+      items.push({ name: 'Admin', path: '/admin' });
+    }
     
     const itemComps = items.map(i => <Menu.Item key={i.path}>{i.name}</Menu.Item>)
     const selectedKeys: string[] = items.filter(i => path.startsWith(i.path)).map(i => i.path);
@@ -54,4 +59,10 @@ class LayoutComp extends React.Component<Props, State> {
   }
 }
 
-export default withRouter(LayoutComp);
+const mapStateToProps = (state) => {
+  return {
+    userId: state.auth.userId,
+  }
+}
+
+export default connect(mapStateToProps)(withRouter(MainLayout));

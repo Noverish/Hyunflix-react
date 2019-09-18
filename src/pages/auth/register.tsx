@@ -2,15 +2,15 @@ import React from 'react';
 import { Form, Input, Tooltip, Icon, Button, Typography } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
-import { register, RegisterAction } from 'actions';
+import { registerAsync } from 'actions';
+import { RegisterParam } from 'models';
 import './register.css';
 
 const { Title } = Typography;
 
 interface Props extends FormComponentProps {
-  onRegister(username: string, password: string, regCode: string): RegisterAction;
+  registerAsyncRequest(param: RegisterParam): ReturnType<typeof registerAsync.request>;
 }
 
 interface State {
@@ -32,10 +32,10 @@ class RegistrationForm extends React.Component<Props, State> {
       }
       
       const username = values['username'];
-      const password1 = values['password1'];
-      const reg_code = values['reg_code'];
+      const password = values['password1'];
+      const regCode = values['reg_code'];
       
-      this.props.onRegister(username, password1, reg_code);
+      this.props.registerAsyncRequest({ username, password, regCode });
     });
   };
   
@@ -149,10 +149,8 @@ class RegistrationForm extends React.Component<Props, State> {
   }
 }
 
-let mapDispatchToProps = (dispatch: Dispatch<RegisterAction>) => {
-  return {
-    onRegister: (username, password, regCode) => dispatch(register(username, password, regCode)),
-  }
+let mapDispatchToProps = {
+  registerAsyncRequest: registerAsync.request,
 }
 
 const form =  Form.create({ name: 'register' })(RegistrationForm);

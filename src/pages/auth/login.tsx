@@ -3,15 +3,15 @@ import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Form, Icon, Input, Button, Checkbox, Typography, message } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Dispatch } from 'redux';
 
-import { login, LoginAction } from 'actions';
+import { loginAsync } from 'actions';
+import { LoginParam } from 'models';
 import './login.css';
 
 const { Title } = Typography;
 
 interface Props extends FormComponentProps, RouteComponentProps {
-  onLogin(username: string, password: string): LoginAction;
+  loginAsyncRequest(param: LoginParam): ReturnType<typeof loginAsync.request>;
 }
 
 interface State {
@@ -30,7 +30,7 @@ class NormalLoginForm extends React.Component<Props, State> {
       const username = values['username'];
       const password = values['password'];
       
-      this.props.onLogin(username, password);
+      this.props.loginAsyncRequest({ username, password });
     });
   };
   
@@ -82,10 +82,8 @@ class NormalLoginForm extends React.Component<Props, State> {
   }
 }
 
-let mapDispatchToProps = (dispatch: Dispatch<LoginAction>) => {
-  return {
-    onLogin: (username, password) => dispatch(login(username, password)),
-  }
+const mapDispatchToProps = {
+  loginAsyncRequest: loginAsync.request,
 }
 
 const form = Form.create({ name: 'normal_login' })(NormalLoginForm)

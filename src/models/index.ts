@@ -1,3 +1,5 @@
+export * from './auth';
+
 export interface File {
   path: string;
   name: string;

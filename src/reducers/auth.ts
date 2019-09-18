@@ -1,19 +1,25 @@
-import { TOKEN_SUCCESS, TOKEN_EXPIRE } from '../actions';
+import { combineReducers } from 'redux';
+import { createReducer } from 'typesafe-actions';
 
-interface State {
-  token: string;
-}
+import { loginAsync, registerAsync, logoutAsync, tokenExpire } from 'actions';
 
-const initalState: State = {
-  token: '',
-}
+export const token = createReducer('' as string)
+  .handleAction(loginAsync.success, (state, action: ReturnType<typeof loginAsync.success>) => action.payload.token)
+  .handleAction(registerAsync.success, (state, action: ReturnType<typeof registerAsync.success>) => action.payload.token)
+  .handleAction(logoutAsync.success, (state, action: ReturnType<typeof logoutAsync.success>) => '')
+  .handleAction(tokenExpire, (state, action: ReturnType<typeof tokenExpire>) => '');
 
-const reducer = (state: State = initalState, action) => {
-  switch(action.type) {
-    case TOKEN_SUCCESS: return { ...state, token: action.token };
-    case TOKEN_EXPIRE:  return { ...state, token: '' };
-    default: return state;
-  }
-}
+export const userId = createReducer(-1 as number)
+  .handleAction(loginAsync.success, (state, action: ReturnType<typeof loginAsync.success>) => action.payload.userId)
+  .handleAction(registerAsync.success, (state, action: ReturnType<typeof registerAsync.success>) => action.payload.userId)
+  .handleAction(tokenExpire, (state, action: ReturnType<typeof tokenExpire>) => -1);
+  
+const reducer = combineReducers({
+  token,
+  userId,
+});
 
 export default reducer;
+
+export type AuthState = ReturnType<typeof reducer>;
+  

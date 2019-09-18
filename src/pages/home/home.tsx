@@ -1,13 +1,12 @@
 import React from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { logout } from 'actions';
+import { logoutAsync } from 'actions';
 import { MainLayout } from 'components'
 import './home.css';
 
-interface Props extends RouteComponentProps {
-  onLogout;
+interface Props {
+  logoutAsyncRequest(): ReturnType<typeof logoutAsync.request>;
 }
 
 interface State {
@@ -16,7 +15,7 @@ interface State {
 
 class HomePage extends React.Component<Props, State> {
   onClick = (e) => {
-    this.props.onLogout();
+    this.props.logoutAsyncRequest();
   }
   
   render() {
@@ -28,10 +27,8 @@ class HomePage extends React.Component<Props, State> {
   }
 }
 
-let mapDispatchToProps = (dispatch) => {
-  return {
-    onLogout: () => dispatch(logout()),
-  }
+const mapDispatchToProps = {
+  logoutAsyncRequest: logoutAsync.request,
 }
 
-export default connect(undefined, mapDispatchToProps)(withRouter(HomePage));
+export default connect(undefined, mapDispatchToProps)(HomePage);
