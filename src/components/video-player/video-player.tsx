@@ -40,7 +40,6 @@ export default class VideoPlayer extends React.Component<Props, State> {
       "edgeStyle": "uniform",
     }
     
-    // TODO ts ignore
     // @ts-ignore
     var settings = this.player!.textTrackSettings;
     settings.setValues(textTractSettings);
@@ -85,7 +84,7 @@ export default class VideoPlayer extends React.Component<Props, State> {
     return (
       <div data-vjs-player style={style}>
         <video
-          ref={node => { // TODO 왜 인지 모르겠는데 null이 나온다
+          ref={node => {
             if(!this.videoNode && node) {
               this.videoNode = node;
               this.initPlayer();

@@ -2,6 +2,7 @@ import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
 
+import { MOBILE_BREAKPOINT } from 'config';
 import './admin-layout.css';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -17,8 +18,7 @@ interface State {
 
 class AdminLayout extends React.Component<Props, State> {
   state = {
-    // TODO 768을 다른데서 가져오기
-    isMobile: window.innerWidth <= 768,
+    isMobile: window.innerWidth <= MOBILE_BREAKPOINT,
     collapsed: false,
   };
   
@@ -100,9 +100,8 @@ class AdminLayout extends React.Component<Props, State> {
   }
   
   onResize = () => {
-    // TODO 768을 다른데서 가져오기
     const prevIsMobile = this.state.isMobile;
-    const nextIsMobile = window.innerWidth <= 768;
+    const nextIsMobile = window.innerWidth <= MOBILE_BREAKPOINT;
     if(prevIsMobile !== nextIsMobile) {
       this.setState({ isMobile: nextIsMobile });
     }

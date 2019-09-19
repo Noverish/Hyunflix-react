@@ -3,7 +3,7 @@ import { Typography } from 'antd';
 import { connect } from 'react-redux';
 
 import { musicNowPlayingChange } from 'actions';
-import { Music } from 'models';
+import { Music, LoopPlayType } from 'models';
 
 interface Props {
   musicNowPlayingChange(music: Music | null): ReturnType<typeof musicNowPlayingChange>;
@@ -58,16 +58,15 @@ class MusicPlayer extends React.Component<Props, State> {
       const index: number = playlist.indexOf(nowPlaying);
       let nextIndex: number = 0;
       
-      // TODO make enum
-      if (loopPlay === 1) {
+      if (loopPlay === LoopPlayType.LOOP_ONE) {
         nextIndex = index;
-      } else if (loopPlay === 0) {
+      } else if (loopPlay === LoopPlayType.NO_LOOP) {
         if (randomPlay) {
           nextIndex = Math.floor(Math.random() * playlist.length);
         } else {
           nextIndex = (index + 1 < playlist.length) ? (index + 1) : -1;
         }
-      } else if (loopPlay === 2) {
+      } else if (loopPlay === LoopPlayType.LOOP_ALL) {
         if (randomPlay) {
           nextIndex = Math.floor(Math.random() * playlist.length);
         } else {

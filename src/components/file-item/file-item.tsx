@@ -20,11 +20,10 @@ class Fileitem extends React.Component<Props, State> {
   
   render () {
     const isVideo = ['.mp4', '.avi', '.mkv'].includes(extname(this.props.file.name));
+    const isMP4 = extname(this.props.file.name) === '.mp4';
     
-    // TODO href 제대로 나오게 수정
-    let link: React.ReactNode = <span className="file-item-name">{this.props.file.name}</span>
-    if ((this.props.file.isdir || extname(this.props.file.name) === '.mp4')) {
-      link = (
+    let link: React.ReactNode = (this.props.file.isdir || isMP4)
+      ? (
         <a
           className="file-item-name"
           href={this.props.file.path}
@@ -32,18 +31,14 @@ class Fileitem extends React.Component<Props, State> {
         >
           <span>{this.props.file.name}</span>
         </a>
-      )
-    } else if (extname(this.props.file.name)) {
-      link = (
+      ) : (
         <a
           className="file-item-name"
           href={this.props.file.url}
-          rel="noopener noreferrer"
         >
           <span>{this.props.file.name}</span>
         </a>
-      )
-    }
+      );
     
     return (
       <div className="file-item">

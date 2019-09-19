@@ -24,7 +24,7 @@ class VideoArticleContentPage extends React.Component<Props, State> {
   videoContainer: HTMLDivElement | null = null;
   
   state = {
-    width: 360,
+    width: -1,
   }
   
   componentDidMount() {
@@ -51,28 +51,35 @@ class VideoArticleContentPage extends React.Component<Props, State> {
     }
     
     const height: number = width * article.height / article.width;
+    let videoPlayer = (width > 0)
+      ? <VideoPlayer src={article.url} subtitles={subtitles} width={width} height={height} />
+      : null
     
     return (
       <MainLayout>
-        <PageHeader onBack={this.onBack} title={article.title} />
-        <div ref={ref => {
-          this.videoContainer = ref;
-          this.resize();
-        }}>
-          <VideoPlayer src={article.url} subtitles={subtitles} width={width} height={height} />
-        </div>
-        <div style={{ padding: '12px' }}>
-          <div>
-            <Title className="video-title" level={4}>{article.title}</Title>
+        <div className="article-list-page">
+          <div className="page-header">
+            <PageHeader onBack={this.onBack} title={article.title} />
           </div>
-          <Text type="secondary">{article.date}</Text>
+          <div ref={ref => {
+            this.videoContainer = ref;
+            this.resize();
+          }}>
+            {videoPlayer}
+          </div>
+          <div style={{ padding: '12px' }}>
+            <div>
+              <Title className="video-title" level={4}>{article.title}</Title>
+            </div>
+            <Text type="secondary">{article.date}</Text>
+          </div>
         </div>
       </MainLayout>
     )
   }
   
   onBack = () => {
-    
+    this.props.history.goBack();
   }
 }
 

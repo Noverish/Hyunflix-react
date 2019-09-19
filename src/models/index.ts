@@ -1,4 +1,5 @@
 export * from './auth';
+export * from './music';
 
 export interface File {
   path: string;
@@ -15,15 +16,6 @@ export interface Encode {
   options: string;
   progress: number;
   date: string;
-}
-
-export interface Music {
-  musicId: number;
-  title: string;
-  path: string;
-  duration: number;
-  artist: string;
-  url: string;
 }
 
 export interface TVProgram {
