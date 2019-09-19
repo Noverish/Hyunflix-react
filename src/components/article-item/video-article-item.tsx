@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { Tag } from 'antd';
+import { Tag, Tooltip } from 'antd';
 
 import { VideoArticle } from 'models';
 import { time } from 'utils';
@@ -28,8 +28,7 @@ class MovieItem extends React.Component<Props, State> {
     const article = this.props.article;
     const link = `/articles/videos/${this.props.article.articleId}`;
     
-    // TODO todo
-    const r = '1080p';
+    const { resolution, color } = widthToResolutionAndColor(article.width);
     
     return (
       <a href={link} className="article-item" onClick={this.onClick}>
@@ -39,7 +38,9 @@ class MovieItem extends React.Component<Props, State> {
         </div>
         <div className="second-section">
           <span className="duration">{time.second2String(article.duration)}</span>
-          <Tag className="resolution" color={resoltuion2Color(r)} key={r}>{r}</Tag>
+          <Tooltip placement="top" title={`${article.width}x${article.height}`}>
+            <Tag className="resolution" color={color}>{resolution}</Tag>
+          </Tooltip>
           <span className="date">{article.date}</span>
         </div>
       </a>
@@ -64,14 +65,25 @@ function renderTitle(title: string, query: string) {
     );
 }
 
-function resoltuion2Color(resolution: string) {
-  switch(resolution) {
-    case '1080p': return 'purple';
-    case '720p': return 'geekblue';
-    case '480p': return 'green';
-    case '360p': return 'red';
-    default: return '';
+function widthToResolutionAndColor(width: number) {
+  const list = {
+    1920: { resolution: '1080p', color: 'purple' },
+    1280: { resolution: '720p', color: 'geekblue' },
+    854: { resolution: '480p', color: 'green' },
+    640: { resolution: '360p', color: 'red' },
   }
+  
+  let diff = 10000;
+  let key = 0;
+  Object.keys(list).forEach(n => {
+    const d = Math.abs(parseInt(n) - width);
+    if (d < diff) {
+      diff = d;
+      key = parseInt(n);
+    }
+  })
+  
+  return list[key];
 }
 
 export default withRouter(MovieItem);
