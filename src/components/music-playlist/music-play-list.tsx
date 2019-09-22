@@ -30,7 +30,7 @@ class MusicPlayList extends React.Component<Props, State> {
             index={playlist.indexOf(music)}
             music={music}
             onClick={this.onItemClick}
-            selected={this.props.nowPlaying === music}
+            selected={((this.props.nowPlaying) ? this.props.nowPlaying.musicId : null) === music.musicId}
           />
         }
       />

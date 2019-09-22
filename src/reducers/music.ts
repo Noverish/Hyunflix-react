@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
 
-import { musicListAsync, musicPlaylistAdd, musicNowPlayingChange, musicRandomPlayToggle, musicLoopPlayToggle } from 'actions';
+import { musicListAsync, musicPlaylistAdd, musicNowPlayingChange, musicRandomPlayToggle, musicLoopPlayToggle, musicPlayNextAsync } from 'actions';
 import { Music } from 'models';
 
 export const isLoadingMusicList = createReducer(false as boolean)
@@ -19,7 +19,8 @@ export const playlist = createReducer([] as Music[])
 
 export const nowPlaying = createReducer(null as (Music | null))
   .handleAction(musicNowPlayingChange, (state, action: ReturnType<typeof musicNowPlayingChange>) => action.payload)
-  .handleAction(musicPlaylistAdd, (state, action: ReturnType<typeof musicPlaylistAdd>) =>  (state) ? state : action.payload[0]);
+  .handleAction(musicPlaylistAdd, (state, action: ReturnType<typeof musicPlaylistAdd>) => (state) ? state : action.payload[0])
+  .handleAction(musicPlayNextAsync.success, (state, action: ReturnType<typeof musicPlayNextAsync.success>) => action.payload);
 
 export const randomPlay = createReducer(false as boolean)
   .handleAction(musicRandomPlayToggle, (state, action) => !state);

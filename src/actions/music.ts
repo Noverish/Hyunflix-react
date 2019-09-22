@@ -14,3 +14,11 @@ export const musicNowPlayingChange = createStandardAction('MUSIC_NOW_PLAYING_CHA
 
 export const musicRandomPlayToggle = createStandardAction('MUSIC_RANDOM_PLAY_TOGGLE')<undefined>();
 export const musicLoopPlayToggle = createStandardAction('MUSIC_LOOP_PLAY_TOGGLE')<undefined>();
+
+export const musicPlayNextAsync = createAsyncAction(
+  'MUSIC_PLAY_NEXT_REQUEST',
+  'MUSIC_PLAY_NEXT_SUCCESS',
+  'MUSIC_PLAY_NEXT_FAILURE'
+)<undefined, Music | null, undefined>();
+
+export const musicPlayPrev = createStandardAction('MUSIC_PLAY_PREV')<undefined>();

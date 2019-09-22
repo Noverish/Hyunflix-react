@@ -53,8 +53,7 @@ class MusicListPage extends React.Component<Props, State> {
             <PageHeader onBack={() => null} title="Music" subTitle="가요, 팝송, BGM" />
             <Search onChange={this.onQueryChange} enterButton />
             <Button.Group className="button-group">
-              <Button onClick={this.onPlaylistClicked} icon="menu">Show Playlist</Button>
-              <Button onClick={this.onAddAllClicked} icon="plus">Add all to Playlist</Button>
+              <Button onClick={this.onAddAllClicked} icon="plus" type="primary">Add all to Playlist</Button>
             </Button.Group>
           </div>
           <List
