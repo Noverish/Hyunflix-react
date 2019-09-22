@@ -1,12 +1,14 @@
-import { put, call, takeEvery } from 'redux-saga/effects';
+import { put, call, delay, takeEvery, takeLatest } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
+import * as hangul from 'hangul-js';
 
-import { musicListAsync, musicPlayNextAsync } from 'actions';
+import { musicListAsync, musicPlayNextAsync, musicTagListAsync, musicSearch } from 'actions';
 import * as Api from 'api';
 import { Music, LoopPlayType } from 'models';
 import { store } from 'index';
+import { USER_INPUT_DEBOUNCE } from 'config';
 
-function* fetchMusicList(action: ReturnType<typeof musicListAsync.request>): Generator {
+function* fetchMusicList(): Generator {
   try {
     const musics: Music[] = (yield call([Api, 'musicList'])) as Music[];
     yield put(musicListAsync.success(musics));
@@ -15,7 +17,16 @@ function* fetchMusicList(action: ReturnType<typeof musicListAsync.request>): Gen
   }
 }
 
-function* fetchMusicPlayNext(action: ReturnType<typeof musicPlayNextAsync.request>): Generator {
+function* fetchMusicTagList(): Generator {
+  try {
+    const tags: string[] = (yield call([Api, 'musicTagList'])) as string[];
+    yield put(musicTagListAsync.success(tags));
+  } catch (err) {
+    yield put(musicTagListAsync.failure(err));
+  }
+}
+
+function* fetchMusicPlayNext(): Generator {
   const { playlist, randomPlay, loopPlay, nowPlaying } = store.getState().music;
   
   let nextIndex: number = 0;
@@ -50,15 +61,44 @@ function* fetchMusicPlayNext(action: ReturnType<typeof musicPlayNextAsync.reques
   yield put(musicPlayNextAsync.success(nextMusic));
 }
 
+function* fetchMusicSearch(action: ReturnType<typeof musicSearch.request>): Generator {
+  yield delay(USER_INPUT_DEBOUNCE);
+  const { musics } = store.getState().music;
+  const query: string = action.payload.replace(' ', '');
+  
+  const koSearcher = new hangul.Searcher(query);
+  const enSearcher = new RegExp(query, 'i');
+  
+  const searched = (query) ? musics.filter((m: Music) => {
+    const targets = [m.title, ...m.tags];
+    return targets.some(t => {
+      t = t.replace(/ /g, '');
+      return t.search(enSearcher) >= 0 || koSearcher.search(t) >= 0;
+    });
+  }) : musics;
+  
+  yield put(musicSearch.success(searched));
+}
+
 export function* watchMusicList() {
   yield takeEvery(getType(musicListAsync.request), fetchMusicList);
+}
+
+export function* watchMusicTagList() {
+  yield takeEvery(getType(musicTagListAsync.request), fetchMusicTagList);
 }
 
 export function* watchMusicPlayNext() {
   yield takeEvery(getType(musicPlayNextAsync.request), fetchMusicPlayNext);
 }
 
+export function* watchMusicSearch() {
+  yield takeLatest(getType(musicSearch.request), fetchMusicSearch);
+}
+
 export default [
   watchMusicList(),
+  watchMusicTagList(),
   watchMusicPlayNext(),
+  watchMusicSearch(),
 ]

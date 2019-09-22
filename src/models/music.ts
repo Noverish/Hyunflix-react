@@ -1,9 +1,11 @@
 export interface Music {
-  musicId: number;
-  title: string;
-  path: string;
-  duration: number;
   artist: string;
+  authority: string[];
+  duration: number;
+  musicId: number;
+  path: string;
+  tags: string[];
+  title: string;
   url: string;
 }
 

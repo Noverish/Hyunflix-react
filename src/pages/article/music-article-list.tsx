@@ -1,11 +1,10 @@
 import React from 'react';
-import { PageHeader, List, Pagination, Input, Button } from 'antd';
+import { PageHeader, List, Pagination, Input, Button, Spin } from 'antd';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as hangul from 'hangul-js';
 
-import { musicListAsync, musicPlaylistAdd } from 'actions';
-import { MainLayout, MusicArticleItem, MusicPlayModal, MusicPlayer } from 'components';
+import { musicListAsync, musicPlaylistAdd, musicTagListAsync, musicSearch } from 'actions';
+import { MainLayout, MusicArticleItem, MusicPlayer } from 'components';
 import { Music } from 'models';
 import { PAGE_SIZE } from 'config';
 import './article.css';
@@ -15,39 +14,39 @@ const { Search } = Input;
 
 interface Props extends RouteComponentProps {
   musicListRequest(): ReturnType<typeof musicListAsync.request>;
+  musicTagList(): ReturnType<typeof musicTagListAsync.request>;
   musicPlaylistAdd(musics: Music[]): ReturnType<typeof musicPlaylistAdd>;
-  musics: Music[];
+  musicSearch(query: string): ReturnType<typeof musicSearch.request>;
+  searched: Music[];
+  loading: boolean;
 }
 
 interface State {
-  showPlayModal: boolean;
-  query: string;
   page: number;
 }
 
 class MusicListPage extends React.Component<Props, State> {
+  query: string = '';
+  
   state = {
-    query: '',
     page: 1,
-    showPlayModal: false,
   }
   
   componentDidMount() {
     this.props.musicListRequest();
+    this.props.musicTagList();
   }
   
   render() {
-    const { musics } = this.props;
-    const { page, query, showPlayModal } = this.state;
+    const { searched, loading } = this.props;
+    const { page } = this.state;
+    const { query } = this;
     
-    const searcher = new hangul.Searcher(query);
-    const searched = (query) ? musics.filter((m: Music) => searcher.search(m.path) > 0) : musics;
     const sliced = searched.slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
     
     return (
       <MainLayout>
         <div className="article-list-page">
-          <MusicPlayModal visible={showPlayModal} dismissCallback={this.onMusicPlayModalDismiss} />
           <MusicPlayer />
           <div className="page-header">
             <PageHeader onBack={() => null} title="Music" subTitle="가요, 팝송, BGM" />
@@ -56,36 +55,28 @@ class MusicListPage extends React.Component<Props, State> {
               <Button onClick={this.onAddAllClicked} icon="plus" type="primary">Add all to Playlist</Button>
             </Button.Group>
           </div>
-          <List
-            dataSource={sliced}
-            renderItem={music => <MusicArticleItem music={music} highlight={query} />}
-          />
+          <Spin spinning={loading}>
+            <List
+              dataSource={sliced}
+              renderItem={music => <MusicArticleItem music={music} highlight={query} />}
+            />
+          </Spin>
           <Pagination current={page} total={searched.length} pageSize={PAGE_SIZE} onChange={this.onPageChange} />
         </div>
       </MainLayout>
     )
   }
   
-  onPlaylistClicked = () => {
-    this.setState({ showPlayModal: true });
-  }
-  
   onAddAllClicked = () => {
-    const { musics } = this.props;
-    const { query } = this.state;
-    
-    const searcher = new hangul.Searcher(query);
-    const searched = (query) ? musics.filter((m: Music) => searcher.search(m.path) > 0) : musics;
-    
+    const { searched } = this.props;
     this.props.musicPlaylistAdd(searched);
   }
   
-  onMusicPlayModalDismiss = () => {
-    this.setState({ showPlayModal: false });
-  }
-  
   onQueryChange = (e) => {
-    this.setState({ query: e.target.value, page: 1 });
+    const query = e.target.value;
+    this.props.musicSearch(query);
+    this.query = query;
+    this.setState({ page: 1 });
   }
   
   onPageChange = (page: number) => {
@@ -95,12 +86,15 @@ class MusicListPage extends React.Component<Props, State> {
 
 const mapDispatchToProps = {
   musicListRequest: musicListAsync.request,
+  musicTagList: musicTagListAsync.request,
   musicPlaylistAdd,
+  musicSearch: musicSearch.request,
 }
 
 let mapStateToProps = (state) => {
   return {
-    musics: state.music.musics,
+    searched: state.music.searched,
+    loading: state.music.loading,
   }
 }
 

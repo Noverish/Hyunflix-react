@@ -22,3 +22,15 @@ export const musicPlayNextAsync = createAsyncAction(
 )<undefined, Music | null, undefined>();
 
 export const musicPlayPrev = createStandardAction('MUSIC_PLAY_PREV')<undefined>();
+
+export const musicTagListAsync = createAsyncAction(
+  'MUSIC_TAG_LIST_REQUEST',
+  'MUSIC_TAG_LIST_SUCCESS',
+  'MUSIC_TAG_LIST_FAILURE'
+)<undefined, string[], string>();
+
+export const musicSearch = createAsyncAction(
+  'MUSIC_SEARCH_REQUEST',
+  'MUSIC_SEARCH_SUCCESS',
+  'MUSIC_SEARCH_FAILURE'
+)<string, Music[], Error>();

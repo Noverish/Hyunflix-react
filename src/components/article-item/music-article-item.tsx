@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { Checkbox } from 'antd';
+import { Checkbox, Tag } from 'antd';
 import { connect } from 'react-redux';
 
 import { musicPlaylistAdd } from 'actions';
@@ -14,6 +14,7 @@ interface Props extends RouteComponentProps {
   
   highlight: string;
   music: Music;
+  tags: string;
 }
 
 interface State {
@@ -36,8 +37,38 @@ class MusicItem extends React.Component<Props, State> {
     // this.props.history.push(link);
   }
   
+  renderTitle = (title: string) => {
+    const { highlight } = this.props;
+    
+    const index = title.search(new RegExp(highlight, 'i'));
+    const beforeStr = title.substr(0, index);
+    const matchStr = title.substr(index, highlight.length);
+    const afterStr = title.substr(index + highlight.length);
+    return (index > -1)
+      ? (
+        <span className="title">
+          {beforeStr}
+          <span style={{ color: '#f50' }}>{matchStr}</span>
+          {afterStr}
+        </span>
+      )
+      : (
+        <span className="title">{title}</span>
+      );
+  }
+  
+  renderTags = () => {
+    const { music, tags } = this.props;
+    // TODO 멋있게
+    const colorList = ['magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
+    
+    return music.tags.map(t => (
+      <Tag color={colorList[tags.indexOf(t) % colorList.length]} key={t}>{t}</Tag>
+    ))
+  }
+  
   render() {
-    const { highlight, playlist, music } = this.props;
+    const { playlist, music } = this.props;
     const checked: boolean = playlist.some(m => m.musicId === music.musicId);
     const link = `/articles/musics/${music.musicId}`;
     
@@ -46,7 +77,8 @@ class MusicItem extends React.Component<Props, State> {
         <div>
           <Checkbox className="check-box" checked={checked} />
           <span className="id">{music.musicId}</span>
-          <span className="title">{renderTitle(music.title, highlight)}</span>
+          { this.renderTags() }
+          { this.renderTitle(music.title) }
         </div>
         <div>
           <span className="duration">{time.second2String(music.duration)}</span>
@@ -63,24 +95,8 @@ const mapDispatchToProps = {
 let mapStateToProps = (state) => {
   return {
     playlist: state.music.playlist,
+    tags: state.music.tags,
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MusicItem));
-
-function renderTitle(title: string, query: string) {
-  const index = title.indexOf(query);
-  const beforeStr = title.substr(0, index);
-  const afterStr = title.substr(index + query.length);
-  return (index > -1)
-    ? (
-      <span>
-        {beforeStr}
-        <span style={{ color: '#f50' }}>{query}</span>
-        {afterStr}
-      </span>
-    )
-    : (
-      <span>{title}</span>
-    );
-}
