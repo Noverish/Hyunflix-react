@@ -1,6 +1,5 @@
 export interface Music {
   artist: string;
-  authority: string[];
   duration: number;
   musicId: number;
   path: string;

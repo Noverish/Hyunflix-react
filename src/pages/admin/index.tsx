@@ -10,11 +10,11 @@ import AdminLayout from './admin-layout';
 import './index.css';
 
 interface Props extends RouteComponentProps {
-  userId: number;
+  authority: string[];
 }
 
 const AdminPage: React.FunctionComponent<Props> = (props) => {
-  if (props.userId === 1) {
+  if (props.authority.includes('admin')) {
     return (
       <AdminLayout>
         <Switch>
@@ -34,7 +34,7 @@ const AdminPage: React.FunctionComponent<Props> = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    userId: state.auth.userId,
+    authority: state.auth.authority,
   }
 }
 
