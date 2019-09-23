@@ -3,13 +3,14 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Checkbox, Tag } from 'antd';
 import { connect } from 'react-redux';
 
-import { musicPlaylistAdd } from 'actions';
+import { musicPlaylistAdd, musicPlaylistRemove } from 'actions';
 import { Music } from 'models';
 import { time } from 'utils';
 import './article-item.css';
 
 interface Props extends RouteComponentProps {
   musicPlaylistAdd(musics: Music[]): void;
+  musicPlaylistRemove(music: Music): ReturnType<typeof musicPlaylistRemove>;
   playlist: Music[];
   
   highlight: string;
@@ -22,21 +23,6 @@ interface State {
 }
 
 class MusicItem extends React.Component<Props, State> {
-  
-  onClick = (e) => {
-    e.preventDefault();
-    const { playlist, music } = this.props;
-    
-    const checked: boolean = playlist.some(m => m.musicId === music.musicId);
-    
-    if (!checked) {
-      this.props.musicPlaylistAdd([music]);
-    }
-    
-    // const link = `/musics/${this.props.music.musicId}`;
-    // this.props.history.push(link);
-  }
-  
   renderTitle = (title: string) => {
     const { highlight } = this.props;
     
@@ -86,10 +72,27 @@ class MusicItem extends React.Component<Props, State> {
       </a>
     )
   }
+  
+  
+  onClick = (e) => {
+    e.preventDefault();
+    const { playlist, music } = this.props;
+    const isInPlaylist: boolean = playlist.some(m => m.musicId === music.musicId);
+    
+    if (!isInPlaylist) {
+      this.props.musicPlaylistAdd([music]);
+    } else {
+      this.props.musicPlaylistRemove(music);
+    }
+    
+    // const link = `/musics/${this.props.music.musicId}`;
+    // this.props.history.push(link);
+  }
 }
 
 const mapDispatchToProps = {
   musicPlaylistAdd,
+  musicPlaylistRemove,
 }
 
 let mapStateToProps = (state) => {

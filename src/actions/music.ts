@@ -9,6 +9,7 @@ export const musicListAsync = createAsyncAction(
 )<undefined, Music[], string>();
 
 export const musicPlaylistAdd = createStandardAction('MUSIC_PLAYLIST_ADD')<Music[]>();
+export const musicPlaylistRemove = createStandardAction('MUSIC_PLAYLIST_REMOVE')<Music>();
 
 export const musicNowPlayingChange = createStandardAction('MUSIC_NOW_PLAYING_CHANGE')<Music | null>();
 

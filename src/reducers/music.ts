@@ -1,14 +1,15 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
 
-import { musicListAsync, musicPlaylistAdd, musicNowPlayingChange, musicRandomPlayToggle, musicLoopPlayToggle, musicPlayNextAsync, musicTagListAsync, musicSearch } from 'actions';
+import { musicListAsync, musicPlaylistAdd, musicNowPlayingChange, musicRandomPlayToggle, musicLoopPlayToggle, musicPlayNextAsync, musicTagListAsync, musicSearch, musicPlaylistRemove } from 'actions';
 import { Music } from 'models';
 
 export const musics = createReducer([] as Music[])
   .handleAction(musicListAsync.success, (_, action: ReturnType<typeof musicListAsync.success>) => action.payload);
 
 export const playlist = createReducer([] as Music[])
-  .handleAction(musicPlaylistAdd, (state, action: ReturnType<typeof musicPlaylistAdd>) => [...state, ...action.payload]);
+  .handleAction(musicPlaylistAdd, (state, action: ReturnType<typeof musicPlaylistAdd>) => [...state, ...action.payload.filter(m => !state.includes(m))])
+  .handleAction(musicPlaylistRemove, (state, action: ReturnType<typeof musicPlaylistRemove>) => state.filter(m => m.musicId !== action.payload.musicId));
 
 export const nowPlaying = createReducer(null as (Music | null))
   .handleAction(musicNowPlayingChange, (_, action: ReturnType<typeof musicNowPlayingChange>) => action.payload)

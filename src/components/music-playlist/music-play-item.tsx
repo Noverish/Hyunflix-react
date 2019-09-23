@@ -1,22 +1,26 @@
 import React from 'react';
-import { List } from 'antd';
+import { Icon } from 'antd';
+import { connect } from 'react-redux';
 
+import { musicNowPlayingChange, musicPlaylistRemove } from 'actions';
 import { Music } from 'models';
 import { time } from 'utils';
 import './music-play-item.css';
 
 interface Props {
+  musicNowPlayingChange(music: Music | null): ReturnType<typeof musicNowPlayingChange>;
+  musicPlaylistRemove(music: Music): ReturnType<typeof musicPlaylistRemove>;
+  
   index: number;
   music: Music;
   selected: boolean;
-  onClick: (music: Music) => void;
 }
 
 interface State {
   
 }
 
-export default class MusicSearchItem extends React.Component<Props, State> {
+class MusicSearchItem extends React.Component<Props, State> {
   render() {
     const music = this.props.music;
     const className = (this.props.selected)
@@ -24,15 +28,31 @@ export default class MusicSearchItem extends React.Component<Props, State> {
       : "music-play-item"
     
     return (
-      <List.Item className={className} onClick={this.onClick}>
-        <span>{this.props.index + 1}</span>
-        <span>{music.title}</span>
-        <span>{time.second2String(music.duration)}</span>
-      </List.Item>
+      <div className={className}>
+        <div className="info" onClick={this.onClick}>
+          <span className="index">{this.props.index + 1}</span>
+          <span className="title">{music.title}</span>
+          <span className="time">{time.second2String(music.duration)}</span>
+        </div>
+        <div className="remove-btn" onClick={this.onRemoveClick}>
+          <Icon type="close"/>
+        </div>
+      </div>
     )
   }
   
   onClick = () => {
-    this.props.onClick(this.props.music);
+    this.props.musicNowPlayingChange(this.props.music);
+  }
+  
+  onRemoveClick = () => {
+    this.props.musicPlaylistRemove(this.props.music);
   }
 }
+
+const mapDispatchToProps = {
+  musicNowPlayingChange,
+  musicPlaylistRemove,
+}
+
+export default connect(undefined, mapDispatchToProps)(MusicSearchItem);
