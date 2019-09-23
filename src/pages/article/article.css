@@ -7,6 +7,11 @@
   border-top: 1px solid #dddddd;
 }
 
+.article-list-page .ant-list {
+  border-top: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+}
+
 .article-list-page .ant-pagination {
   align-self: center;
   margin-top: 24px;

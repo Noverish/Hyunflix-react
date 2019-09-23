@@ -1,5 +1,5 @@
 .article-item {
-  border-bottom: 1px solid #dddddd;
+  border-top: 1px solid #dddddd;
   padding: 8px;
   display: flex;
   flex-flow: row nowrap;
@@ -11,7 +11,7 @@
 }
 
 .article-item:first-child {
-  border-top: 1px solid #dddddd;
+  border-top: 0px;
 }
 
 .article-item > div:first-child {

@@ -55,7 +55,7 @@ class MusicListPage extends React.Component<Props, State> {
               <Button onClick={this.onAddAllClicked} icon="plus" type="primary">Add all to Playlist</Button>
             </Button.Group>
           </div>
-          <Spin spinning={loading}>
+          <Spin spinning={loading} tip="로딩중...">
             <List
               dataSource={sliced}
               renderItem={music => <MusicArticleItem music={music} highlight={query} />}

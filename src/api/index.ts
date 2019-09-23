@@ -9,6 +9,7 @@ export const SERVER: string = 'http://home.hyunsub.kim:8080';
 export * from './ffmpeg';
 export * from './auth';
 export * from './music';
+export * from './video';
 
 export async function request(path: string, method: string, data: any = undefined) {
   const url = path.startsWith('/') ? `${SERVER}${path}` : path;
@@ -91,18 +92,6 @@ export async function encodeFile(inpath: string, options: string, outpath: strin
 
 export async function encodePresets() {
   const url = `/encode/presets`;
-  const method = 'get';
-  return await request(url, method);
-}
-
-export async function videoArticleList() {
-  const url = `/articles/videos`;
-  const method = 'get';
-  return await request(url, method);
-}
-
-export async function videoArticleContent(articleId: number) {
-  const url = `/articles/videos/${articleId}`;
   const method = 'get';
   return await request(url, method);
 }

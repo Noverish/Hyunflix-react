@@ -1,53 +1,27 @@
-import { VideoArticle, Subtitle } from 'models';
+import { createAsyncAction } from 'typesafe-actions';
+import { VideoArticle } from 'models';
+import { VideoArticleContentResult } from 'api';
 
-export const VIDEO_ARTICLE_LIST = 'VIDEO_ARTICLE_LIST';
-export const VIDEO_ARTICLE_LIST_SUCCESS = 'VIDEO_ARTICLE_LIST_SUCCESS';
-export const VIDEO_ARTICLE_CONTENT = 'VIDEO_ARTICLE_CONTENT';
-export const VIDEO_ARTICLE_CONTENT_SUCCESS = 'VIDEO_ARTICLE_CONTENT_SUCCESS';
+export const videoList = createAsyncAction(
+  'VIDEO_LIST_REQUEST',
+  'VIDEO_LIST_SUCCESS',
+  'VIDEO_LIST_FAILURE'
+)<undefined, VideoArticle[], string>();
 
-export interface VideoArticleListAction {
-  type: typeof VIDEO_ARTICLE_LIST;
-}
+export const videoContent = createAsyncAction(
+  'VIDEO_CONTENT_REQUEST',
+  'VIDEO_CONTENT_SUCCESS',
+  'VIDEO_CONTENT_FAILURE'
+)<number, VideoArticleContentResult, string>();
 
-export interface VideoArticleListSuccessAction {
-  type: typeof VIDEO_ARTICLE_LIST_SUCCESS;
-  articles: VideoArticle[];
-}
+export const videoSearch = createAsyncAction(
+  'VIDEO_SEARCH_REQUEST',
+  'VIDEO_SEARCH_SUCCESS',
+  'VIDEO_SEARCH_FAILURE'
+)<string, VideoArticle[], string>();
 
-export interface VideoArticleContentAction {
-  type: typeof VIDEO_ARTICLE_CONTENT;
-  articleId: number;
-}
-
-export interface VideoArticleContentSuccessAction {
-  type: typeof VIDEO_ARTICLE_CONTENT_SUCCESS;
-  article: VideoArticle;
-  subtitles: Subtitle[];
-}
-
-export function videoArticleList(): VideoArticleListAction {
-  return {
-    type: VIDEO_ARTICLE_LIST,
-  }
-}
-
-export function videoArticleListSuccess(articles: VideoArticle[]): VideoArticleListSuccessAction {
-  return {
-    type: VIDEO_ARTICLE_LIST_SUCCESS,
-    articles,
-  }
-}
-
-export function videoArticleContent(articleId: number): VideoArticleContentAction {
-  return {
-    type: VIDEO_ARTICLE_CONTENT,
-    articleId,
-  }
-}
-
-export function videoArticleContentSuccess(article: VideoArticle, subtitles: Subtitle[]): VideoArticleContentSuccessAction {
-  return {
-    type: VIDEO_ARTICLE_CONTENT_SUCCESS,
-    article, subtitles,
-  }
-}
+export const videoTagList = createAsyncAction(
+  'VIDEO_TAG_LIST_REQUEST',
+  'VIDEO_TAG_LIST_SUCCESS',
+  'VIDEO_TAG_LIST_FAILURE'
+)<undefined, string[], string>();

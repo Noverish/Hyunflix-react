@@ -2,16 +2,15 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { PageHeader, Typography } from 'antd';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
-import { videoArticleContent, VideoArticleContentAction } from 'actions';
+import { videoContent } from 'actions';
 import { MainLayout, VideoPlayer } from 'components';
 import { VideoArticle, Subtitle } from 'models';
 
 const { Title, Text } = Typography;
 
 interface Props extends RouteComponentProps {
-  onVideoArticleContent(articleId: number): VideoArticleContentAction;
+  videoContent(articleId: number): ReturnType<typeof videoContent.request>;
   article: VideoArticle | null;
   subtitles: Subtitle[];
 }
@@ -31,7 +30,7 @@ class VideoArticleContentPage extends React.Component<Props, State> {
     window.addEventListener("resize", this.resize);
     const articleId: number = parseInt(this.props.match.params['articleId']);
     
-    this.props.onVideoArticleContent(articleId);
+    this.props.videoContent(articleId);
   }
   
   resize = () => {
@@ -83,10 +82,8 @@ class VideoArticleContentPage extends React.Component<Props, State> {
   }
 }
 
-let mapDispatchToProps = (dispatch: Dispatch<VideoArticleContentAction>) => {
-  return {
-    onVideoArticleContent: (articleId: number) => dispatch(videoArticleContent(articleId)),
-  }
+let mapDispatchToProps = {
+  videoContent: videoContent.request,
 }
 
 let mapStateToProps = (state) => {

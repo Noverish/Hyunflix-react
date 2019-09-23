@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Tag, Tooltip } from 'antd';
+import { connect } from 'react-redux';
 
 import { VideoArticle } from 'models';
 import { time } from 'utils';
@@ -9,13 +10,14 @@ import './article-item.css';
 interface Props extends RouteComponentProps {
   highlight: string;
   article: VideoArticle;
+  tags: string;
 }
 
 interface State {
   
 }
 
-class MovieItem extends React.Component<Props, State> {
+class VideoItem extends React.Component<Props, State> {
   
   onClick = (e) => {
     const link = `/articles/videos/${this.props.article.articleId}`;
@@ -23,8 +25,37 @@ class MovieItem extends React.Component<Props, State> {
     this.props.history.push(link);
   }
   
-  render() {
+  renderTitle = (title: string) => {
     const { highlight } = this.props;
+    
+    const index = title.search(new RegExp(highlight, 'i'));
+    const beforeStr = title.substr(0, index);
+    const matchStr = title.substr(index, highlight.length);
+    const afterStr = title.substr(index + highlight.length);
+    return (index > -1)
+      ? (
+        <span className="title">
+          {beforeStr}
+          <span style={{ color: '#f50' }}>{matchStr}</span>
+          {afterStr}
+        </span>
+      )
+      : (
+        <span className="title">{title}</span>
+      );
+  }
+  
+  renderTags = () => {
+    const { article, tags } = this.props;
+    // TODO 멋있게
+    const colorList = ['magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
+    
+    return article.tags.map(t => (
+      <Tag color={colorList[tags.indexOf(t) % colorList.length]} key={t}>{t}</Tag>
+    ))
+  }
+  
+  render() {
     const article = this.props.article;
     const link = `/articles/videos/${this.props.article.articleId}`;
     
@@ -34,7 +65,8 @@ class MovieItem extends React.Component<Props, State> {
       <a href={link} className="article-item" onClick={this.onClick}>
         <div className="first-section">
           <span className="id">{article.articleId}</span>
-          <span className="title">{renderTitle(article.title, highlight)}</span>
+          { this.renderTags() }
+          { this.renderTitle(article.title) }
         </div>
         <div className="second-section">
           <span className="duration">{time.second2String(article.duration)}</span>
@@ -48,22 +80,13 @@ class MovieItem extends React.Component<Props, State> {
   }
 }
 
-function renderTitle(title: string, query: string) {
-  const index = title.indexOf(query);
-  const beforeStr = title.substr(0, index);
-  const afterStr = title.substr(index + query.length);
-  return (index > -1)
-    ? (
-      <span>
-        {beforeStr}
-        <span style={{ color: '#f50' }}>{query}</span>
-        {afterStr}
-      </span>
-    )
-    : (
-      <span>{title}</span>
-    );
+let mapStateToProps = (state) => {
+  return {
+    tags: state.video.tags,
+  }
 }
+
+export default connect(mapStateToProps)(withRouter(VideoItem));
 
 function widthToResolutionAndColor(width: number) {
   const list = {
@@ -85,5 +108,3 @@ function widthToResolutionAndColor(width: number) {
   
   return list[key];
 }
-
-export default withRouter(MovieItem);

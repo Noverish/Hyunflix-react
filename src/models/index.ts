@@ -1,5 +1,6 @@
 export * from './auth';
 export * from './music';
+export * from './video';
 
 export interface File {
   path: string;
@@ -16,34 +17,6 @@ export interface Encode {
   options: string;
   progress: number;
   date: string;
-}
-
-export interface TVProgram {
-  videoId: number;
-  seriesName: string;
-  episodeName: string;
-  episodeNumber: number;
-  broadcastDate: string;
-  date: string;
-}
-
-export interface VideoArticle {
-  articleId: number;
-  videoId: number;
-  category: string;
-  title: string;
-  date: string;
-  url: string;
-  duration: number;
-  width: number;
-  height: number;
-  bitrate: number;
-  size: number;
-}
-
-export interface Subtitle {
-  language: string;
-  url: string;
 }
 
 export interface RegCode {
