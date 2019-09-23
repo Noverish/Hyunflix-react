@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as pages from 'pages';
+import { debounce } from "debounce";
 
+import { windowResize } from 'actions';
+import * as pages from 'pages';
 import 'antd/dist/antd.css';
 import './App.css';
 
 interface Props {
+  windowResize(): ReturnType<typeof windowResize>;
   token: string;
 }
 
@@ -15,6 +18,10 @@ interface State {
 }
 
 class App extends Component<Props, State> {
+  componentDidMount() {
+    window.onresize = debounce(this.props.windowResize, 500);
+  }
+  
   render() {
     let inner = (this.props.token)
       ? (
@@ -48,10 +55,14 @@ class App extends Component<Props, State> {
   }
 }
 
-let mapStateToProps = (state) => {
+const mapDispatchToProps = {
+  windowResize,
+}
+
+const mapStateToProps = (state) => {
   return {
     token: state.auth.token
   };
 }
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

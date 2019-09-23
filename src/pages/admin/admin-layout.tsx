@@ -1,30 +1,29 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
+import { connect } from 'react-redux';
 
-import { MOBILE_BREAKPOINT } from 'config';
 import './admin-layout.css';
 
 const { Header, Content, Footer, Sider } = Layout;
 
 interface Props extends RouteComponentProps {
-  
+  isMobile: boolean;
 }
 
 interface State {
-  isMobile: boolean;
   collapsed: boolean;
 }
 
 class AdminLayout extends React.Component<Props, State> {
   state = {
-    isMobile: window.innerWidth <= MOBILE_BREAKPOINT,
     collapsed: false,
   };
   
   render() {
     const path = this.props.location.pathname;
-    const { isMobile, collapsed } = this.state;
+    const { isMobile } = this.props;
+    const { collapsed } = this.state;
     
     const items = [
       { name: '파일 탐색기',   path: '/admin/explorer',       icon: 'folder' },
@@ -90,22 +89,12 @@ class AdminLayout extends React.Component<Props, State> {
     this.props.history.push(e.key);
     this.toggle();
   }
-  
-  componentDidMount() {
-    window.addEventListener('resize', this.onResize);
-  }
-  
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.onResize);
-  }
-  
-  onResize = () => {
-    const prevIsMobile = this.state.isMobile;
-    const nextIsMobile = window.innerWidth <= MOBILE_BREAKPOINT;
-    if(prevIsMobile !== nextIsMobile) {
-      this.setState({ isMobile: nextIsMobile });
-    }
+}
+
+const mapStateToProps = (state) => {
+  return {
+    isMobile: state.etc.isMobile,
   }
 }
 
-export default withRouter(AdminLayout);
+export default connect(mapStateToProps)(withRouter(AdminLayout));
