@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { Tag, Tooltip } from 'antd';
+import { Tag, Tooltip, Button } from 'antd';
 import { connect } from 'react-redux';
 
 import { VideoArticle } from 'models';
@@ -8,9 +8,12 @@ import { time } from 'utils';
 import './article-item.css';
 
 interface Props extends RouteComponentProps {
+  isAdmin: boolean;
+  tags: string;
+  
   highlight: string;
   article: VideoArticle;
-  tags: string;
+  onEditClicked(article: VideoArticle): void;
 }
 
 interface State {
@@ -18,13 +21,6 @@ interface State {
 }
 
 class VideoItem extends React.Component<Props, State> {
-  
-  onClick = (e) => {
-    const link = `/articles/videos/${this.props.article.articleId}`;
-    e.preventDefault();
-    this.props.history.push(link);
-  }
-  
   renderTitle = (title: string) => {
     const { highlight } = this.props;
     
@@ -56,8 +52,8 @@ class VideoItem extends React.Component<Props, State> {
   }
   
   render() {
-    const article = this.props.article;
-    const link = `/articles/videos/${this.props.article.articleId}`;
+    const { article, isAdmin } = this.props;
+    const link = `/articles/videos/${article.articleId}`;
     
     const { resolution, color } = widthToResolutionAndColor(article.width);
     
@@ -74,14 +70,28 @@ class VideoItem extends React.Component<Props, State> {
             <Tag className="resolution" color={color}>{resolution}</Tag>
           </Tooltip>
           <span className="date">{article.date}</span>
+          { isAdmin ? <Button icon="edit" size="small" onClick={this.onEdit}/> : null}
         </div>
       </a>
     )
+  }
+  
+  onClick = (e) => {
+    const link = `/articles/videos/${this.props.article.articleId}`;
+    e.preventDefault();
+    this.props.history.push(link);
+  }
+  
+  onEdit = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.props.onEditClicked(this.props.article);
   }
 }
 
 let mapStateToProps = (state) => {
   return {
+    isAdmin: state.auth.isAdmin,
     tags: state.video.tags,
   }
 }

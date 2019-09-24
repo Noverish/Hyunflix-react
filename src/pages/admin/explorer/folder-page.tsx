@@ -78,7 +78,8 @@ class FolderPage extends React.Component<Props, State> {
   }
   
   onItemClicked = (file: File) => {
-    this.props.history.push(`/explorer${file.path}`)
+    // TODO make path relative
+    this.props.history.push(`/admin/explorer${file.path}`)
   }
 }
 

@@ -4,7 +4,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { videoList, videoSearch, videoTagList } from 'actions';
-import { MainLayout, VideoArticleItem } from 'components';
+import { MainLayout, VideoArticleItem, VideoEditModal } from 'components';
 import { VideoArticle } from 'models';
 import { PAGE_SIZE } from 'config';
 import './article.css';
@@ -20,6 +20,8 @@ interface Props extends RouteComponentProps {
 }
 
 interface State {
+  videoEditModalVisible: boolean;
+  article: VideoArticle | null;
   page: number;
 }
 
@@ -27,6 +29,8 @@ class VideoArticleListPage extends React.Component<Props, State> {
   query = '';
   
   state = {
+    videoEditModalVisible: false,
+    article: null,
     page: 1,
   }
   
@@ -37,7 +41,7 @@ class VideoArticleListPage extends React.Component<Props, State> {
   
   render() {
     const { searched, loading } = this.props;
-    const { page } = this.state;
+    const { page, videoEditModalVisible, article } = this.state;
     const { query } = this;
     
     const sliced = searched.slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
@@ -52,11 +56,12 @@ class VideoArticleListPage extends React.Component<Props, State> {
           <Spin spinning={loading} tip="로딩중...">
             <List
               dataSource={sliced}
-              renderItem={article => <VideoArticleItem article={article} highlight={query} />}
+              renderItem={article => <VideoArticleItem article={article} highlight={query} onEditClicked={this.onEditClicked} />}
             />
           </Spin>
           <Pagination current={page} total={searched.length} pageSize={PAGE_SIZE} onChange={this.onPageChange} />
         </div>
+        { (article) ? <VideoEditModal visible={videoEditModalVisible} onClose={this.onModalClose} article={article!}/> : null }
       </MainLayout>
     )
   }
@@ -70,6 +75,14 @@ class VideoArticleListPage extends React.Component<Props, State> {
   
   onPageChange = (page: number) => {
     this.setState({ page })
+  }
+  
+  onEditClicked = (article: VideoArticle) => {
+    this.setState({ videoEditModalVisible: true, article });
+  }
+  
+  onModalClose = () => {
+    this.setState({ videoEditModalVisible: false, article: null });
   }
 }
 
