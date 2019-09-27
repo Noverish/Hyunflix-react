@@ -16,3 +16,5 @@ export { default as MusicArticleItem } from './article-item/music-article-item';
 export { default as RegCodeArticleItem } from './article-item/regcode-article-item';
 
 export { default as VideoEditModal } from './video/video-edit-modal';
+
+export { default as FileSelectModal } from './etc/file-select-modal';

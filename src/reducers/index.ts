@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 
-import explorer from './explorer';
 import auth from './auth';
 import encode from './encode';
 import video from './video';
@@ -9,7 +8,6 @@ import user from './user';
 import etc from './etc';
 
 const counterApp = combineReducers({
-  explorer,
   auth,
   encode,
   video,

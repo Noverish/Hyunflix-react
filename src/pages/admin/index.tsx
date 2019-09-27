@@ -6,6 +6,7 @@ import { NotFoundPage } from 'pages';
 import ExplorerPage from './explorer/explorer';
 import EncodePage from './encode/encode';
 import RegisterCodePage from './register-code/register-code';
+import VideoManagePage from './video/video-manage';
 import AdminLayout from './admin-layout';
 import './index.css';
 
@@ -21,7 +22,8 @@ const AdminPage: React.FunctionComponent<Props> = (props) => {
           <Route path="/admin/explorer*" component={ExplorerPage} />
           <Route path="/admin/encode*" component={EncodePage} />
           <Route path="/admin/register-code*" component={RegisterCodePage} />
-          <Route render={props => <Redirect to="/admin/explorer" />} />
+          <Route path="/admin/video-manage*" component={VideoManagePage} />
+          <Route render={props => <Redirect to="/admin/explorer" /> } />
         </Switch>
       </AdminLayout>
     )

@@ -1,59 +1,46 @@
 import React from 'react';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Input, Button } from 'antd';
 
-import { VideoArticle } from 'models';
+import { File } from 'models';
+import { FileSelectModal } from 'components';
 
 interface Props {
-  article: VideoArticle;
   visible: boolean;
   onClose: () => void;
 }
 
 interface State {
-  
+  fileModalVisible: boolean;
 }
 
-export default class VideoEditModal extends React.Component<Props, State> {
+class VideoEditModal extends React.Component<Props, State> {
   state = {
-    
-  }
-  
-  renderFormItems = () => {
-    const { article } = this.props;
-    
-    return Object.keys(article).map(k => (
-      <Form.Item label={k} key={k} style={{ marginBottom: '0' }}>
-        <Input defaultValue={article[k]}/>
-      </Form.Item>
-    ))
+    fileModalVisible: false,
   }
   
   render() {
-    
-    const formItemLayout = {
-      labelCol: { span: 4 },
-      wrapperCol: { span: 20 },
-    };
+    const { visible, onClose } = this.props;
+    const { fileModalVisible } = this.state;
     
     return (
       <Modal
         title="Title"
-        visible={this.props.visible}
-        onOk={this.onOk}
-        onCancel={this.onCancel}
+        visible={visible}
+        onOk={onClose}
+        onCancel={onClose}
       >
-        <Form layout="horizontal" {...formItemLayout}>
-          { this.renderFormItems() }
-        </Form>
+        <Input style={{ width: '50%' }} placeholder="replace from (regex)" />
+        <Input style={{ width: '50%' }} placeholder="replace to" />
+        <Button onClick={() => this.setState({ fileModalVisible: true })}>파일 선택</Button>
+        <FileSelectModal visible={fileModalVisible} onClose={this.onClose} />
       </Modal>
     )
   }
   
-  onOk = () => {
-    this.props.onClose();
-  }
-  
-  onCancel = () => {
-    this.props.onClose();
+  onClose = (file: File | null) => {
+    this.setState({ fileModalVisible: false });
   }
 }
+
+export default VideoEditModal;
+

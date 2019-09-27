@@ -20,17 +20,18 @@ class AdminLayout extends React.Component<Props, State> {
     collapsed: false,
   };
   
-  render() {
-    const path = this.props.location.pathname;
-    const { isMobile } = this.props;
-    const { collapsed } = this.state;
+  renderMenu = () => {
+    const path: string = this.props.location.pathname;
     
     const items = [
       { name: '파일 탐색기',   path: '/admin/explorer',       icon: 'folder' },
       { name: '비디오 인코딩', path: '/admin/encode',         icon: 'youtube' },
       { name: '회원가입 코드', path: '/admin/register-codes', icon: 'bold' },
+      { name: '비디오 관리',   path: '/admin/video-manage',   icon: 'play-circle' },
       { name: '홈으로',        path: '/home',                 icon: 'home' },
     ]
+    
+    const selectedKeys: string[] = items.filter(i => path.startsWith(i.path)).map(i => i.path);
     
     const itemComps = items.map(i => (
       <Menu.Item key={i.path}>
@@ -38,7 +39,17 @@ class AdminLayout extends React.Component<Props, State> {
         <span className="nav-text">{i.name}</span>
       </Menu.Item>
     ))
-    const selectedKeys: string[] = items.filter(i => path.startsWith(i.path)).map(i => i.path);
+    
+    return (
+      <Menu theme="dark" mode="inline" selectedKeys={selectedKeys} onClick={this.menuClicked}>
+        {itemComps}
+      </Menu>  
+    )
+  }
+  
+  render() {
+    const { isMobile } = this.props;
+    const { collapsed } = this.state;
     
     const siderLayoutClass = (collapsed)
       ? "sider-layout collapsed"
@@ -55,9 +66,7 @@ class AdminLayout extends React.Component<Props, State> {
             trigger={null}
           >
             <div className="logo" />
-            <Menu theme="dark" mode="inline" selectedKeys={selectedKeys} onClick={this.menuClicked}>
-              {itemComps}
-            </Menu>
+            { this.renderMenu() }
           </Sider>
           <div className="sider-rest" onClick={this.toggle}/>
         </div>

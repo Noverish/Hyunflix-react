@@ -1,5 +1,5 @@
 import React from 'react';
-import { PageHeader, List, Pagination, Input, Spin } from 'antd';
+import { PageHeader, List, Pagination, Input, Spin, Button } from 'antd';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -17,11 +17,11 @@ interface Props extends RouteComponentProps {
   videoSearch(query: string): ReturnType<typeof videoSearch.request>;
   searched: VideoArticle[];
   loading: boolean;
+  isAdmin: boolean;
 }
 
 interface State {
   videoEditModalVisible: boolean;
-  article: VideoArticle | null;
   page: number;
 }
 
@@ -40,8 +40,8 @@ class VideoArticleListPage extends React.Component<Props, State> {
   }
   
   render() {
-    const { searched, loading } = this.props;
-    const { page, videoEditModalVisible, article } = this.state;
+    const { searched, loading, isAdmin } = this.props;
+    const { page, videoEditModalVisible } = this.state;
     const { query } = this;
     
     const sliced = searched.slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
@@ -52,16 +52,21 @@ class VideoArticleListPage extends React.Component<Props, State> {
           <div className="page-header">
             <PageHeader onBack={() => null} title="Video" subTitle="영화, 드라마, 예능" />
             <Search onChange={this.onQueryChange} enterButton />
+            { (isAdmin) ? (
+              <Button.Group className="button-group">
+                <Button onClick={this.onEditClicked} icon="edit" type="primary">게시물 수정</Button>
+              </Button.Group>
+            ) : null }
           </div>
           <Spin spinning={loading} tip="로딩중...">
             <List
               dataSource={sliced}
-              renderItem={article => <VideoArticleItem article={article} highlight={query} onEditClicked={this.onEditClicked} />}
+              renderItem={article => <VideoArticleItem article={article} highlight={query} />}
             />
           </Spin>
           <Pagination current={page} total={searched.length} pageSize={PAGE_SIZE} onChange={this.onPageChange} />
         </div>
-        { (article) ? <VideoEditModal visible={videoEditModalVisible} onClose={this.onModalClose} article={article!}/> : null }
+        <VideoEditModal visible={videoEditModalVisible} onClose={this.onModalClose} />
       </MainLayout>
     )
   }
@@ -77,12 +82,12 @@ class VideoArticleListPage extends React.Component<Props, State> {
     this.setState({ page })
   }
   
-  onEditClicked = (article: VideoArticle) => {
-    this.setState({ videoEditModalVisible: true, article });
+  onEditClicked = () => {
+    this.setState({ videoEditModalVisible: true });
   }
   
   onModalClose = () => {
-    this.setState({ videoEditModalVisible: false, article: null });
+    this.setState({ videoEditModalVisible: false });
   }
 }
 
@@ -96,6 +101,7 @@ let mapStateToProps = (state) => {
   return {
     searched: state.video.searched,
     loading: state.video.loading,
+    isAdmin: state.auth.isAdmin,
   }
 }
 

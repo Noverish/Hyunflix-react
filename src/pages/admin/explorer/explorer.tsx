@@ -2,14 +2,13 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
 import { Result } from 'antd';
-import { Dispatch } from 'redux';
 
-import { explore, ExploreAction } from 'actions';
+import { readdir } from 'actions';
 import FolderPage from './folder-page';
 import { File } from 'models';
 
 interface Props extends RouteComponentProps {
-  onExplore(path: string): ExploreAction;
+  readdir(path: string): ReturnType<typeof readdir.request>;
   files: File[] | null;
 }
 
@@ -33,12 +32,14 @@ class ExplorerPage extends React.Component<Props, State> {
     const path = (params) ? params : '/';
     
     if(this.path !== path) {
-      this.props.onExplore(path);
+      this.props.readdir(path);
       this.path = path;
     }
   }
   
   render() {
+    console.log(this.props);
+    
     const files: File[] | null = this.props.files;
     
     if(!files) {
@@ -63,15 +64,13 @@ class ExplorerPage extends React.Component<Props, State> {
   }
 }
 
-let mapDispatchToProps = (dispatch: Dispatch<ExploreAction>) => {
-  return {
-    onExplore: (path) => dispatch(explore(path)),
-  }
+let mapDispatchToProps = {
+  readdir: readdir.request,
 }
 
 let mapStateToProps = (state) => {
   return {
-    files: state.explorer.files,
+    files: state.etc.files,
   }
 }
 

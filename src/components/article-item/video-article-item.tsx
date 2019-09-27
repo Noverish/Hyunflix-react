@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { Tag, Tooltip, Button } from 'antd';
+import { Tag, Tooltip } from 'antd';
 import { connect } from 'react-redux';
 
 import { VideoArticle } from 'models';
@@ -8,12 +8,10 @@ import { time } from 'utils';
 import './article-item.css';
 
 interface Props extends RouteComponentProps {
-  isAdmin: boolean;
   tags: string;
   
   highlight: string;
   article: VideoArticle;
-  onEditClicked(article: VideoArticle): void;
 }
 
 interface State {
@@ -52,7 +50,7 @@ class VideoItem extends React.Component<Props, State> {
   }
   
   render() {
-    const { article, isAdmin } = this.props;
+    const { article } = this.props;
     const link = `/articles/videos/${article.articleId}`;
     
     const { resolution, color } = widthToResolutionAndColor(article.width);
@@ -70,7 +68,6 @@ class VideoItem extends React.Component<Props, State> {
             <Tag className="resolution" color={color}>{resolution}</Tag>
           </Tooltip>
           <span className="date">{article.date}</span>
-          { isAdmin ? <Button icon="edit" size="small" onClick={this.onEdit}/> : null}
         </div>
       </a>
     )
@@ -81,17 +78,10 @@ class VideoItem extends React.Component<Props, State> {
     e.preventDefault();
     this.props.history.push(link);
   }
-  
-  onEdit = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    this.props.onEditClicked(this.props.article);
-  }
 }
 
 let mapStateToProps = (state) => {
   return {
-    isAdmin: state.auth.isAdmin,
     tags: state.video.tags,
   }
 }
