@@ -1,25 +1,25 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
 
-import { videoList, videoContent, videoSearch, videoTagList } from 'actions';
+import { videoArticleList, videoArticle, videoSearch, videoTagList, videoSubtitleList } from 'actions';
 import { VideoArticle, Subtitle } from 'models';
 
 export const articles = createReducer([] as VideoArticle[])
-  .handleAction(videoList.success, (_, action: ReturnType<typeof videoList.success>) => action.payload);
+  .handleAction(videoArticleList.success, (_, action: ReturnType<typeof videoArticleList.success>) => action.payload);
 
 export const article = createReducer(null as (VideoArticle | null))
-  .handleAction(videoContent.success, (_, action: ReturnType<typeof videoContent.success>) => action.payload.article);
+  .handleAction(videoArticle.success, (_, action: ReturnType<typeof videoArticle.success>) => action.payload);
   
 export const subtitles = createReducer([] as Subtitle[])
-  .handleAction(videoContent.success, (_, action: ReturnType<typeof videoContent.success>) => action.payload.subtitles);
+  .handleAction(videoSubtitleList.success, (_, action: ReturnType<typeof videoSubtitleList.success>) => action.payload);
 
 export const searched = createReducer([] as VideoArticle[])
-  .handleAction(videoList.success, (_, action: ReturnType<typeof videoList.success>) => action.payload)
+  .handleAction(videoArticleList.success, (_, action: ReturnType<typeof videoArticleList.success>) => action.payload)
   .handleAction(videoSearch.success, (_, action: ReturnType<typeof videoSearch.success>) => action.payload);
 
 export const loading = createReducer(false as boolean)
-  .handleAction([videoList.request, videoSearch.request], () => true)
-  .handleAction([videoList.success, videoList.failure, videoSearch.success, videoSearch.failure], () => false);
+  .handleAction([videoArticleList.request, videoSearch.request], () => true)
+  .handleAction([videoArticleList.success, videoArticleList.failure, videoSearch.success, videoSearch.failure], () => false);
 
 export const tags = createReducer([] as string[])
   .handleAction(videoTagList.success, (_, action: ReturnType<typeof videoTagList.success>) => action.payload);

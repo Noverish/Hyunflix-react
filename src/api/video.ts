@@ -7,12 +7,7 @@ export async function videoArticleList(): Promise<VideoArticle[]> {
   return await request(url, method);
 }
 
-export interface VideoArticleContentResult {
-  article: VideoArticle;
-  subtitles: Subtitle[];
-}
-
-export async function videoArticleContent(articleId: number): Promise<VideoArticleContentResult> {
+export async function videoArticle(articleId: number): Promise<VideoArticle> {
   const url = `/articles/videos/${articleId}`;
   const method = 'get';
   return await request(url, method);
@@ -20,6 +15,12 @@ export async function videoArticleContent(articleId: number): Promise<VideoArtic
 
 export async function videoTagList(): Promise<string[]> {
   const url = `/articles/videos/tags`;
+  const method = 'get';
+  return await request(url, method);
+}
+
+export async function videoSubtitleList(videoId: number): Promise<Subtitle[]> {
+  const url = `/videos/${videoId}/subtitles`;
   const method = 'get';
   return await request(url, method);
 }

@@ -1,18 +1,22 @@
-export interface VideoArticle {
-  articleId: number;
+export interface Video {
   videoId: number;
-  tags: string[];
-  title: string;
-  date: string;
   url: string;
   duration: number;
   width: number;
   height: number;
   bitrate: number;
-  size: number;
+  size: string;
 }
 
 export interface Subtitle {
   language: string;
   url: string;
+}
+
+export interface VideoArticle {
+  articleId: number;
+  videos: Video[];
+  tags: string[];
+  title: string;
+  date: string;
 }

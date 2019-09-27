@@ -2,29 +2,32 @@ import { put, call, delay, takeEvery, takeLatest } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 import * as hangul from 'hangul-js';
 
-import { videoList, videoContent, videoSearch, videoTagList } from 'actions';
+import { videoArticleList, videoArticle, videoSearch, videoTagList, videoSubtitleList } from 'actions';
 import * as Api from 'api';
-import { VideoArticle } from 'models';
+import { VideoArticle, Subtitle } from 'models';
 import { store } from 'index';
 import { USER_INPUT_DEBOUNCE } from 'config';
 
 export function* fetchVideoArticleList() {
   try {
-    const articles: VideoArticle[] = yield call([Api, 'videoArticleList']);
-    yield put(videoList.success(articles));
+    const result: VideoArticle[] = yield call([Api, 'videoArticleList']);
+    yield put(videoArticleList.success(result));
   } catch (errMsg) {
-    yield put(videoList.failure(errMsg));
+    yield put(videoArticleList.failure(errMsg));
   }
 }
 
-export function* fetchVideoArticleContent(action: ReturnType<typeof videoContent.request>) {
+export function* fetchVideoArticle(action: ReturnType<typeof videoArticle.request>) {
   const articleId: number = action.payload;
   
   try {
-    const result: Api.VideoArticleContentResult = yield call([Api, 'videoArticleContent'], articleId);
-    yield put(videoContent.success(result));
+    const article: VideoArticle = yield call([Api, 'videoArticle'], articleId);
+    yield put(videoArticle.success(article));
+    // TODO 여러 비디오 지원
+    const subtitles: Subtitle[] = yield call([Api, 'videoSubtitleList'], article.videos[0].videoId);
+    yield put(videoSubtitleList.success(subtitles));
   } catch (errMsg) {
-    yield put(videoContent.failure(errMsg));
+    yield put(videoArticle.failure(errMsg));
   }
 }
 
@@ -34,6 +37,17 @@ export function* fetchVideoTagList() {
     yield put(videoTagList.success(result));
   } catch (errMsg) {
     yield put(videoTagList.failure(errMsg));
+  }
+}
+
+export function* fetchVideoSubtitleList(action: ReturnType<typeof videoSubtitleList.request>) {
+  const videoId: number = action.payload;
+  
+  try {
+    const result: Subtitle[] = yield call([Api, 'videoSubtitleList'], videoId);
+    yield put(videoSubtitleList.success(result));
+  } catch (errMsg) {
+    yield put(videoSubtitleList.failure(errMsg));
   }
 }
 
@@ -57,15 +71,19 @@ function* fetchVideoSearch(action: ReturnType<typeof videoSearch.request>): Gene
 }
 
 export function* watchVideoArticleList() {
-  yield takeEvery(getType(videoList.request), fetchVideoArticleList);
+  yield takeEvery(getType(videoArticleList.request), fetchVideoArticleList);
 }
 
 export function* watchVideoArticleContent() {
-  yield takeEvery(getType(videoContent.request), fetchVideoArticleContent);
+  yield takeEvery(getType(videoArticle.request), fetchVideoArticle);
 }
 
 export function* watchVideoTagList() {
   yield takeEvery(getType(videoTagList.request), fetchVideoTagList);
+}
+
+export function* watchVideoSubtitleList() {
+  yield takeEvery(getType(videoSubtitleList.request), fetchVideoSubtitleList);
 }
 
 export function* watchVideoSearch() {
@@ -76,5 +94,6 @@ export default [
   watchVideoArticleList(),
   watchVideoArticleContent(),
   watchVideoTagList(),
+  watchVideoSubtitleList(),
   watchVideoSearch(),
 ]

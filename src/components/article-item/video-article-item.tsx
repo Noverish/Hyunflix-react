@@ -51,9 +51,12 @@ class VideoItem extends React.Component<Props, State> {
   
   render() {
     const { article } = this.props;
+    const videos = article.videos;
+    // TODO 여러 비디오 지원
+    const video = videos[0];
     const link = `/articles/videos/${article.articleId}`;
     
-    const { resolution, color } = widthToResolutionAndColor(article.width);
+    const { resolution, color } = widthToResolutionAndColor(video.width);
     
     return (
       <a href={link} className="article-item" onClick={this.onClick}>
@@ -63,8 +66,8 @@ class VideoItem extends React.Component<Props, State> {
           { this.renderTitle(article.title) }
         </div>
         <div className="second-section">
-          <span className="duration">{time.second2String(article.duration)}</span>
-          <Tooltip placement="top" title={`${article.width}x${article.height}`}>
+          <span className="duration">{time.second2String(video.duration)}</span>
+          <Tooltip placement="top" title={`${video.width}x${video.height}`}>
             <Tag className="resolution" color={color}>{resolution}</Tag>
           </Tooltip>
           <span className="date">{article.date}</span>

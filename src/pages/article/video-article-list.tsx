@@ -3,7 +3,7 @@ import { PageHeader, List, Pagination, Input, Spin, Button } from 'antd';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { videoList, videoSearch, videoTagList } from 'actions';
+import { videoArticleList, videoSearch, videoTagList } from 'actions';
 import { MainLayout, VideoArticleItem, VideoEditModal } from 'components';
 import { VideoArticle } from 'models';
 import { PAGE_SIZE } from 'config';
@@ -12,7 +12,7 @@ import './article.css';
 const { Search } = Input;
 
 interface Props extends RouteComponentProps {
-  videoList(): ReturnType<typeof videoList.request>;
+  videoArticleList(): ReturnType<typeof videoArticleList.request>;
   videoTagList(): ReturnType<typeof videoTagList.request>;
   videoSearch(query: string): ReturnType<typeof videoSearch.request>;
   searched: VideoArticle[];
@@ -35,7 +35,7 @@ class VideoArticleListPage extends React.Component<Props, State> {
   }
   
   componentDidMount() {
-    this.props.videoList();
+    this.props.videoArticleList();
     this.props.videoTagList();
   }
   
@@ -92,7 +92,7 @@ class VideoArticleListPage extends React.Component<Props, State> {
 }
 
 let mapDispatchToProps = {
-  videoList: videoList.request,
+  videoArticleList: videoArticleList.request,
   videoTagList: videoTagList.request,
   videoSearch: videoSearch.request,
 }

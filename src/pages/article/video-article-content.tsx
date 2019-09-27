@@ -3,14 +3,14 @@ import { RouteComponentProps } from 'react-router-dom';
 import { PageHeader, Typography } from 'antd';
 import { connect } from 'react-redux';
 
-import { videoContent } from 'actions';
+import { videoArticle } from 'actions';
 import { MainLayout, VideoPlayer } from 'components';
-import { VideoArticle, Subtitle } from 'models';
+import { VideoArticle, Subtitle, Video } from 'models';
 
 const { Title, Text } = Typography;
 
 interface Props extends RouteComponentProps {
-  videoContent(articleId: number): ReturnType<typeof videoContent.request>;
+  videoArticle(articleId: number): ReturnType<typeof videoArticle.request>;
   article: VideoArticle | null;
   subtitles: Subtitle[];
 }
@@ -30,7 +30,7 @@ class VideoArticleContentPage extends React.Component<Props, State> {
     window.addEventListener("resize", this.resize);
     const articleId: number = parseInt(this.props.match.params['articleId']);
     
-    this.props.videoContent(articleId);
+    this.props.videoArticle(articleId);
   }
   
   resize = () => {
@@ -49,9 +49,13 @@ class VideoArticleContentPage extends React.Component<Props, State> {
       return <MainLayout/>
     }
     
-    const height: number = width * article.height / article.width;
+    const videos: Video[] = article.videos;
+    // TODO 여러 비디오 하게 하기
+    const video = videos[0];
+    
+    const height: number = width * video.height / video.width;
     let videoPlayer = (width > 0)
-      ? <VideoPlayer src={article.url} subtitles={subtitles} width={width} height={height} />
+      ? <VideoPlayer src={video.url} subtitles={subtitles} width={width} height={height} />
       : null
     
     return (
@@ -83,7 +87,7 @@ class VideoArticleContentPage extends React.Component<Props, State> {
 }
 
 let mapDispatchToProps = {
-  videoContent: videoContent.request,
+  videoArticle: videoArticle.request,
 }
 
 let mapStateToProps = (state) => {
