@@ -1,7 +1,13 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
 
-import { videoArticleList, videoArticle, videoSearch, videoTagList, videoSubtitleList } from 'actions';
+import {
+  videoArticleList,
+  videoArticle,
+  videoSearch,
+  videoTagList,
+  videoSubtitleList,
+} from 'actions';
 import { VideoArticle, Subtitle } from 'models';
 
 export const articles = createReducer([] as VideoArticle[])

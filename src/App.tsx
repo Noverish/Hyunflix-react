@@ -6,7 +6,8 @@ import { debounce } from "debounce";
 import { windowResize } from 'actions';
 import * as pages from 'pages';
 import 'antd/dist/antd.css';
-import './App.css';
+import './article-item.css';
+import './article.css';
 
 interface Props {
   windowResize(): ReturnType<typeof windowResize>;

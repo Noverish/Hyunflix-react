@@ -7,7 +7,6 @@ import { musicListAsync, musicPlaylistAdd, musicTagListAsync, musicSearch } from
 import { MainLayout, MusicArticleItem, MusicPlayer } from 'components';
 import { Music } from 'models';
 import { PAGE_SIZE } from 'config';
-import './article.css';
 import './music-article-list.css';
 
 const { Search } = Input;

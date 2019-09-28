@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { RegCode } from 'models';
-import './article-item.css';
 
 interface Props {
   regCode: RegCode;

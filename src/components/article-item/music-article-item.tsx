@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { musicPlaylistAdd, musicPlaylistRemove } from 'actions';
 import { Music } from 'models';
 import { time } from 'utils';
-import './article-item.css';
 
 interface Props extends RouteComponentProps {
   musicPlaylistAdd(musics: Music[]): void;

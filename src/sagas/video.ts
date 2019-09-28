@@ -57,13 +57,14 @@ function* fetchVideoSearch(action: ReturnType<typeof videoSearch.request>): Gene
   const query: string = action.payload.replace(' ', '');
   
   const koSearcher = new hangul.Searcher(query);
-  const enSearcher = new RegExp(query, 'i');
+  // TODO const enSearcher = new RegExp(query, 'i');
   
   const searched = (query) ? articles.filter((m: VideoArticle) => {
     const targets = [m.title, ...m.tags];
     return targets.some(t => {
       t = t.replace(/ /g, '');
-      return t.search(enSearcher) >= 0 || koSearcher.search(t) >= 0;
+      // TODO return t.search(enSearcher) >= 0 || koSearcher.search(t) >= 0;
+      return t.indexOf(query) >= 0 || koSearcher.search(t) >= 0;
     });
   }) : articles;
   

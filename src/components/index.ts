@@ -11,10 +11,10 @@ export { default as MusicPlayList } from './music-playlist/music-play-list';
 export { default as MusicPlayer } from './music-playlist/music-player';
 export { default as MusicPlayControl } from './music-playlist/music-play-control';
 
-export { default as VideoArticleItem } from './article-item/video-article-item';
 export { default as MusicArticleItem } from './article-item/music-article-item';
 export { default as RegCodeArticleItem } from './article-item/regcode-article-item';
 
-export { default as VideoEditModal } from './video/video-edit-modal';
+export { default as VideoArticleList } from './video/video-article-list';
+export { default as VideoArticleItem } from './video/video-article-item';
 
 export { default as FileSelectModal } from './etc/file-select-modal';

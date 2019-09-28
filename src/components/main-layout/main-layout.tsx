@@ -28,6 +28,7 @@ class MainLayout extends React.Component<Props, State> {
       { name: 'Music', path: '/articles/musics' },
     ]
     
+    // TODO
     if (this.props.userId === 1) {
       items.push({ name: 'Admin', path: '/admin' });
     }

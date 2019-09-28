@@ -1,28 +1,36 @@
 import React from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { Tag, Tooltip } from 'antd';
+import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
+import { Tag, Tooltip, Checkbox } from 'antd';
 import { connect } from 'react-redux';
 
 import { VideoArticle } from 'models';
 import { time } from 'utils';
-import './article-item.css';
 
 interface Props extends RouteComponentProps {
-  tags: string;
-  
   highlight: string;
   article: VideoArticle;
-}
-
-interface State {
   
+  // Redux Props
+  tags: string;
+  
+  // TODO Default Props
+  checkable?: boolean;
+  checked?: boolean;
+  onCheck?(article: VideoArticle, checked: boolean): void;
 }
 
-class VideoItem extends React.Component<Props, State> {
+class VideoItem extends React.Component<Props> {
+  public static defaultProps = {
+    checkable: false,
+    checked: false,
+    onCheck: () => {},
+  }
+  
   renderTitle = (title: string) => {
     const { highlight } = this.props;
     
-    const index = title.search(new RegExp(highlight, 'i'));
+    // TODO const index = title.search(new RegExp(highlight, 'i'));
+    const index = title.indexOf(highlight);
     const beforeStr = title.substr(0, index);
     const matchStr = title.substr(index, highlight.length);
     const afterStr = title.substr(index + highlight.length);
@@ -50,17 +58,17 @@ class VideoItem extends React.Component<Props, State> {
   }
   
   render() {
-    const { article } = this.props;
-    const videos = article.videos;
-    // TODO 여러 비디오 지원
-    const video = videos[0];
-    const link = `/articles/videos/${article.articleId}`;
+    const { article, checked, checkable } = this.props;
     
+    // TODO 여러 비디오 지원
+    const video = article.videos[0];
+    const link = `/articles/videos/${article.articleId}`;
     const { resolution, color } = widthToResolutionAndColor(video.width);
     
     return (
-      <a href={link} className="article-item" onClick={this.onClick}>
+      <Link to={link} className="article-item" onClick={checkable ? this.onClick : undefined}>
         <div className="first-section">
+          { checkable && <Checkbox className="check-box" checked={checked} /> }
           <span className="id">{article.articleId}</span>
           { this.renderTags() }
           { this.renderTitle(article.title) }
@@ -72,24 +80,29 @@ class VideoItem extends React.Component<Props, State> {
           </Tooltip>
           <span className="date">{article.date}</span>
         </div>
-      </a>
+      </Link>
     )
   }
   
   onClick = (e) => {
-    const link = `/articles/videos/${this.props.article.articleId}`;
     e.preventDefault();
-    this.props.history.push(link);
+    const { article, checked } = this.props;
+    this.props.onCheck!(article, !checked);
   }
 }
 
-let mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
   return {
     tags: state.video.tags,
+    checkedList: state.video.check,
   }
 }
 
-export default connect(mapStateToProps)(withRouter(VideoItem));
+const mapDispathToProps = {
+  
+}
+
+export default connect(mapStateToProps, mapDispathToProps)(withRouter(VideoItem));
 
 function widthToResolutionAndColor(width: number) {
   const list = {
