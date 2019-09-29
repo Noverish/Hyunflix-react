@@ -3,19 +3,19 @@ import { FFMPEG_SERVER } from 'config';
 import { Encode } from 'models'
 
 export async function ffmpegPause() {
-  const url = `${FFMPEG_SERVER}/pause`;
+  const url = `${FFMPEG_SERVER}/ffmpeg/pause`;
   const method = 'post';
   return await request(url, method);
 }
 
 export async function ffmpegResume() {
-  const url = `${FFMPEG_SERVER}/resume`;
+  const url = `${FFMPEG_SERVER}/ffmpeg/resume`;
   const method = 'post';
   return await request(url, method);
 }
 
 export async function ffmpegIsRunning() {
-  const url = `${FFMPEG_SERVER}/state`;
+  const url = `${FFMPEG_SERVER}/ffmpeg/state`;
   const method = 'get';
   return (await request(url, method)).running === 'true';
 }
