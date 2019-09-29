@@ -36,14 +36,14 @@ class VideoItem extends React.Component<Props> {
     const afterStr = title.substr(index + highlight.length);
     return (index > -1)
       ? (
-        <span className="title">
+        <span className="article-title">
           {beforeStr}
           <span style={{ color: '#f50' }}>{matchStr}</span>
           {afterStr}
         </span>
       )
       : (
-        <span className="title">{title}</span>
+        <span className="article-title">{title}</span>
       );
   }
   
@@ -67,18 +67,18 @@ class VideoItem extends React.Component<Props> {
     
     return (
       <Link to={link} className="article-item" onClick={checkable ? this.onClick : undefined}>
-        <div className="first-section">
+        <div className="first section">
           { checkable && <Checkbox className="check-box" checked={checked} /> }
-          <span className="id">{article.articleId}</span>
+          <span className="article-id">{article.articleId}</span>
           { this.renderTags() }
           { this.renderTitle(article.title) }
         </div>
-        <div className="second-section">
-          <span className="duration">{time.second2String(video.duration)}</span>
+        <div className="second section">
+          <span className="article-date">{time.second2String(video.duration)}</span>
           <Tooltip placement="top" title={`${video.width}x${video.height}`}>
             <Tag className="resolution" color={color}>{resolution}</Tag>
           </Tooltip>
-          <span className="date">{article.date}</span>
+          <span className="article-date">{article.date}</span>
         </div>
       </Link>
     )

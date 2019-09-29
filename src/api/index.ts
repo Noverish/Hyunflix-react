@@ -1,4 +1,4 @@
-import { File, Encode } from 'models'
+import { File } from 'models'
 import { message } from 'antd';
 import { tokenExpire } from 'actions';
 import { store } from '../index';
@@ -75,23 +75,4 @@ export async function exists(path: string): Promise<boolean> {
   const method = 'post';
   const body = { path }
   return (await request(url, method, body)).exists;
-}
-
-export async function encodeStatus(): Promise<Encode[]> {
-  const url = `/encode/status`;
-  const method = 'get';
-  return await request(url, method);
-}
-
-export async function encodeFile(inpath: string, options: string, outpath: string) {
-  const url = `/encode`;
-  const method = 'post';
-  const body = { inpath, options, outpath };
-  return await request(url, method, body);
-}
-
-export async function encodePresets() {
-  const url = `/encode/presets`;
-  const method = 'get';
-  return await request(url, method);
 }

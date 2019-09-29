@@ -79,7 +79,7 @@ class VideoArticleList extends React.Component<Props, State> {
     return (
       <div className="article-list-page">
         <div className="page-header">
-          <PageHeader onBack={() => null} title="Video" subTitle="영화, 드라마, 예능" />
+          <PageHeader backIcon={false} title="Video" subTitle="영화, 드라마, 예능" />
           <Search onChange={this.onQueryChange} enterButton />
           { checkable && (
             <Button.Group className="button-group">
@@ -88,13 +88,21 @@ class VideoArticleList extends React.Component<Props, State> {
             </Button.Group> 
           )}
         </div>
-        <Spin spinning={loading} tip="로딩중...">
-          <List
-            dataSource={sliced}
-            renderItem={this.renderItem}
-          />
-        </Spin>
-        <Pagination current={page} total={searched.length} pageSize={PAGE_SIZE} onChange={this.onPageChange} />
+        <div className="page-content">
+          <Spin spinning={loading} tip="로딩중...">
+            <List
+              dataSource={sliced}
+              renderItem={this.renderItem}
+            />
+          </Spin>
+        </div>
+        <div className="page-footer">
+          <div className="left wrapper"></div>
+          <div className="center wrapper">
+            <Pagination current={page} total={searched.length} pageSize={PAGE_SIZE} onChange={this.onPageChange} />
+          </div>
+          <div className="right wrapper"></div>
+        </div>
       </div>
     )
   }

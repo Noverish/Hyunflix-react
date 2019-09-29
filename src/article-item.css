@@ -4,6 +4,7 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
+  color: #000000;
 }
 
 .article-item:hover {
@@ -14,47 +15,43 @@
   border-top: 0px;
 }
 
-.article-item > div:first-child {
+/* section */
+.article-item > .section {
   display: flex;
+  align-items: center;
+}
+
+.article-item > .first.section {
   flex: 1 1 auto;
 }
 
-.article-item .check-box {
+.article-item > .second.section {
+  flex: 0 0 auto;
+}
+
+/* components */
+.article-item > .section > * {
   margin-right: 8px;
 }
 
-.article-item .id {
-  color: #000000;
+.article-item .article-id {
   margin-right: 8px;
   flex: 0 0 30px;
   text-align: center;
 }
 
-.article-item .ant-tag {
-  align-self: flex-start;
-}
-
-.article-item .title {
+.article-item .article-title {
   color: #1890ff;
+  word-break: break-all;
+  /*white-space: nowrap;*/
+  /*text-overflow: ellipsis;*/
+  /*overflow: hidden;*/
 }
 
-.article-item .duration {
+.article-item .article-date {
   color: #999999;
   font-size: 11px;
 }
-
-.article-item .resolution {
-  width: 50px;
-  text-align: center;
-  padding: 0;
-  margin-left: 8px;
-}
-
-.article-item .date {
-  color: #999999;
-  font-size: 11px;
-}
-
 
 @media only screen and (max-width: 768px) {
   .article-item {
@@ -62,7 +59,7 @@
     align-items: stretch;
   }
   
-  .article-item > div:nth-child(2) {
-    margin-top: 8px;
+  .article-item > .first.section {
+    margin-bottom: 8px;
   }
 }

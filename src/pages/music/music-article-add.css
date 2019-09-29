@@ -1,0 +1,20 @@
+.music-article-add .ant-form.ant-form-inline {
+  display: flex;
+}
+
+.music-article-add .ant-row.ant-form-item:first-child {
+  display: flex;
+  flex-grow: 1;
+}
+
+.music-article-add .ant-row.ant-form-item:last-child {
+  margin-right: 0;
+}
+
+.music-article-add .ant-col.ant-form-item-control-wrapper {
+  flex-grow: 1;
+}
+
+.music-article-add .ant-form {
+  margin: 8px 0;
+}

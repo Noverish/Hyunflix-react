@@ -31,14 +31,14 @@ class MusicItem extends React.Component<Props, State> {
     const afterStr = title.substr(index + highlight.length);
     return (index > -1)
       ? (
-        <span className="title">
+        <span className="article-title">
           {beforeStr}
           <span style={{ color: '#f50' }}>{matchStr}</span>
           {afterStr}
         </span>
       )
       : (
-        <span className="title">{title}</span>
+        <span className="article-title">{title}</span>
       );
   }
   
@@ -59,14 +59,14 @@ class MusicItem extends React.Component<Props, State> {
     
     return (
       <a href={link} className="article-item" onClick={this.onClick}>
-        <div>
+        <div className="first section">
           <Checkbox className="check-box" checked={checked} />
-          <span className="id">{music.musicId}</span>
+          <span className="article-id">{music.musicId}</span>
           { this.renderTags() }
           { this.renderTitle(music.title) }
         </div>
-        <div>
-          <span className="duration">{time.second2String(music.duration)}</span>
+        <div className="second section">
+          <span className="article-date">{time.second2String(music.duration)}</span>
         </div>
       </a>
     )

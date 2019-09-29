@@ -1,6 +1,6 @@
 import React from 'react';
 import { PageHeader, List, Pagination, Input, Button, Spin } from 'antd';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { musicListAsync, musicPlaylistAdd, musicTagListAsync, musicSearch } from 'actions';
@@ -48,19 +48,29 @@ class MusicListPage extends React.Component<Props, State> {
         <div className="article-list-page">
           <MusicPlayer />
           <div className="page-header">
-            <PageHeader onBack={() => null} title="Music" subTitle="가요, 팝송, BGM" />
+            <PageHeader backIcon={false} title="Music" subTitle="가요, 팝송, BGM" />
             <Search onChange={this.onQueryChange} enterButton />
             <Button.Group className="button-group">
               <Button onClick={this.onAddAllClicked} icon="plus" type="primary">Add all to Playlist</Button>
             </Button.Group>
           </div>
-          <Spin spinning={loading} tip="로딩중...">
-            <List
-              dataSource={sliced}
-              renderItem={music => <MusicArticleItem music={music} highlight={query} />}
-            />
-          </Spin>
-          <Pagination current={page} total={searched.length} pageSize={PAGE_SIZE} onChange={this.onPageChange} />
+          <div className="page-content">
+            <Spin spinning={loading} tip="로딩중...">
+              <List
+                dataSource={sliced}
+                renderItem={music => <MusicArticleItem music={music} highlight={query} />}
+              />
+            </Spin>
+          </div>
+          <div className="page-footer">
+            <div className="left wrapper">
+              <Button><Link to="/articles/musics/add">음악 추가</Link></Button>
+            </div>
+            <div className="center wrapper">
+              <Pagination current={page} total={searched.length} pageSize={PAGE_SIZE} onChange={this.onPageChange} />
+            </div>
+            <div className="right wrapper"></div>
+          </div>
         </div>
       </MainLayout>
     )

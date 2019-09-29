@@ -9,7 +9,7 @@ import { encodeList, encodeListSuccess, EncodeListAction, EncodeListSuccessActio
 import { EncodeItem } from 'components';
 import { Encode } from 'models';
 import { ffmpegPause, ffmpegResume } from 'api';
-import { FFMPEG_SERVER, FFMPEG_SOCKET_PATH } from 'config';
+import { FFMPEG_SERVER, FFMPEG_SOCKET_PATH, PAGE_SIZE } from 'config';
 
 interface Props extends RouteComponentProps {
   onEncodeList(): EncodeListAction;
@@ -56,24 +56,32 @@ class EncodePage extends React.Component<Props, State> {
   render() {
     const page: number = this.state.page;
     const encodes: Encode[] = this.props.encodes;
-    const subItems: Encode[] = encodes.slice((page - 1) * 10, (page) * 10);
+    const subItems: Encode[] = encodes.slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
     
     return (
       <div className="article-list-page">
         <div className="page-header">
-          <PageHeader onBack={() => null} title="비디오 인코딩" />
+          <PageHeader backIcon={false} title="비디오 인코딩" />
           <Button.Group className="button-group">
             <Button icon="caret-right" onClick={this.onResumeClicked}>Resume</Button>
             <Button icon="pause" onClick={this.onPauseClicked}>Pause</Button>
           </Button.Group>
         </div>
-        <List
-          dataSource={subItems}
-          renderItem={(item: Encode) => (
-            <EncodeItem encode={item} key={item.encodeId} />
-          )}
-        />
-        <Pagination current={page} total={encodes.length} onChange={this.onChange} />
+        <div className="page-content">
+          <List
+            dataSource={subItems}
+            renderItem={(item: Encode) => (
+              <EncodeItem encode={item} key={item.encodeId} />
+            )}
+          />
+        </div>
+        <div className="page-footer">
+          <div className="left wrapper"></div>
+          <div className="center wrapper">
+            <Pagination current={page} total={encodes.length} pageSize={PAGE_SIZE} onChange={this.onChange} />
+          </div>
+          <div className="right wrapper"></div>
+        </div>
       </div>
     )
   }

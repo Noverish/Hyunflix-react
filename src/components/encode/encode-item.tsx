@@ -12,13 +12,15 @@ const encodeItem: React.FunctionComponent<Props> = ({ encode }) => {
   const percent = parseFloat(encode.progress.toFixed(2));
   
   return (
-    <div className="encode-item">
-      <div className="encode-item-id">{encode.encodeId}</div>
-      <div className="encode-item-inpath">{encode.inpath}</div>
-      <div className="encode-item-etc-layout">
+    <div className="article-item encode-item">
+      <div className="first section">
+        <div className="article-id">{encode.encodeId}</div>
+        <div className="article-title">{encode.inpath}</div>
+      </div>
+      <div className="second section">
         { progress2tag(encode.progress) }
-        <Progress className="encode-item-progress" percent={percent} size="small" />
-        <div className="encode-item-date">{encode.date}</div>
+        <Progress className="progress" percent={percent} size="small" />
+        <div className="article-date">{encode.date}</div>
       </div>
     </div>
   )
@@ -28,10 +30,10 @@ export default encodeItem;
 
 function progress2tag(progress: number): React.ReactElement {
   if (progress === 0.0) {
-    return <Tag className="encode-item-status" color="red">queued</Tag>
+    return <Tag className="status" color="red">queued</Tag>
   } else if (progress >= 100.0) {
-    return <Tag className="encode-item-status" color="green">done</Tag>
+    return <Tag className="status" color="green">done</Tag>
   } else {
-    return <Tag className="encode-item-status" color="cyan">processing</Tag>
+    return <Tag className="status" color="cyan">processing</Tag>
   }
 }

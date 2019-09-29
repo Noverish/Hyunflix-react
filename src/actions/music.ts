@@ -35,3 +35,9 @@ export const musicSearch = createAsyncAction(
   'MUSIC_SEARCH_SUCCESS',
   'MUSIC_SEARCH_FAILURE'
 )<string, Music[], Error>();
+
+export const musicAdd = createAsyncAction(
+  'MUSIC_ADD_REQUEST',
+  'MUSIC_ADD_SUCCESS',
+  'MUSIC_ADD_FAILURE'
+)<string, void, string>();
