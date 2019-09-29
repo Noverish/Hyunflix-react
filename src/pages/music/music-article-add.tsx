@@ -1,15 +1,19 @@
 import React from 'react';
-import { PageHeader, Input, Button, Spin, Form, message, Select } from 'antd';
+import { PageHeader, Input, Button, Spin, Form, message, Select, Steps, Progress } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
+import * as socketio from 'socket.io-client';
 
+import { YoutubeStage } from 'models';
+import { FFMPEG_SERVER, YOUTUBE_SOCKET_PATH } from 'config';
 import { musicTagListAsync } from 'actions';
 import { musicAdd } from 'api';
 import { MainLayout } from 'components';
 import './music-article-add.css';
 
 const { Option } = Select;
+const { Step } = Steps;
 
 interface Props extends RouteComponentProps, FormComponentProps {
   musicTagListAsync(): ReturnType<typeof musicTagListAsync.request>
@@ -17,19 +21,60 @@ interface Props extends RouteComponentProps, FormComponentProps {
 }
 
 interface State {
-  
+  stage: number;
+  progress: number;
+  eta: number;
 }
 
 class MusicArticleAddPage extends React.Component<Props, State> {
+  socket: socketio.Socket | null = null;
+  
   state = {
-    
+    stage: -1,
+    progress: 0,
+    eta: 0,
   }
   
   componentDidMount() {
     this.props.musicTagListAsync();
   }
   
+  renderSteps = (stepStage: number) => {
+    const { stage, progress, eta } = this.state;
+    
+    let percent = 0;
+    if (stage < stepStage) {
+      percent = 0;
+    } else if (stage === stepStage) {
+      percent = progress;
+    } else {
+      percent = 100;
+    }
+    
+    let subTitle = '';
+    if (stage < stepStage) {
+      subTitle = '준비중';
+    } else if (stage === stepStage) {
+      subTitle = `${eta}초 남음`;
+    } else {
+      subTitle = '완료';
+    }
+    
+    switch (stepStage) {
+      case YoutubeStage.ready: {
+        return <Step title="준비" subTitle={subTitle} />
+      }
+      case YoutubeStage.download: {
+        return <Step title="다운로드" subTitle={subTitle} description={ <Progress percent={percent} /> } />
+      }
+      case YoutubeStage.encode: {
+        return <Step title="인코딩" subTitle={subTitle} description={ <Progress percent={percent} /> } />
+      }
+    }
+  }
+  
   render() {
+    const { stage } = this.state;
     const { tags } = this.props;
     const { getFieldDecorator } = this.props.form;
     
@@ -83,6 +128,11 @@ class MusicArticleAddPage extends React.Component<Props, State> {
                 <Button type="primary" onClick={this.onSubmit}>추가</Button>
               </Form.Item>
             </Form>
+            <Steps direction="vertical" current={stage}>
+              { this.renderSteps(YoutubeStage.ready) }
+              { this.renderSteps(YoutubeStage.download) }
+              { this.renderSteps(YoutubeStage.encode) }
+            </Steps>
           </div>
         </div>
       </MainLayout>
@@ -94,9 +144,18 @@ class MusicArticleAddPage extends React.Component<Props, State> {
     const tags: string[] = this.props.form.getFieldValue('tags');
     
     (async () => {
+      this.socket = socketio.connect(FFMPEG_SERVER, { path: YOUTUBE_SOCKET_PATH });
+      this.socket.on('message', (data: Buffer) => {
+        const payload = JSON.parse(data.toString());
+        this.setState(payload);
+        
+        if (payload.stage === YoutubeStage.success) {
+          this.socket.disconnect();
+          message.success('추가 완료');
+        }
+      });
+      
       await musicAdd(url, tags);
-      message.success('추가 완료');
-      // this.props.history.goBack();
     })().catch(console.error);
   }
 }
