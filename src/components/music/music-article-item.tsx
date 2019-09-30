@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { Checkbox, Tag } from 'antd';
+import { Checkbox, Tag, Icon } from 'antd';
 import { connect } from 'react-redux';
 
 import { musicPlaylistAdd, musicPlaylistRemove } from 'actions';
@@ -64,6 +64,7 @@ class MusicItem extends React.Component<Props, State> {
           <span className="article-id">{music.musicId}</span>
           { this.renderTags() }
           { this.renderTitle(music.title) }
+          { music.youtube && <Icon type="youtube" style={{ color: '#f5222d' }} /> }
         </div>
         <div className="second section">
           <span className="article-date">{time.second2String(music.duration)}</span>

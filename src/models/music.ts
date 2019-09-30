@@ -1,5 +1,5 @@
 export interface Music {
-  artist: string;
+  youtube: string | null;
   duration: number;
   musicId: number;
   path: string;
