@@ -64,7 +64,11 @@ class MusicItem extends React.Component<Props, State> {
           <span className="article-id">{music.musicId}</span>
           { this.renderTags() }
           { this.renderTitle(music.title) }
-          { music.youtube && <Icon type="youtube" style={{ color: '#f5222d' }} /> }
+          { music.youtube && (
+            <div onClick={this.youtubeClicked}>
+              <Icon type="youtube" style={{ color: '#f5222d' }} />
+            </div>
+          ) }
         </div>
         <div className="second section">
           <span className="article-date">{time.second2String(music.duration)}</span>
@@ -72,7 +76,6 @@ class MusicItem extends React.Component<Props, State> {
       </a>
     )
   }
-  
   
   onClick = (e) => {
     e.preventDefault();
@@ -87,6 +90,14 @@ class MusicItem extends React.Component<Props, State> {
     
     // const link = `/musics/${this.props.music.musicId}`;
     // this.props.history.push(link);
+  }
+  
+  youtubeClicked = (e) => {
+    const url = `https://www.youtube.com/watch?v=${this.props.music.youtube}`;
+    e.preventDefault();
+    e.stopPropagation();
+    const win = window.open(url, '_blank');
+    win!.focus();
   }
 }
 
