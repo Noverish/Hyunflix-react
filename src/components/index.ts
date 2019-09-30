@@ -11,6 +11,7 @@ export { default as MusicPlayModal } from './music/music-play-modal';
 export { default as MusicPlayList } from './music/music-play-list';
 export { default as MusicPlayer } from './music/music-player';
 export { default as MusicPlayControl } from './music/music-play-control';
+export { default as MusicArticleList } from './music/music-article-list';
 export { default as MusicArticleItem } from './music/music-article-item';
 
 export { default as FileSelectModal } from './etc/file-select-modal';
