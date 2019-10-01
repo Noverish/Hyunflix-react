@@ -1,5 +1,5 @@
 import { request } from './';
-import { VideoArticle, Subtitle } from 'models';
+import { VideoArticle, Subtitle, VideoBundle } from 'models';
 
 export async function videoArticleList(): Promise<VideoArticle[]> {
   const url = `/articles/videos`;
@@ -34,4 +34,16 @@ export async function videoArticleUpdate(params: VideoArticleUpdateParams): Prom
   const url = `/articles/videos/${params.videoArticleId}`;
   const method = 'put';
   await request(url, method, params.params);
+}
+
+export async function videoBundleList(category: string): Promise<VideoBundle[]> {
+  const url = `/bundles/videos/${category}`;
+  const method = 'get';
+  return await request(url, method);
+}
+
+export async function videoBundle(category: string, bundleId: number): Promise<VideoBundle[]> {
+  const url = `/bundles/videos/${category}/${bundleId}`;
+  const method = 'get';
+  return await request(url, method);
 }

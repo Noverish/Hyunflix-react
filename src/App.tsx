@@ -34,6 +34,7 @@ class App extends Component<Props, State> {
           
           <Route path="/articles/videos/:articleId" component={pages.VideoArticleContent} />
           <Route path="/articles/videos" component={pages.VideoArticleList} />
+          <Route path="/bundles/videos/:category" component={pages.VideoBundleList} />
           
           <Route path="/articles/musics/add" component={pages.MusicArticleAdd} />
           <Route path="/articles/musics" component={pages.MusicArticleList} />

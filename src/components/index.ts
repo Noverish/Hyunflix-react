@@ -5,6 +5,8 @@ export { default as EncodeModal } from './encode/encode-modal';
 
 export { default as VideoArticleList } from './video/video-article-list';
 export { default as VideoArticleItem } from './video/video-article-item';
+export { default as VideoBundleList } from './video/video-bundle-list';
+export { default as VideoBundleItem } from './video/video-bundle-item';
 export { default as VideoPlayer } from './video/video-player';
 
 export { default as MusicPlayModal } from './music/music-play-modal';

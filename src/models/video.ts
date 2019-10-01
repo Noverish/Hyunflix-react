@@ -20,3 +20,10 @@ export interface VideoArticle {
   title: string;
   date: string;
 }
+
+export interface VideoBundle {
+  bundleId: number;
+  articles: VideoArticle[];
+  title: string;
+  category: string;
+}
