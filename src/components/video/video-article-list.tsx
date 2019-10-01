@@ -1,97 +1,76 @@
 import React from 'react';
-import { PageHeader, List, Pagination, Input, Spin, Button } from 'antd';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { PageHeader, List, Pagination, Input, Spin } from 'antd';
+import { debounce } from 'debounce';
 
-import { videoArticleList, videoSearch, videoTagList } from 'actions';
 import { VideoArticleItem } from 'components';
 import { VideoArticle } from 'models';
-import { PAGE_SIZE } from 'config';
+import { USER_INPUT_DEBOUNCE } from 'config';
 
 const { Search } = Input;
 
-interface Props extends RouteComponentProps {
-  // Redux Props
-  videoArticleList(): ReturnType<typeof videoArticleList.request>;
-  videoTagList(): ReturnType<typeof videoTagList.request>;
-  videoSearch(query: string): ReturnType<typeof videoSearch.request>;
-  searched: VideoArticle[];
+interface Props {
+  onPageChange(page: number): void;
+  onQueryChange(query: string): void;
+  onItemClick?(article: VideoArticle): void;
+  onItemCheck?(article: VideoArticle, checked: boolean, checklist: VideoArticle[]): void;
+  articles: VideoArticle[];
+  total: number;
+  page: number;
+  pageSize: number;
   loading: boolean;
-  
-  // TODO Default Props
+  topRight?: React.ReactNode;
   checkable?: boolean;
-  onEdit?(articles: VideoArticle[]): void;
-  onDelete?(articles: VideoArticle[]): void;
 }
 
 interface State {
-  page: number;
   checklist: VideoArticle[];
 }
 
 class VideoArticleList extends React.Component<Props, State> {
-  static defaultProps = {
-    checkable: false,
-    onEdit: () => {},
-    onDelete: () => {},
-  }
-  
   query = '';
   
+  public static defaultProps = {
+    checkable: false,
+    onItemClick: () => {},
+    onItemCheck: () => {},
+  }
+  
   state = {
-    page: 1,
     checklist: [],
   }
   
-  componentDidMount() {
-    this.props.videoArticleList();
-    this.props.videoTagList();
-  }
-  
   renderItem = (article: VideoArticle) => {
-    const checkable: boolean = this.props.checkable!;
-    const checklist: VideoArticle[] = this.state.checklist;
+    const onItemClick = this.props.onItemClick || VideoArticleList.defaultProps.onItemClick;
     const { query } = this;
-    
-    const props = (checkable)
-      ? { checkable, onCheck: this.onCheck, checked: checklist.includes(article) }
-      : {}
+    const checkable: boolean = this.props.checkable || VideoArticleList.defaultProps.checkable;
+    const checklist: VideoArticle[] = this.state.checklist;
     
     return (
       <VideoArticleItem
+        onClick={onItemClick}
+        onCheck={this.onItemCheck}
         article={article}
         highlight={query}
-        {...props}
+        checkable={checkable}
+        checked={checklist.some(a => a.articleId === article.articleId)}
       />
     )
   }
   
-  // TODO https://medium.com/@martin_hotell/react-typescript-and-defaultprops-dilemma-ca7f81c661c7
-  // TODO https://github.com/Microsoft/TypeScript/issues/23812
-  // TODO https://stackoverflow.com/questions/37282159/default-property-value-in-react-component-using-typescript
-  // TODO https://medium.com/@pitapat/typescript-3-0-strict-mode-react-hoc-936d7d9231ea
   render() {
-    const { searched, loading, checkable, onEdit, onDelete } = this.props;
-    const { page, checklist } = this.state;
-    
-    const sliced = searched.slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
+    const { articles, total, page, pageSize, onPageChange, loading, topRight } = this.props;
     
     return (
       <div className="article-list-page">
         <div className="page-header">
           <PageHeader backIcon={false} title="Video" subTitle="영화, 드라마, 예능" />
           <Search onChange={this.onQueryChange} enterButton />
-          { checkable && (
-            <Button.Group className="button-group">
-              <Button icon="edit" onClick={() => onEdit!(checklist)}>Edit</Button>
-              <Button icon="delete" onClick={() => onDelete!(checklist)}>Remove</Button>
-            </Button.Group> 
-          )}
+          { topRight }
         </div>
         <div className="page-content">
           <Spin spinning={loading} tip="로딩중...">
             <List
-              dataSource={sliced}
+              dataSource={articles}
               renderItem={this.renderItem}
             />
           </Spin>
@@ -99,7 +78,7 @@ class VideoArticleList extends React.Component<Props, State> {
         <div className="page-footer">
           <div className="left wrapper"></div>
           <div className="center wrapper">
-            <Pagination current={page} total={searched.length} pageSize={PAGE_SIZE} onChange={this.onPageChange} />
+            <Pagination current={page} total={total} pageSize={pageSize} onChange={onPageChange} />
           </div>
           <div className="right wrapper"></div>
         </div>
@@ -107,37 +86,25 @@ class VideoArticleList extends React.Component<Props, State> {
     )
   }
   
+  debouncedOnQueryChange = debounce((query: string) => {
+    if (this.query !== query) {
+      this.query = query;
+      this.props.onQueryChange(query)
+    }
+  }, USER_INPUT_DEBOUNCE);
+  
   onQueryChange = (e) => {
-    const query = e.target.value;
-    this.props.videoSearch(query);
-    this.query = query;
-    this.setState({ page: 1 });
+    this.debouncedOnQueryChange(e.target.value)  
   }
   
-  onPageChange = (page: number) => {
-    this.setState({ page })
-  }
-  
-  onCheck = (article: VideoArticle, checked: boolean) => {
+  onItemCheck = (article: VideoArticle, checked: boolean) => {
+    const onItemCheck = this.props.onItemCheck || VideoArticleList.defaultProps.onItemCheck;
     const { checklist } = this.state;
+    const newChecklist = (checked) ? [ ...checklist, article ] : checklist.filter(v => v !== article)
     
-    (checked)
-      ? this.setState({ checklist: [ ...checklist, article ] })
-      : this.setState({ checklist: checklist.filter(v => v !== article)});
+    this.setState({ checklist: newChecklist });
+    onItemCheck(article, checked, newChecklist);
   }
 }
 
-let mapDispatchToProps = {
-  videoArticleList: videoArticleList.request,
-  videoTagList: videoTagList.request,
-  videoSearch: videoSearch.request,
-}
-
-let mapStateToProps = (state) => {
-  return {
-    searched: state.video.searched,
-    loading: state.video.loading,
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(VideoArticleList));
+export default VideoArticleList;

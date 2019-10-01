@@ -1,30 +1,13 @@
 import React from 'react';
-import { RouteComponentProps, Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Radio } from 'antd';
-
 import './video-article-list.css';
 
-import { MainLayout, VideoArticleList } from 'components';
+import { VideoArticle } from 'models';
+import { MainLayout, VideoArticleListContainer } from 'components';
 
-interface Props extends RouteComponentProps {
-  
-}
-
-interface State {
-  
-}
-
-class VideoArticleListPage extends React.Component<Props, State> {
-  state = {
-    
-  }
-  
-  componentDidMount() {
-    
-  }
-  
-  // TODO link
+class VideoArticleListPage extends React.Component<RouteComponentProps> {
   render() {
     return (
       <MainLayout>
@@ -35,13 +18,15 @@ class VideoArticleListPage extends React.Component<Props, State> {
             <Radio.Button value="drama">드라마</Radio.Button>
             <Radio.Button value="entertainment"><Link to="/bundles/videos/fun">예능</Link></Radio.Button>
           </Radio.Group>
-          <VideoArticleList />
+          <VideoArticleListContainer onItemClick={this.onItemClick}/>
         </div>
       </MainLayout>
     )
   }
   
-  
+  onItemClick = (article: VideoArticle) => {
+    this.props.history.push(`/articles/videos/${article.articleId}`)
+  }
 }
 
 let mapDispatchToProps = {

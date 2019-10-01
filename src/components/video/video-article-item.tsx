@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Tag, Tooltip, Checkbox } from 'antd';
 import { connect } from 'react-redux';
 
@@ -7,25 +7,18 @@ import { VideoArticle } from 'models';
 import { time } from 'utils';
 
 interface Props extends RouteComponentProps {
+  onClick(article: VideoArticle): void;
+  onCheck(article: VideoArticle, checked: boolean): void;
   highlight: string;
   article: VideoArticle;
+  checkable: boolean;
+  checked: boolean;
   
   // Redux Props
   tags: string;
-  
-  // TODO Default Props
-  checkable?: boolean;
-  checked?: boolean;
-  onCheck?(article: VideoArticle, checked: boolean): void;
 }
 
 class VideoItem extends React.Component<Props> {
-  public static defaultProps = {
-    checkable: false,
-    checked: false,
-    onCheck: () => {},
-  }
-  
   renderTitle = (title: string) => {
     const { highlight } = this.props;
     
@@ -58,15 +51,14 @@ class VideoItem extends React.Component<Props> {
   }
   
   render() {
-    const { article, checked, checkable } = this.props;
+    const { article, checkable, checked } = this.props;
     
     // TODO 여러 비디오 지원
     const video = article.videos[0];
-    const link = `/articles/videos/${article.articleId}`;
     const { resolution, color } = widthToResolutionAndColor(video.width);
     
     return (
-      <Link to={link} className="article-item" onClick={checkable ? this.onClick : undefined}>
+      <div className="article-item" onClick={this.onClick}>
         <div className="first section">
           { checkable && <Checkbox className="check-box" checked={checked} /> }
           <span className="article-id">{article.articleId}</span>
@@ -80,14 +72,18 @@ class VideoItem extends React.Component<Props> {
           </Tooltip>
           <span className="article-date">{article.date}</span>
         </div>
-      </Link>
+      </div>
     )
   }
   
-  onClick = (e) => {
-    e.preventDefault();
-    const { article, checked } = this.props;
-    this.props.onCheck!(article, !checked);
+  onClick = () => {
+    const { checkable, article, checked } = this.props;
+    
+    if (checkable) {
+      this.props.onCheck(article, !checked);
+    } else {
+      this.props.onClick(article);
+    }
   }
 }
 

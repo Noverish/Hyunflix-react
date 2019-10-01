@@ -1,8 +1,15 @@
 import { request } from './';
 import { VideoArticle, Subtitle, VideoBundle } from 'models';
+import { stringify } from 'querystring';
 
-export async function videoArticleList(): Promise<VideoArticle[]> {
-  const url = `/articles/videos`;
+export interface VideoArticleListResult {
+  total: number;
+  results: VideoArticle[];
+}
+
+export async function videoArticleList(query: string, page: number, pageSize: number): Promise<VideoArticleListResult> {
+  const querystring = stringify({ q: query, p: page, ps: pageSize});
+  const url = `/articles/videos?${querystring}`;
   const method = 'get';
   return await request(url, method);
 }

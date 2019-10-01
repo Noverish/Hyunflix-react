@@ -1,21 +1,9 @@
-import { put, call, delay, takeEvery, takeLatest } from 'redux-saga/effects';
+import { put, call, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
-import * as hangul from 'hangul-js';
 
-import { videoArticleList, videoArticle, videoSearch, videoTagList, videoSubtitleList } from 'actions';
+import { videoArticle, videoTagList, videoSubtitleList } from 'actions';
 import * as Api from 'api';
 import { VideoArticle, Subtitle } from 'models';
-import { store } from 'index';
-import { USER_INPUT_DEBOUNCE } from 'config';
-
-export function* fetchVideoArticleList() {
-  try {
-    const result: VideoArticle[] = yield call([Api, 'videoArticleList']);
-    yield put(videoArticleList.success(result));
-  } catch (errMsg) {
-    yield put(videoArticleList.failure(errMsg));
-  }
-}
 
 export function* fetchVideoArticle(action: ReturnType<typeof videoArticle.request>) {
   const articleId: number = action.payload;
@@ -51,30 +39,6 @@ export function* fetchVideoSubtitleList(action: ReturnType<typeof videoSubtitleL
   }
 }
 
-function* fetchVideoSearch(action: ReturnType<typeof videoSearch.request>): Generator {
-  yield delay(USER_INPUT_DEBOUNCE);
-  const { articles } = store.getState().video;
-  const query: string = action.payload.replace(' ', '');
-  
-  const koSearcher = new hangul.Searcher(query);
-  // TODO const enSearcher = new RegExp(query, 'i');
-  
-  const searched = (query) ? articles.filter((m: VideoArticle) => {
-    const targets = [m.title, ...m.tags];
-    return targets.some(t => {
-      t = t.replace(/ /g, '');
-      // TODO return t.search(enSearcher) >= 0 || koSearcher.search(t) >= 0;
-      return t.indexOf(query) >= 0 || koSearcher.search(t) >= 0;
-    });
-  }) : articles;
-  
-  yield put(videoSearch.success(searched));
-}
-
-export function* watchVideoArticleList() {
-  yield takeEvery(getType(videoArticleList.request), fetchVideoArticleList);
-}
-
 export function* watchVideoArticleContent() {
   yield takeEvery(getType(videoArticle.request), fetchVideoArticle);
 }
@@ -87,14 +51,8 @@ export function* watchVideoSubtitleList() {
   yield takeEvery(getType(videoSubtitleList.request), fetchVideoSubtitleList);
 }
 
-export function* watchVideoSearch() {
-  yield takeLatest(getType(videoSearch.request), fetchVideoSearch);
-}
-
 export default [
-  watchVideoArticleList(),
   watchVideoArticleContent(),
   watchVideoTagList(),
   watchVideoSubtitleList(),
-  watchVideoSearch(),
 ]
