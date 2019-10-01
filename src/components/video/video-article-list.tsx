@@ -4,25 +4,26 @@ import { debounce } from 'debounce';
 
 import { VideoArticleItem } from 'components';
 import { VideoArticle } from 'models';
-import { USER_INPUT_DEBOUNCE } from 'config';
+import { USER_INPUT_DEBOUNCE, PAGE_SIZE } from 'config';
 
 const { Search } = Input;
 
 interface Props {
-  onPageChange(page: number): void;
-  onQueryChange(query: string): void;
+  onPageChange?(page: number): void;
+  onQueryChange?(query: string): void;
   onItemClick?(article: VideoArticle): void;
   onItemCheck?(article: VideoArticle, checked: boolean, checklist: VideoArticle[]): void;
   articles: VideoArticle[];
-  total: number;
-  page: number;
-  pageSize: number;
-  loading: boolean;
+  total?: number;
+  page?: number;
+  pageSize?: number;
+  loading?: boolean;
   topRight?: React.ReactNode;
   checkable?: boolean;
 }
 
 interface State {
+  page: number;
   checklist: VideoArticle[];
 }
 
@@ -31,12 +32,15 @@ class VideoArticleList extends React.Component<Props, State> {
   
   public static defaultProps = {
     checkable: false,
+    loading: false,
     onItemClick: () => {},
     onItemCheck: () => {},
+    pageSize: PAGE_SIZE,
   }
   
   state = {
     checklist: [],
+    page: this.props.page ? -1 : 1,
   }
   
   renderItem = (article: VideoArticle) => {
@@ -58,19 +62,27 @@ class VideoArticleList extends React.Component<Props, State> {
   }
   
   render() {
-    const { articles, total, page, pageSize, onPageChange, loading, topRight } = this.props;
+    const { articles, topRight } = this.props;
+    const page = this.props.page || this.state.page;
+    const loading = this.props.loading || VideoArticleList.defaultProps.loading;
+    const pageSize: number = this.props.pageSize || VideoArticleList.defaultProps.pageSize;
+    const total: number = this.props.total || articles.length;
+    
+    const sliced = (this.props.onPageChange)
+      ? articles
+      : articles.slice((page - 1) * pageSize, (page) * pageSize);
     
     return (
       <div className="article-list-page">
         <div className="page-header">
           <PageHeader backIcon={false} title="Video" subTitle="영화, 드라마, 예능" />
-          <Search onChange={this.onQueryChange} enterButton />
+          { this.props.onQueryChange && <Search onChange={this.onQueryChange} enterButton /> }
           { topRight }
         </div>
         <div className="page-content">
           <Spin spinning={loading} tip="로딩중...">
             <List
-              dataSource={articles}
+              dataSource={sliced}
               renderItem={this.renderItem}
             />
           </Spin>
@@ -78,7 +90,7 @@ class VideoArticleList extends React.Component<Props, State> {
         <div className="page-footer">
           <div className="left wrapper"></div>
           <div className="center wrapper">
-            <Pagination current={page} total={total} pageSize={pageSize} onChange={onPageChange} />
+            <Pagination current={page} total={total} pageSize={pageSize} onChange={this.onPageChange} />
           </div>
           <div className="right wrapper"></div>
         </div>
@@ -89,12 +101,21 @@ class VideoArticleList extends React.Component<Props, State> {
   debouncedOnQueryChange = debounce((query: string) => {
     if (this.query !== query) {
       this.query = query;
-      this.props.onQueryChange(query)
+      this.props.onQueryChange!(query)
     }
   }, USER_INPUT_DEBOUNCE);
   
   onQueryChange = (e) => {
     this.debouncedOnQueryChange(e.target.value)  
+  }
+  
+  onPageChange = (page: number) => {
+    const { onPageChange } = this.props;
+    
+    this.props.page || this.setState({ page });
+    if (onPageChange) {
+      onPageChange(page);
+    }
   }
   
   onItemCheck = (article: VideoArticle, checked: boolean) => {

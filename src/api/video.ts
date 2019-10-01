@@ -49,7 +49,7 @@ export async function videoBundleList(category: string): Promise<VideoBundle[]> 
   return await request(url, method);
 }
 
-export async function videoBundle(category: string, bundleId: number): Promise<VideoBundle[]> {
+export async function videoBundle(category: string, bundleId: number): Promise<VideoBundle> {
   const url = `/bundles/videos/${category}/${bundleId}`;
   const method = 'get';
   return await request(url, method);

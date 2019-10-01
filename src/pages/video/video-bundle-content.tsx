@@ -2,27 +2,43 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import { MainLayout, VideoArticleList } from 'components';
+import { VideoBundle, VideoArticle } from 'models';
+import { videoBundle } from 'api';
+
 interface Props extends RouteComponentProps {
   
 }
 
 interface State {
-  
+  bundle: VideoBundle | null;
 }
 
-class BoilerPlate extends React.Component<Props, State> {
+class VideoBundleContentPage extends React.Component<Props, State> {
   state = {
-    
+    bundle: null,
   }
   
   componentDidMount() {
+    const category: string = this.props.match.params['category'];
+    const bundleId: number = parseInt(this.props.match.params['bundleId'], 10);
     
+    videoBundle(category, bundleId)
+      .then(bundle => this.setState({ bundle }));
   }
   
   render() {
+    const bundle: VideoBundle | null = this.state.bundle;
+    
     return (
-      <div></div>
+      <MainLayout>
+        { bundle && <VideoArticleList articles={bundle!.articles} onItemClick={this.onItemClick} /> }
+      </MainLayout>
     )
+  }
+  
+  onItemClick = (article: VideoArticle) => {
+    this.props.history.push(`/articles/videos/${article.articleId}`)
   }
 }
 
@@ -36,4 +52,4 @@ let mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BoilerPlate);
+export default connect(mapStateToProps, mapDispatchToProps)(VideoBundleContentPage);
