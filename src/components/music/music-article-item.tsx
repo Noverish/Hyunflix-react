@@ -8,13 +8,14 @@ import { Music } from 'models';
 import { time } from 'utils';
 
 interface Props extends RouteComponentProps {
+  music: Music;
+  highlight: string;
+  
+  // Redux Props
   musicPlaylistAdd(musics: Music[]): void;
   musicPlaylistRemove(music: Music): ReturnType<typeof musicPlaylistRemove>;
   playlist: Music[];
-  
-  highlight: string;
-  music: Music;
-  tags: string;
+  tags: Map<string, string>;
 }
 
 interface State {
@@ -44,11 +45,9 @@ class MusicItem extends React.Component<Props, State> {
   
   renderTags = () => {
     const { music, tags } = this.props;
-    // TODO 멋있게
-    const colorList = ['magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
     
     return music.tags.map(t => (
-      <Tag color={colorList[tags.indexOf(t) % colorList.length]} key={t}>{t}</Tag>
+      <Tag color={tags.get(t)} key={t}>{t}</Tag>
     ))
   }
   

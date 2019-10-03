@@ -3,8 +3,8 @@ import { PageHeader, List, Pagination, Input, Button, Spin } from 'antd';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { musicListAsync, musicPlaylistAdd, musicTagListAsync, musicSearch } from 'actions';
-import { MainLayout, MusicArticleItem, MusicPlayer } from 'components';
+import { musicListAsync, musicPlaylistAdd, musicSearch, musicTagListAsync } from 'actions';
+import { MusicArticleItem } from 'components';
 import { Music } from 'models';
 import { PAGE_SIZE } from 'config';
 
@@ -12,11 +12,12 @@ const { Search } = Input;
 
 interface Props extends RouteComponentProps {
   musicListRequest(): ReturnType<typeof musicListAsync.request>;
-  musicTagList(): ReturnType<typeof musicTagListAsync.request>;
   musicPlaylistAdd(musics: Music[]): ReturnType<typeof musicPlaylistAdd>;
   musicSearch(query: string): ReturnType<typeof musicSearch.request>;
+  musicTagList(): ReturnType<typeof musicTagListAsync.request>;
   searched: Music[];
   loading: boolean;
+  tags: Map<string, string>;
 }
 
 interface State {
@@ -31,8 +32,12 @@ class MusicArticleList extends React.Component<Props, State> {
   }
   
   componentDidMount() {
+    const { tags } = this.props;
     this.props.musicListRequest();
-    this.props.musicTagList();
+    
+    if (tags.size === 0) {
+      this.props.musicTagList();
+    }
   }
   
   render() {
@@ -91,15 +96,16 @@ class MusicArticleList extends React.Component<Props, State> {
 
 const mapDispatchToProps = {
   musicListRequest: musicListAsync.request,
-  musicTagList: musicTagListAsync.request,
   musicPlaylistAdd,
   musicSearch: musicSearch.request,
+  musicTagList: musicTagListAsync.request,
 }
 
 let mapStateToProps = (state) => {
   return {
     searched: state.music.searched,
     loading: state.music.loading,
+    tags: state.music.tags,
   }
 }
 

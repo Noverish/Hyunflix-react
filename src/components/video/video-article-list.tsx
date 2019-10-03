@@ -1,7 +1,9 @@
 import React from 'react';
 import { PageHeader, List, Pagination, Input, Spin } from 'antd';
 import { debounce } from 'debounce';
+import { connect } from 'react-redux';
 
+import { videoTagList } from 'actions';
 import { VideoArticleItem } from 'components';
 import { VideoArticle } from 'models';
 import { USER_INPUT_DEBOUNCE, PAGE_SIZE } from 'config';
@@ -23,6 +25,10 @@ interface Props {
   checkable?: boolean;
   title?: string;
   subTitle?: string;
+  
+  // Redux Props
+  videoTagList(): ReturnType<typeof videoTagList.request>;
+  tags: Map<string, string>;
 }
 
 interface State {
@@ -46,6 +52,14 @@ class VideoArticleList extends React.Component<Props, State> {
   state = {
     checklist: [],
     page: this.props.page ? -1 : 1,
+  }
+  
+  componentDidMount() {
+    const { tags } = this.props;
+    
+    if (tags.size === 0) {
+      this.props.videoTagList();
+    }
   }
   
   renderItem = (article: VideoArticle) => {
@@ -139,4 +153,14 @@ class VideoArticleList extends React.Component<Props, State> {
   }
 }
 
-export default VideoArticleList;
+const mapStateToProps = (state) => {
+  return {
+    tags: state.video.tags,
+  }
+}
+
+const mapDispathToProps = {
+  videoTagList: videoTagList.request,
+}
+
+export default connect(mapStateToProps, mapDispathToProps)(VideoArticleList);

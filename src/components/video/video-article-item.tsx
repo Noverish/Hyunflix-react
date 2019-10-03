@@ -1,12 +1,11 @@
 import React from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Tag, Tooltip, Checkbox } from 'antd';
 import { connect } from 'react-redux';
 
 import { VideoArticle } from 'models';
 import { time } from 'utils';
 
-interface Props extends RouteComponentProps {
+interface Props {
   onClick(article: VideoArticle): void;
   onCheck(article: VideoArticle, checked: boolean): void;
   highlight: string;
@@ -15,7 +14,7 @@ interface Props extends RouteComponentProps {
   checked: boolean;
   
   // Redux Props
-  tags: string;
+  tags: Map<string, string>;
 }
 
 class VideoItem extends React.Component<Props> {
@@ -42,11 +41,9 @@ class VideoItem extends React.Component<Props> {
   
   renderTags = () => {
     const { article, tags } = this.props;
-    // TODO 멋있게
-    const colorList = ['magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
     
     return article.tags.map(t => (
-      <Tag color={colorList[tags.indexOf(t) % colorList.length]} key={t}>{t}</Tag>
+      <Tag color={tags.get(t)} key={t}>{t}</Tag>
     ))
   }
   
@@ -94,11 +91,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispathToProps = {
-  
-}
-
-export default connect(mapStateToProps, mapDispathToProps)(withRouter(VideoItem));
+export default connect(mapStateToProps)(VideoItem);
 
 function widthToResolutionAndColor(width: number) {
   const list = {

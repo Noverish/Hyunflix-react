@@ -6,3 +6,4 @@ export const AUTH_SERVER = 'http://home.hyunsub.kim:8700';
 export const YOUTUBE_SERVER = 'http://home.hyunsub.kim:8055';
 export const MOBILE_BREAKPOINT = 768;
 export const USER_INPUT_DEBOUNCE = 500;
+export const COLORS = ['magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];

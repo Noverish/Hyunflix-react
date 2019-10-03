@@ -1,5 +1,5 @@
 import React from 'react';
-import { PageHeader, Input, Button, Spin, Form, message, Select, Steps, Progress } from 'antd';
+import { PageHeader, Input, Button, Form, message, Select, Steps, Progress } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';

@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
 
+import { COLORS } from 'config';
+
 import {
   videoArticle,
   videoTagList,
@@ -14,8 +16,15 @@ export const article = createReducer(null as (VideoArticle | null))
 export const subtitles = createReducer([] as Subtitle[])
   .handleAction(videoSubtitleList.success, (_, action: ReturnType<typeof videoSubtitleList.success>) => action.payload);
 
-export const tags = createReducer([] as string[])
-  .handleAction(videoTagList.success, (_, action: ReturnType<typeof videoTagList.success>) => action.payload);
+export const tags = createReducer(new Map<string, string>())
+  .handleAction(videoTagList.success, (_, action: ReturnType<typeof videoTagList.success>) => {
+    const map = new Map<string, string>();
+    const tags: string[] = action.payload;
+    
+    tags.forEach((t, i) => map.set(t, COLORS[i % COLORS.length]));
+    
+    return map;
+  });
 
 const reducer = combineReducers({
   article,

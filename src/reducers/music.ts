@@ -3,6 +3,7 @@ import { createReducer } from 'typesafe-actions';
 
 import { musicListAsync, musicPlaylistAdd, musicNowPlayingChange, musicRandomPlayToggle, musicLoopPlayToggle, musicPlayNextAsync, musicTagListAsync, musicSearch, musicPlaylistRemove } from 'actions';
 import { Music } from 'models';
+import { COLORS } from 'config';
 
 export const musics = createReducer([] as Music[])
   .handleAction(musicListAsync.success, (_, action: ReturnType<typeof musicListAsync.success>) => action.payload);
@@ -21,10 +22,17 @@ export const randomPlay = createReducer(false as boolean)
   
 export const loopPlay = createReducer(0 as number)
   .handleAction(musicLoopPlayToggle, (state, _) => (state + 1) % 3);
-  
-export const tags = createReducer([] as string[])
-  .handleAction(musicTagListAsync.success, (_, action: ReturnType<typeof musicTagListAsync.success>) => action.payload);
-  
+
+export const tags = createReducer(new Map<string, string>())
+  .handleAction(musicTagListAsync.success, (_, action: ReturnType<typeof musicTagListAsync.success>) => {
+    const map = new Map<string, string>();
+    const tags: string[] = action.payload;
+    
+    tags.forEach((t, i) => map.set(t, COLORS[i % COLORS.length]));
+    
+    return map;
+  });
+
 export const searched = createReducer([] as Music[])
   .handleAction(musicListAsync.success, (_, action: ReturnType<typeof musicListAsync.success>) => action.payload)
   .handleAction(musicSearch.success, (_, action: ReturnType<typeof musicSearch.success>) => action.payload);
