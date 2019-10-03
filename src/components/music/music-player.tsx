@@ -29,7 +29,7 @@ class MusicPlayer extends React.Component<Props, State> {
     const { nowPlaying } = this.props;
     
     const source = (nowPlaying)
-      ? <source src={nowPlaying!.url} type="audio/mpeg" />
+      ? <source src={encodeURI(nowPlaying!.url)} type="audio/mpeg" />
       : null
     
     const title = (nowPlaying)

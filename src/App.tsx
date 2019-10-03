@@ -32,13 +32,15 @@ class App extends Component<Props, State> {
           <Route exact path="/" render={ props => <Redirect to="/home" /> } />
           <Route path="/home" component={pages.HomePage} />
           
-          <Route path="/articles/videos/:articleId" component={pages.VideoArticleContent} />
-          <Route path="/articles/videos" component={pages.VideoArticleList} />
-          <Route path="/bundles/videos/:category/:bundleId" component={pages.VideoBundleContent} />
-          <Route path="/bundles/videos/:category" component={pages.VideoBundleList} />
+          <Route path="/videos/articles/:articleId" component={pages.VideoArticleContent} />
+          <Route path="/videos/articles" component={pages.VideoArticleList} />
+          <Route path="/videos/bundles/:category/:bundleId" component={pages.VideoBundleContent} />
+          <Route path="/videos/bundles/:category" component={pages.VideoBundleList} />
+          <Route path="/videos" render={ () => <Redirect to='/videos/articles' /> } />
           
-          <Route path="/articles/musics/add" component={pages.MusicArticleAdd} />
-          <Route path="/articles/musics" component={pages.MusicArticleList} />
+          <Route path="/musics/articles/add" component={pages.MusicArticleAdd} />
+          <Route path="/musics/articles" component={pages.MusicArticleList} />
+          <Route path="/musics" render={ () => <Redirect to='/musics/articles' /> } />
           
           <Route path="/admin" component={pages.AdminPage} />
           

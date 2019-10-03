@@ -29,7 +29,7 @@ class VideoArticleList extends React.Component<Props, State> {
     return (
       <VideoBundleItem
         bundle={bundle}
-        link={`/bundles/videos/${bundle.category}/${bundle.bundleId}`}
+        link={`/videos/bundles/${bundle.category}/${bundle.bundleId}`}
       />
     )
   }

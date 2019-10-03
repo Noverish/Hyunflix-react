@@ -15,8 +15,8 @@ class VideoArticleListPage extends React.Component<RouteComponentProps> {
           <Radio.Group className="category-button-bar">
             <Radio.Button value="all">모두</Radio.Button>
             <Radio.Button value="movie">영화</Radio.Button>
-            <Radio.Button value="drama">드라마</Radio.Button>
-            <Radio.Button value="entertainment"><Link to="/bundles/videos/fun">예능</Link></Radio.Button>
+            <Radio.Button value="drama"><Link to="/videos/bundles/drama">드라마</Link></Radio.Button>
+            <Radio.Button value="entertainment"><Link to="/videos/bundles/fun">예능</Link></Radio.Button>
           </Radio.Group>
           <VideoArticleListContainer onItemClick={this.onItemClick}/>
         </div>
@@ -25,7 +25,7 @@ class VideoArticleListPage extends React.Component<RouteComponentProps> {
   }
   
   onItemClick = (article: VideoArticle) => {
-    this.props.history.push(`/articles/videos/${article.articleId}`)
+    this.props.history.push(`/videos/articles/${article.articleId}`)
   }
 }
 

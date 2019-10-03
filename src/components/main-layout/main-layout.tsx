@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import { connect } from 'react-redux';
 import './main-layout.css';
@@ -15,17 +15,13 @@ interface State {
 }
 
 class MainLayout extends React.Component<Props, State> {
-  menuClicked = (e) => {
-    this.props.history.push(e.key);
-  }
-  
   render() {
     const path = this.props.match.path;
     
     const items = [
       { name: 'Home', path: '/home' },
-      { name: 'Video', path: '/articles/videos' },
-      { name: 'Music', path: '/articles/musics' },
+      { name: 'Video', path: '/videos' },
+      { name: 'Music', path: '/musics' },
     ]
     
     // TODO
@@ -33,8 +29,12 @@ class MainLayout extends React.Component<Props, State> {
       items.push({ name: 'Admin', path: '/admin' });
     }
     
-    const itemComps = items.map(i => <Menu.Item key={i.path}>{i.name}</Menu.Item>)
-    const selectedKeys: string[] = items.filter(i => path.startsWith(i.path)).map(i => i.path);
+    const itemComps = items.map(i => (
+      <Menu.Item key={i.name}>
+        <Link to={i.path}>{i.name}</Link>
+      </Menu.Item>
+    ))
+    const selectedKeys: string[] = items.filter(i => path.startsWith(i.path)).map(i => i.name);
     
     return (
       <Layout className="main-layout">
@@ -44,7 +44,6 @@ class MainLayout extends React.Component<Props, State> {
             mode="horizontal"
             selectedKeys={selectedKeys}
             style={{ lineHeight: '64px' }}
-            onClick={this.menuClicked}
           >
             {itemComps}
           </Menu>

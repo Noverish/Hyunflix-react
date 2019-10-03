@@ -55,7 +55,7 @@ class MusicItem extends React.Component<Props, State> {
   render() {
     const { playlist, music } = this.props;
     const checked: boolean = playlist.some(m => m.musicId === music.musicId);
-    const link = `/articles/musics/${music.musicId}`;
+    const link = `/musics/articles/${music.musicId}`;
     
     return (
       <a href={link} className="article-item" onClick={this.onClick}>

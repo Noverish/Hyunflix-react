@@ -61,7 +61,7 @@ class MusicArticleList extends React.Component<Props, State> {
         </div>
         <div className="page-footer">
           <div className="left wrapper">
-            <Button><Link to="/articles/musics/add">음악 추가</Link></Button>
+            <Button><Link to="/musics/articles/add">음악 추가</Link></Button>
           </div>
           <div className="center wrapper">
             <Pagination current={page} total={searched.length} pageSize={PAGE_SIZE} onChange={this.onPageChange} />
