@@ -13,6 +13,7 @@ interface Props {
   onQueryChange?(query: string): void;
   onItemClick?(article: VideoArticle): void;
   onItemCheck?(article: VideoArticle, checked: boolean, checklist: VideoArticle[]): void;
+  onBack?(): void;
   articles: VideoArticle[];
   total?: number;
   page?: number;
@@ -20,6 +21,8 @@ interface Props {
   loading?: boolean;
   topRight?: React.ReactNode;
   checkable?: boolean;
+  title?: string;
+  subTitle?: string;
 }
 
 interface State {
@@ -36,6 +39,8 @@ class VideoArticleList extends React.Component<Props, State> {
     onItemClick: () => {},
     onItemCheck: () => {},
     pageSize: PAGE_SIZE,
+    title: 'Video',
+    subTitle: ''
   }
   
   state = {
@@ -62,20 +67,26 @@ class VideoArticleList extends React.Component<Props, State> {
   }
   
   render() {
-    const { articles, topRight } = this.props;
+    const { articles, topRight, onBack } = this.props;
     const page = this.props.page || this.state.page;
     const loading = this.props.loading || VideoArticleList.defaultProps.loading;
     const pageSize: number = this.props.pageSize || VideoArticleList.defaultProps.pageSize;
     const total: number = this.props.total || articles.length;
+    const title: string = this.props.title || VideoArticleList.defaultProps.title;
+    const subTitle: string = this.props.subTitle || VideoArticleList.defaultProps.subTitle;
     
     const sliced = (this.props.onPageChange)
       ? articles
       : articles.slice((page - 1) * pageSize, (page) * pageSize);
     
+    const props = (onBack)
+      ? { onBack }
+      : { backIcon: false }
+    
     return (
       <div className="article-list-page">
         <div className="page-header">
-          <PageHeader backIcon={false} title="Video" subTitle="영화, 드라마, 예능" />
+          <PageHeader {...props} title={title} subTitle={subTitle} />
           { this.props.onQueryChange && <Search onChange={this.onQueryChange} enterButton /> }
           { topRight }
         </div>

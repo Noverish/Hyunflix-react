@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Radio } from 'antd';
+import { Button } from 'antd';
 import './video-article-list.css';
 
 import { VideoArticle } from 'models';
@@ -12,13 +12,11 @@ class VideoArticleListPage extends React.Component<RouteComponentProps> {
     return (
       <MainLayout>
         <div className="video-article-list-page">
-          <Radio.Group className="category-button-bar">
-            <Radio.Button value="all">모두</Radio.Button>
-            <Radio.Button value="movie">영화</Radio.Button>
-            <Radio.Button value="drama"><Link to="/videos/bundles/drama">드라마</Link></Radio.Button>
-            <Radio.Button value="entertainment"><Link to="/videos/bundles/fun">예능</Link></Radio.Button>
-          </Radio.Group>
-          <VideoArticleListContainer onItemClick={this.onItemClick}/>
+          <Button.Group className="category-button-bar">
+            <Button><Link to="/videos/bundles/drama">드라마</Link></Button>
+            <Button><Link to="/videos/bundles/fun">예능</Link></Button>
+          </Button.Group>
+          <VideoArticleListContainer onItemClick={this.onItemClick} subTitle="영화, 드라마, 예능" />
         </div>
       </MainLayout>
     )

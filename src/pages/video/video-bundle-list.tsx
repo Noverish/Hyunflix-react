@@ -27,13 +27,18 @@ class VideoBundleListPage extends React.Component<Props, State> {
   }
   
   render() {
+    const category: string = this.props.match.params['category'];
     const { bundles } = this.state;
     
     return (
       <MainLayout>
-        <VideoBundleList bundles={bundles}/>
+        <VideoBundleList bundles={bundles} onBack={this.onBack} title={category}/>
       </MainLayout>
     )
+  }
+  
+  onBack = () => {
+    this.props.history.goBack();
   }
 }
 

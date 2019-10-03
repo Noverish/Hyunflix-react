@@ -32,13 +32,25 @@ class VideoBundleContentPage extends React.Component<Props, State> {
     
     return (
       <MainLayout>
-        { bundle && <VideoArticleList articles={bundle!.articles} onItemClick={this.onItemClick} /> }
+        { bundle && (
+          <VideoArticleList
+            articles={bundle!.articles}
+            onItemClick={this.onItemClick}
+            onBack={this.onBack}
+            title={bundle!.title}
+            subTitle={`총 ${bundle!.articles.length}편`}
+          />
+        ) }
       </MainLayout>
     )
   }
   
   onItemClick = (article: VideoArticle) => {
     this.props.history.push(`/videos/articles/${article.articleId}`)
+  }
+  
+  onBack = () => {
+    this.props.history.goBack();
   }
 }
 

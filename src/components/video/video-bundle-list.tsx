@@ -10,13 +10,21 @@ const { Search } = Input;
 
 interface Props {
   bundles: VideoBundle[];
+  onBack?(): void;
+  title?: string;
+  subTitle?: string;
 }
 
 interface State {
   page: number;
 }
 
-class VideoArticleList extends React.Component<Props, State> {
+class VideoBundleList extends React.Component<Props, State> {
+  public static defaultProps = {
+    title: 'Video Bundle',
+    subTitle: ''
+  }
+  
   state = {
     page: 1,
   }
@@ -35,18 +43,22 @@ class VideoArticleList extends React.Component<Props, State> {
   }
   
   render() {
-    const { bundles } = this.props;
+    const { bundles, onBack } = this.props;
     const { page } = this.state;
+    const title: string = this.props.title || VideoBundleList.defaultProps.title;
+    const subTitle: string = this.props.subTitle || VideoBundleList.defaultProps.subTitle;
     
     const searched = bundles;
     const sliced = searched.slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
     
-    const title = (bundles.length) ? bundles[0].category : '';
+    const props = (onBack)
+      ? { onBack }
+      : { backIcon: false }
     
     return (
       <div className="article-list-page">
         <div className="page-header">
-          <PageHeader backIcon={false} title={title} />
+          <PageHeader {...props} title={title} subTitle={subTitle} />
           <Search onChange={this.onQueryChange} enterButton />
         </div>
         <div className="page-content">
@@ -85,4 +97,4 @@ let mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(VideoArticleList);
+export default connect(mapStateToProps, mapDispatchToProps)(VideoBundleList);
