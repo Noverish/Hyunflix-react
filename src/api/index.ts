@@ -2,9 +2,9 @@ import { File } from 'models'
 import { message } from 'antd';
 import { tokenExpire } from 'actions';
 import { store } from '../index';
-const axios = require('axios');
 
-export const SERVER: string = 'http://home.hyunsub.kim:8080';
+import { BACKEND_SERVER } from 'config';
+const axios = require('axios');
 
 export * from './ffmpeg';
 export * from './auth';
@@ -12,7 +12,7 @@ export * from './music';
 export * from './video';
 
 export async function request(path: string, method: string, data: any = undefined) {
-  const url = path.startsWith('/') ? `${SERVER}${path}` : path;
+  const url = path.startsWith('/') ? `${BACKEND_SERVER}${path}` : path;
   const headers = {};
   
   const token = store.getState().auth.token;

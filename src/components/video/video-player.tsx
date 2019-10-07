@@ -7,6 +7,7 @@ interface Props {
   height: number;
   src: string;
   subtitles: Subtitle[];
+  onTimeUpdate?(time: number): void;
 }
 
 interface State {
@@ -47,18 +48,31 @@ export default class VideoPlayer extends React.Component<Props, State> {
   }
 
   onPlayerReady = () => {
-    const { subtitles, src } = this.props;
+    const { subtitles, src, onTimeUpdate } = this.props;
+    const player: videojs.Player | null = this.player;
     
-    this.player!.src({ src, type: 'video/mp4' });
+    if (player === null) {
+      console.warn('onPlayerReady called while player is null!');
+      return;
+    }
+    
+    player.src({ src, type: 'video/mp4' });
     
     for(const subtitle of subtitles) {
-      this.player!.addRemoteTextTrack({
+      player.addRemoteTextTrack({
         kind: 'subtitles',
         srclang: subtitle.language,
         label: subtitle.language,
         src: subtitle.url,
         default: subtitle.language === 'ko'
       }, false /* manualCleanup */);
+    }
+    
+    if (onTimeUpdate) {
+      player.off('timeupdate');
+      player.on('timeupdate', () => {
+        onTimeUpdate(Math.floor(player.currentTime()));
+      });
     }
   }
 

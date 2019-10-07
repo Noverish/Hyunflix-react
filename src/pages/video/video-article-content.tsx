@@ -1,11 +1,13 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { PageHeader, Typography } from 'antd';
+import * as socketio from 'socket.io-client';
 import { connect } from 'react-redux';
 
 import { videoArticle } from 'actions';
 import { MainLayout, VideoPlayer } from 'components';
 import { VideoArticle, Subtitle, Video } from 'models';
+import { BACKEND_SERVER, USER_VIDEO_SOCKET_PATH } from 'config';
 
 const { Title, Text } = Typography;
 
@@ -13,6 +15,7 @@ interface Props extends RouteComponentProps {
   videoArticle(articleId: number): ReturnType<typeof videoArticle.request>;
   article: VideoArticle | null;
   subtitles: Subtitle[];
+  userId: number;
 }
 
 interface State {
@@ -21,6 +24,7 @@ interface State {
 
 class VideoArticleContentPage extends React.Component<Props, State> {
   videoContainer: HTMLDivElement | null = null;
+  socket: socketio.Socket | null = null;
   
   state = {
     width: -1,
@@ -31,6 +35,14 @@ class VideoArticleContentPage extends React.Component<Props, State> {
     const articleId: number = parseInt(this.props.match.params['articleId']);
     
     this.props.videoArticle(articleId);
+    
+    this.socket = socketio.connect(BACKEND_SERVER, { path: USER_VIDEO_SOCKET_PATH });
+  }
+  
+  componentWillUnmount() {
+    if(this.socket) {
+      this.socket.disconnect();
+    }
   }
   
   resize = () => {
@@ -55,7 +67,7 @@ class VideoArticleContentPage extends React.Component<Props, State> {
     
     const height: number = width * video.height / video.width;
     let videoPlayer = (width > 0)
-      ? <VideoPlayer src={video.url} subtitles={subtitles} width={width} height={height} />
+      ? <VideoPlayer src={video.url} subtitles={subtitles} width={width} height={height} onTimeUpdate={this.onTimeUpdate} />
       : null
     
     return (
@@ -84,6 +96,20 @@ class VideoArticleContentPage extends React.Component<Props, State> {
   onBack = () => {
     this.props.history.goBack();
   }
+  
+  onTimeUpdate = (time: number) => {
+    const { userId, article } = this.props;
+    
+    if (article === null) {
+      return;
+    }
+    
+    this.socket.send(JSON.stringify({
+      userId: userId,
+      articleId: article.articleId,
+      time
+    }));
+  }
 }
 
 let mapDispatchToProps = {
@@ -92,6 +118,7 @@ let mapDispatchToProps = {
 
 let mapStateToProps = (state) => {
   return {
+    userId: state.auth.userId,
     article: state.video.article,
     subtitles: state.video.subtitles,
   }
