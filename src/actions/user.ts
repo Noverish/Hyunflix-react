@@ -1,6 +1,6 @@
 import { createAsyncAction } from 'typesafe-actions';
 
-import { RegCode } from 'models';
+import { RegCode, UserVideo } from 'models';
 
 export const regCodeListAsync = createAsyncAction(
   'REG_CODE_LIST_REQUEST',
@@ -18,3 +18,9 @@ export interface RegCodeAddParam {
   realname: string;
   code: string;
 }
+
+export const userVideoList = createAsyncAction(
+  'USER_VIDEO_LIST_REQUEST',
+  'USER_VIDEO_LIST_SUCCESS',
+  'USER_VIDEO_LIST_FAILURE'
+)<undefined, UserVideo[], string>();

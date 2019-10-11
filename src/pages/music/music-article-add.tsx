@@ -17,7 +17,7 @@ const { Step } = Steps;
 
 interface Props extends RouteComponentProps, FormComponentProps {
   musicTagListAsync(): ReturnType<typeof musicTagListAsync.request>
-  tags: string[];
+  tags: Map<string, string>;
 }
 
 interface State {
@@ -78,7 +78,7 @@ class MusicArticleAddPage extends React.Component<Props, State> {
     const { tags } = this.props;
     const { getFieldDecorator } = this.props.form;
     
-    const options = tags.map(t => <Option key={t}>{t}</Option>);
+    const options = Array.from(tags.keys()).map(t => <Option key={t}>{t}</Option>);
     
     const formItemLayout = {
       labelCol: {

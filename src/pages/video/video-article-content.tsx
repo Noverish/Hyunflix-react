@@ -3,6 +3,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { PageHeader, Typography } from 'antd';
 import * as socketio from 'socket.io-client';
 import { connect } from 'react-redux';
+import * as qs from 'query-string';
 
 import { videoArticle } from 'actions';
 import { MainLayout, VideoPlayer } from 'components';
@@ -31,6 +32,7 @@ class VideoArticleContentPage extends React.Component<Props, State> {
   }
   
   componentDidMount() {
+    // TODO redux resize 사용하기
     window.addEventListener("resize", this.resize);
     const articleId: number = parseInt(this.props.match.params['articleId']);
     
@@ -54,7 +56,7 @@ class VideoArticleContentPage extends React.Component<Props, State> {
   }
   
   render() {
-    const { article, subtitles } = this.props;
+    const { article, subtitles, location } = this.props;
     const { width } = this.state;
     
     if (!article) {
@@ -65,9 +67,18 @@ class VideoArticleContentPage extends React.Component<Props, State> {
     // TODO 여러 비디오 하게 하기
     const video = videos[0];
     
+    const currentTime = qs.parse(location.search, { parseNumbers: true }).t as number | undefined;
+    
     const height: number = width * video.height / video.width;
     let videoPlayer = (width > 0)
-      ? <VideoPlayer src={video.url} subtitles={subtitles} width={width} height={height} onTimeUpdate={this.onTimeUpdate} />
+      ? <VideoPlayer
+          src={video.url}
+          subtitles={subtitles}
+          width={width}
+          height={height}
+          onTimeUpdate={this.onTimeUpdate}
+          currentTime={currentTime}
+        />
       : null
     
     return (

@@ -1,9 +1,10 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 
-import { regCodeListAsync, regCodeAddAsync } from 'actions';
+import { regCodeListAsync, regCodeAddAsync, userVideoList } from 'actions';
 import * as Api from 'api';
-import { RegCode } from 'models';
+import { RegCode, UserVideo } from 'models';
+import { store } from 'index';
 
 function* fetchRegCodeList(action: ReturnType<typeof regCodeListAsync.request>): Generator {
   try {
@@ -26,6 +27,17 @@ function* fetchRegCodeAdd(action: ReturnType<typeof regCodeAddAsync.request>): G
   }
 }
 
+function* fetchUserVideoList(action: ReturnType<typeof userVideoList.request>) {
+  const userId = store.getState().auth.userId;
+  
+  try {
+    const userVideos: UserVideo[] = (yield call([Api, 'userVideoList'], userId)) as UserVideo[];
+    yield put(userVideoList.success(userVideos));
+  } catch (err) {
+    yield put(userVideoList.failure(err));
+  }
+}
+
 export function* watchRegCodeList() {
   yield takeEvery(getType(regCodeListAsync.request), fetchRegCodeList);
 }
@@ -34,7 +46,12 @@ export function* watchRegCodeAdd() {
   yield takeEvery(getType(regCodeAddAsync.request), fetchRegCodeAdd);
 }
 
+export function* watchUserVideoList() {
+  yield takeEvery(getType(userVideoList.request), fetchUserVideoList);
+}
+
 export default [
   watchRegCodeList(),
   watchRegCodeAdd(),
+  watchUserVideoList(),
 ]

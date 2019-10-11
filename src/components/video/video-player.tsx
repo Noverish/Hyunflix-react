@@ -8,6 +8,7 @@ interface Props {
   src: string;
   subtitles: Subtitle[];
   onTimeUpdate?(time: number): void;
+  currentTime?: number;
 }
 
 interface State {
@@ -48,7 +49,7 @@ export default class VideoPlayer extends React.Component<Props, State> {
   }
 
   onPlayerReady = () => {
-    const { subtitles, src, onTimeUpdate } = this.props;
+    const { subtitles, src, onTimeUpdate, currentTime } = this.props;
     const player: videojs.Player | null = this.player;
     
     if (player === null) {
@@ -73,6 +74,10 @@ export default class VideoPlayer extends React.Component<Props, State> {
       player.on('timeupdate', () => {
         onTimeUpdate(Math.floor(player.currentTime()));
       });
+    }
+    
+    if (currentTime) {
+      player.currentTime(currentTime);
     }
   }
 

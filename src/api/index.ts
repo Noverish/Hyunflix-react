@@ -10,6 +10,7 @@ export * from './ffmpeg';
 export * from './auth';
 export * from './music';
 export * from './video';
+export * from './user';
 
 export async function request(path: string, method: string, data: any = undefined) {
   const url = path.startsWith('/') ? `${BACKEND_SERVER}${path}` : path;
