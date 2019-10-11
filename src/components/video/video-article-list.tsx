@@ -75,7 +75,7 @@ class VideoArticleList extends React.Component<Props, State> {
         article={article}
         highlight={query}
         checkable={checkable}
-        checked={checklist.some(a => a.articleId === article.articleId)}
+        checked={checklist.some(a => a.id === article.id)}
       />
     )
   }

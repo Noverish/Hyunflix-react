@@ -10,7 +10,7 @@ export const musics = createReducer([] as Music[])
 
 export const playlist = createReducer([] as Music[])
   .handleAction(musicPlaylistAdd, (state, action: ReturnType<typeof musicPlaylistAdd>) => [...state, ...action.payload.filter(m => !state.includes(m))])
-  .handleAction(musicPlaylistRemove, (state, action: ReturnType<typeof musicPlaylistRemove>) => state.filter(m => m.musicId !== action.payload.musicId));
+  .handleAction(musicPlaylistRemove, (state, action: ReturnType<typeof musicPlaylistRemove>) => state.filter(m => m.id !== action.payload.id));
 
 export const nowPlaying = createReducer(null as (Music | null))
   .handleAction(musicNowPlayingChange, (_, action: ReturnType<typeof musicNowPlayingChange>) => action.payload)

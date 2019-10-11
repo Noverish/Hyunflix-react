@@ -53,14 +53,14 @@ class MusicItem extends React.Component<Props, State> {
   
   render() {
     const { playlist, music } = this.props;
-    const checked: boolean = playlist.some(m => m.musicId === music.musicId);
-    const link = `/musics/articles/${music.musicId}`;
+    const checked: boolean = playlist.some(m => m.id === music.id);
+    const link = `/musics/articles/${music.id}`;
     
     return (
       <a href={link} className="article-item" onClick={this.onClick}>
         <div className="first section">
           <Checkbox className="check-box" checked={checked} />
-          <span className="article-id">{music.musicId}</span>
+          <span className="article-id">{music.id}</span>
           { this.renderTags() }
           { this.renderTitle(music.title) }
           { music.youtube && (
@@ -79,7 +79,7 @@ class MusicItem extends React.Component<Props, State> {
   onClick = (e) => {
     e.preventDefault();
     const { playlist, music } = this.props;
-    const isInPlaylist: boolean = playlist.some(m => m.musicId === music.musicId);
+    const isInPlaylist: boolean = playlist.some(m => m.id === music.id);
     
     if (!isInPlaylist) {
       this.props.musicPlaylistAdd([music]);
@@ -87,7 +87,7 @@ class MusicItem extends React.Component<Props, State> {
       this.props.musicPlaylistRemove(music);
     }
     
-    // const link = `/musics/${this.props.music.musicId}`;
+    // const link = `/musics/${this.props.music.id}`;
     // this.props.history.push(link);
   }
   

@@ -39,7 +39,7 @@ class HomePage extends React.Component<Props, State> {
   
   onItemClick = (article: VideoArticle) => {
     const userVideo = this.props.userVideos.find(v => v.article === article);
-    this.props.history.push(`/videos/articles/${article.articleId}?t=${userVideo!.time}`);
+    this.props.history.push(`/videos/articles/${article.id}?t=${userVideo!.time}`);
   }
 }
 

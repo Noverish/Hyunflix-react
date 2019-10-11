@@ -16,7 +16,7 @@ const encodeItem: React.FunctionComponent<Props> = ({ encode }) => {
   return (
     <div className="article-item encode-item">
       <div className="first section">
-        <div className="article-id">{encode.encodeId}</div>
+        <div className="article-id">{encode.id}</div>
         <div className="article-title">{basename(encode.inpath)}</div>
       </div>
       <div className="second section">

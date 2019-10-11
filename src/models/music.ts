@@ -1,7 +1,7 @@
 export interface Music {
   youtube: string | null;
   duration: number;
-  musicId: number;
+  id: number;
   path: string;
   tags: string[];
   title: string;

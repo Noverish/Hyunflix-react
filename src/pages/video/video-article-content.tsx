@@ -117,7 +117,7 @@ class VideoArticleContentPage extends React.Component<Props, State> {
     
     this.socket.send(JSON.stringify({
       userId: userId,
-      articleId: article.articleId,
+      articleId: article.id,
       time
     }));
   }

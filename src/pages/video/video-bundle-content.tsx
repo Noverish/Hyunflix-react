@@ -46,7 +46,7 @@ class VideoBundleContentPage extends React.Component<Props, State> {
   }
   
   onItemClick = (article: VideoArticle) => {
-    this.props.history.push(`/videos/articles/${article.articleId}`)
+    this.props.history.push(`/videos/articles/${article.id}`)
   }
   
   onBack = () => {

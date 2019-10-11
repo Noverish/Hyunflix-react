@@ -58,7 +58,7 @@ class VideoItem extends React.Component<Props> {
       <div className="article-item" onClick={this.onClick}>
         <div className="first section">
           { checkable && <Checkbox className="check-box" checked={checked} /> }
-          <span className="article-id">{article.articleId}</span>
+          <span className="article-id">{article.id}</span>
           { this.renderTags() }
           { this.renderTitle(article.title) }
         </div>

@@ -23,7 +23,7 @@ class VideoArticleListPage extends React.Component<RouteComponentProps> {
   }
   
   onItemClick = (article: VideoArticle) => {
-    this.props.history.push(`/videos/articles/${article.articleId}`)
+    this.props.history.push(`/videos/articles/${article.id}`)
   }
 }
 

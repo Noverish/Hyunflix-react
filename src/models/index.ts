@@ -12,7 +12,7 @@ export interface File {
 }
 
 export interface Encode {
-  encodeId: number;
+  id: number;
   inpath: string;
   outpath: string;
   options: string;
@@ -21,7 +21,7 @@ export interface Encode {
 }
 
 export interface RegCode {
-  codeId: number;
+  id: number;
   userId: number | null;
   realname: string;
   code: string;

@@ -1,5 +1,5 @@
 export interface Video {
-  videoId: number;
+  id: number;
   url: string;
   duration: number;
   width: number;
@@ -14,7 +14,7 @@ export interface Subtitle {
 }
 
 export interface VideoArticle {
-  articleId: number;
+  id: number;
   videos: Video[];
   tags: string[];
   title: string;

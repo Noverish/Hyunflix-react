@@ -12,7 +12,7 @@ export function* fetchVideoArticle(action: ReturnType<typeof videoArticle.reques
     const article: VideoArticle = yield call([Api, 'videoArticle'], articleId);
     yield put(videoArticle.success(article));
     // TODO 여러 비디오 지원
-    const subtitles: Subtitle[] = yield call([Api, 'videoSubtitleList'], article.videos[0].videoId);
+    const subtitles: Subtitle[] = yield call([Api, 'videoSubtitleList'], article.videos[0].id);
     yield put(videoSubtitleList.success(subtitles));
   } catch (errMsg) {
     yield put(videoArticle.failure(errMsg));

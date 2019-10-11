@@ -32,7 +32,7 @@ class VideoArticleEditPage extends React.Component<Props, State> {
         update: (isRegex)
           ? article.title.replace(new RegExp(from), to)
           : article.title.split(from).join(to),
-        key: article.articleId,
+        key: article.id,
       }
     })
   }

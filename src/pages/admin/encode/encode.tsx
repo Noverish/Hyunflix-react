@@ -37,7 +37,7 @@ class EncodePage extends React.Component<Props, State> {
       const encodes = this.props.encodes;
       
       const index = encodes.findIndex((item: Encode) => {
-        return item.encodeId === payload['encodeId'];
+        return item.id === payload['encodeId'];
       });
       
       if (index >= 0) {
@@ -71,7 +71,7 @@ class EncodePage extends React.Component<Props, State> {
           <List
             dataSource={subItems}
             renderItem={(item: Encode) => (
-              <EncodeItem encode={item} key={item.encodeId} />
+              <EncodeItem encode={item} key={item.id} />
             )}
           />
         </div>
