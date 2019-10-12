@@ -17,7 +17,7 @@ class VideoBundleItem extends React.Component<Props> {
     return (
       <Link to={link} className="article-item">
         <div className="first section">
-          <span className="article-id">{bundle.bundleId}</span>
+          <span className="article-id">{bundle.id}</span>
           <Tag color='magenta'>{bundle.category}</Tag>
           <span className="article-title">{bundle.title}</span>
         </div>

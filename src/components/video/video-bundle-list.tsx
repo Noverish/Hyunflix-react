@@ -37,7 +37,7 @@ class VideoBundleList extends React.Component<Props, State> {
     return (
       <VideoBundleItem
         bundle={bundle}
-        link={`/videos/bundles/${bundle.category}/${bundle.bundleId}`}
+        link={`/videos/bundles/${bundle.category}/${bundle.id}`}
       />
     )
   }
