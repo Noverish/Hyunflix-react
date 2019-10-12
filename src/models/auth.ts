@@ -11,6 +11,6 @@ export interface RegisterParam {
 
 export interface LoginResult {
   token: string;
-  userId: number;
+  id: number;
   authority: string[];
 }

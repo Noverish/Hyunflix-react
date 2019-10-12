@@ -1,6 +1,9 @@
 import React from 'react';
 import videojs from 'video.js';
 import { Subtitle } from 'models';
+import 'videojs-seek-buttons';
+import './videojs-seek-buttons.css';
+import './videojs-skin.css';
 
 interface Props {
   width: number;
@@ -34,7 +37,22 @@ export default class VideoPlayer extends React.Component<Props, State> {
       sources: []
     }
     
-    this.player = videojs(this.videoNode, videoOption, this.onPlayerReady);
+    const player = videojs(this.videoNode, videoOption, this.onPlayerReady);
+    
+    // @ts-ignore
+    player.seekButtons({
+      forward: 10,
+      back: 10
+    });
+    
+    skin(player);
+    
+    const { onTimeUpdate } = this.props;
+    if (onTimeUpdate) {
+      player.on('timeupdate', () => {
+        onTimeUpdate(Math.floor(player.currentTime()));
+      });
+    }
     
     const textTractSettings = {
       "backgroundColor": "#000",
@@ -43,13 +61,15 @@ export default class VideoPlayer extends React.Component<Props, State> {
     }
     
     // @ts-ignore
-    var settings = this.player!.textTrackSettings;
+    var settings = player.textTrackSettings;
     settings.setValues(textTractSettings);
     settings.updateDisplay();
+    
+    this.player = player;
   }
 
   onPlayerReady = () => {
-    const { subtitles, src, onTimeUpdate, currentTime } = this.props;
+    const { subtitles, src, currentTime } = this.props;
     const player: videojs.Player | null = this.player;
     
     if (player === null) {
@@ -67,13 +87,6 @@ export default class VideoPlayer extends React.Component<Props, State> {
         src: subtitle.url,
         default: subtitle.language === 'ko'
       }, false /* manualCleanup */);
-    }
-    
-    if (onTimeUpdate) {
-      player.off('timeupdate');
-      player.on('timeupdate', () => {
-        onTimeUpdate(Math.floor(player.currentTime()));
-      });
     }
     
     if (currentTime) {
@@ -110,8 +123,29 @@ export default class VideoPlayer extends React.Component<Props, State> {
             }
           }}
           className="video-js"
-        ></video>
+        />
       </div>
     )
   }
+}
+
+// TODO https://github.com/maluklo/Newskin-videojs-v6-v7
+function skin(videjs) {
+  videojs.options.controlBar = {
+    // @ts-ignore
+    volumePanel: { inline: !1, vertical: !0 },
+    children: [
+      "playToggle",
+      "volumePanel",
+      "liveDisplay",
+      "currentTimeDisplay",
+      "progressControl",
+      "durationDisplay",
+      "chaptersButton",
+      "descriptionsButton",
+      "subsCapsButton",
+      "audioTrackButton",
+      "fullscreenToggle"
+    ]
+  };
 }
