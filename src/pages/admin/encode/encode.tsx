@@ -1,5 +1,5 @@
 import React from 'react';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps, Link } from 'react-router-dom';
 import { Button, Pagination, List, message, PageHeader } from 'antd';
 import * as socketio from 'socket.io-client';
 import { connect } from 'react-redux';
@@ -66,6 +66,9 @@ class EncodePage extends React.Component<Props, State> {
             <Button icon="caret-right" onClick={this.onResumeClicked}>Resume</Button>
             <Button icon="pause" onClick={this.onPauseClicked}>Pause</Button>
           </Button.Group>
+          <Link to="/admin/encode/add" style={{ marginLeft: '12px' }}>
+            <Button type="primary">Add</Button>
+          </Link>
         </div>
         <div className="page-content">
           <List

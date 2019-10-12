@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { NotFoundPage } from 'pages';
 import ExplorerPage from './explorer/explorer';
 import EncodePage from './encode/encode';
+import EncodeAddPage from './encode/encode-add';
 import RegisterCodePage from './register-code/register-code';
 import VideoManagePage from './video/video-manage';
 import VideoArticleEditPage from './video/video-article-edit';
@@ -21,6 +22,7 @@ const AdminPage: React.FunctionComponent<Props> = (props) => {
       <AdminLayout>
         <Switch>
           <Route path="/admin/explorer*" component={ExplorerPage} />
+          <Route path="/admin/encode/add" component={EncodeAddPage} />
           <Route path="/admin/encode*" component={EncodePage} />
           <Route path="/admin/register-code*" component={RegisterCodePage} />
           <Route path="/admin/video-manage/edit" component={VideoArticleEditPage} />

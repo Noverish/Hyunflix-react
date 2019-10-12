@@ -12,6 +12,7 @@
     "@types/video.js": "^7.2.15",
     "antd": "^3.23.4",
     "axios": "^0.19.0",
+    "classnames": "^2.2.6",
     "debounce": "^1.2.0",
     "hangul-js": "^0.2.5",
     "immutable": "^4.0.0-rc.12",

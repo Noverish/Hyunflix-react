@@ -7,7 +7,7 @@ import './main-layout.css';
 const { Header, Content, Footer } = Layout;
 
 interface Props extends RouteComponentProps {
-  userId: number;
+  isAdmin: number;
 }
 
 interface State {
@@ -24,8 +24,7 @@ class MainLayout extends React.Component<Props, State> {
       { name: 'Music', path: '/musics' },
     ]
     
-    // TODO
-    if (this.props.userId === 1) {
+    if (this.props.isAdmin) {
       items.push({ name: 'Admin', path: '/admin' });
     }
     
@@ -61,7 +60,7 @@ class MainLayout extends React.Component<Props, State> {
 
 const mapStateToProps = (state) => {
   return {
-    userId: state.auth.userId,
+    isAdmin: state.auth.isAdmin,
   }
 }
 

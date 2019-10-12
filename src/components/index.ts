@@ -18,6 +18,8 @@ export { default as MusicArticleList } from './music/music-article-list';
 export { default as MusicArticleItem } from './music/music-article-item';
 
 export { default as FileSelectModal } from './etc/file-select-modal';
+export { default as FileSelectList } from './etc/file-select-list';
+export { default as FileSelectItem } from './etc/file-select-item';
 export { default as FileItem } from './etc/file-item';
 export { default as RenameModal } from './etc/rename-modal';
 
