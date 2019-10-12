@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch, Redirect, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { NotFoundPage } from 'pages';
+import NotFound from 'pages/not-found';
 import ExplorerPage from './explorer/explorer';
 import EncodePage from './encode/encode';
 import EncodeAddPage from './encode/encode-add';
@@ -27,13 +27,13 @@ const AdminPage: React.FunctionComponent<Props> = (props) => {
           <Route path="/admin/register-code*" component={RegisterCodePage} />
           <Route path="/admin/video-manage/edit" component={VideoArticleEditPage} />
           <Route path="/admin/video-manage" component={VideoManagePage} />
-          <Route render={props => <Redirect to="/admin/explorer" /> } />
+          <Route render={_ => <Redirect to="/admin/explorer" /> } />
         </Switch>
       </AdminLayout>
     )
   } else {
     return (
-      <NotFoundPage />
+      <NotFound />
     )
   }
 };

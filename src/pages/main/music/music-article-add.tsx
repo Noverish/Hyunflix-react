@@ -9,7 +9,6 @@ import { YoutubeStage } from 'models';
 import { FFMPEG_SERVER, YOUTUBE_SOCKET_PATH } from 'config';
 import { musicTagListAsync } from 'actions';
 import { musicAdd } from 'api';
-import { MainLayout } from 'components';
 import './music-article-add.css';
 
 const { Option } = Select;
@@ -105,37 +104,35 @@ class MusicArticleAddPage extends React.Component<Props, State> {
     };
     
     return (
-      <MainLayout>
-        <div className="article-list-page music-article-add">
-          <div className="page-header">
-            <PageHeader onBack={this.props.history.goBack} title="Music Add" subTitle="유튜브 링크로 음악 추가하기" />
-          </div>
-          <div className="page-content">
-            <Form {...formItemLayout}>
-              <Form.Item label="Youtube URL">
-                {getFieldDecorator('url', {
-                  rules: [ { required: true, message: 'Youtube 링크를 입력해주세요!' } ]
-                })(<Input />)}
-              </Form.Item>
-              <Form.Item label="Tags">
-                {getFieldDecorator('tags')(
-                  <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']}>
-                    {options}
-                  </Select>
-                )}
-              </Form.Item>
-              <Form.Item {...tailFormItemLayout}>
-                <Button type="primary" onClick={this.onSubmit}>추가</Button>
-              </Form.Item>
-            </Form>
-            <Steps direction="vertical" current={stage}>
-              { this.renderSteps(YoutubeStage.ready) }
-              { this.renderSteps(YoutubeStage.download) }
-              { this.renderSteps(YoutubeStage.encode) }
-            </Steps>
-          </div>
+      <div className="article-list-page music-article-add">
+        <div className="page-header">
+          <PageHeader onBack={this.props.history.goBack} title="Music Add" subTitle="유튜브 링크로 음악 추가하기" />
         </div>
-      </MainLayout>
+        <div className="page-content">
+          <Form {...formItemLayout}>
+            <Form.Item label="Youtube URL">
+              {getFieldDecorator('url', {
+                rules: [ { required: true, message: 'Youtube 링크를 입력해주세요!' } ]
+              })(<Input />)}
+            </Form.Item>
+            <Form.Item label="Tags">
+              {getFieldDecorator('tags')(
+                <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']}>
+                  {options}
+                </Select>
+              )}
+            </Form.Item>
+            <Form.Item {...tailFormItemLayout}>
+              <Button type="primary" onClick={this.onSubmit}>추가</Button>
+            </Form.Item>
+          </Form>
+          <Steps direction="vertical" current={stage}>
+            { this.renderSteps(YoutubeStage.ready) }
+            { this.renderSteps(YoutubeStage.download) }
+            { this.renderSteps(YoutubeStage.encode) }
+          </Steps>
+        </div>
+      </div>
     )
   }
     

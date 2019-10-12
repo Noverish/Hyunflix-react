@@ -1,5 +1,3 @@
-export { default as MainLayout } from './main-layout/main-layout';
-
 export { default as EncodeItem } from './encode/encode-item';
 export { default as EncodeModal } from './encode/encode-modal';
 

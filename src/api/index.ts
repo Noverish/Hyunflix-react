@@ -1,9 +1,9 @@
 import { File } from 'models'
-import { message } from 'antd';
 import { tokenExpire } from 'actions';
 import { store } from '../index';
 
 import { BACKEND_SERVER } from 'config';
+import { handleError } from 'utils';
 const axios = require('axios');
 
 export * from './ffmpeg';
@@ -45,7 +45,8 @@ export async function request(path: string, method: string, data: any = undefine
       errMsg = err.message;
     }
     
-    message.error(errMsg);
+    handleError(errMsg);
+    
     throw errMsg;
   }
 }

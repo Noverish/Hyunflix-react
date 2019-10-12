@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import * as qs from 'query-string';
 
 import { videoArticle } from 'actions';
-import { MainLayout, VideoPlayer } from 'components';
+import { VideoPlayer } from 'components';
 import { VideoArticle, Subtitle, Video } from 'models';
 import { BACKEND_SERVER, USER_VIDEO_SOCKET_PATH } from 'config';
 
@@ -60,7 +60,7 @@ class VideoArticleContentPage extends React.Component<Props, State> {
     const { width } = this.state;
     
     if (!article) {
-      return <MainLayout/>
+      return <div />
     }
     
     const videos: Video[] = article.videos;
@@ -82,25 +82,23 @@ class VideoArticleContentPage extends React.Component<Props, State> {
       : null
     
     return (
-      <MainLayout>
-        <div className="article-list-page">
-          <div className="page-header">
-            <PageHeader onBack={this.onBack} title={article.title} />
-          </div>
-          <div ref={ref => {
-            this.videoContainer = ref;
-            this.resize();
-          }}>
-            {videoPlayer}
-          </div>
-          <div style={{ padding: '12px' }}>
-            <div>
-              <Title className="video-title" level={4}>{article.title}</Title>
-            </div>
-            <Text type="secondary">{article.date}</Text>
-          </div>
+      <div className="article-list-page">
+        <div className="page-header">
+          <PageHeader onBack={this.onBack} title={article.title} />
         </div>
-      </MainLayout>
+        <div ref={ref => {
+          this.videoContainer = ref;
+          this.resize();
+        }}>
+          {videoPlayer}
+        </div>
+        <div style={{ padding: '12px' }}>
+          <div>
+            <Title className="video-title" level={4}>{article.title}</Title>
+          </div>
+          <Text type="secondary">{article.date}</Text>
+        </div>
+      </div>
     )
   }
   

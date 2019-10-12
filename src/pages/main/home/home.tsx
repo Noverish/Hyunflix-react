@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router-dom';
 
 import { logoutAsync, userVideoList } from 'actions';
 import { UserVideo, VideoArticle } from 'models';
-import { MainLayout, VideoArticleList } from 'components'
+import { VideoArticleList } from 'components'
 import './home.css';
 
 interface Props extends RouteComponentProps {
@@ -30,10 +30,10 @@ class HomePage extends React.Component<Props, State> {
     const articles = this.props.userVideos.map(v => v.article);
     
     return (
-      <MainLayout>
+      <React.Fragment>
         <button type='button' onClick={this.onClick}>logout</button>
         <VideoArticleList articles={articles} onItemClick={this.onItemClick} title={"시청 기록"} />
-      </MainLayout>
+      </React.Fragment>
     )
   }
   
