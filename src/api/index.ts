@@ -1,5 +1,6 @@
 import { File } from 'models';
 import { tokenExpire } from 'actions';
+import { message } from 'antd';
 import { store } from '../index';
 
 import { BACKEND_SERVER } from 'config';
@@ -45,7 +46,11 @@ export async function request(path: string, method: string, data: any = undefine
       errMsg = err.message;
     }
 
-    handleError(errMsg);
+    if (err.response.status === 500) {
+      handleError(errMsg);
+    } else {
+      message.error(errMsg);
+    }
 
     throw errMsg;
   }

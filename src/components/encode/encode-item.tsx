@@ -33,7 +33,7 @@ export default encodeItem;
 function progress2tag(progress: number): React.ReactElement {
   if (progress === 0.0) {
     return <Tag className="status" color="orange">queued</Tag>;
-  }  if (progress < 0.0) {
+  } else if (progress < 0.0) {
     return <Tag className="status" color="red">failed</Tag>;
   } else if (progress >= 100.0) {
     return <Tag className="status" color="green">done</Tag>;

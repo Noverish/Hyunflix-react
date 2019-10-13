@@ -13,6 +13,7 @@
     "radix": false,
     "variable-name": false,
     "no-this-assignment": false,
-    "jsx-wrap-multiline": false
+    "jsx-wrap-multiline": false,
+    "align": [true, "parameters", "statements", "members", "elements"]
   }
 }

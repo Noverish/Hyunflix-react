@@ -17,7 +17,7 @@ const UserVideoPage: React.FunctionComponent<Props> = (props) => {
     userVideoList(userId)
       .then(userVideos => setUserVideos(userVideos))
       .catch();
-  },        [userId]);
+  }, [userId]);
 
   return (
     <UserVideoList

@@ -24,10 +24,10 @@ class AdminLayout extends React.Component<Props, State> {
     const path: string = this.props.location.pathname;
 
     const items = [
-      { name: '파일 탐색기',   path: '/admin/explorer',       icon: 'folder' },
       { name: '비디오 인코딩', path: '/admin/encode',         icon: 'youtube' },
       { name: '회원가입 코드', path: '/admin/register-codes', icon: 'bold' },
       { name: '비디오 관리',   path: '/admin/video-manage',   icon: 'play-circle' },
+      { name: '비디오 검사',   path: '/admin/video/examin',   icon: 'play-circle' },
       { name: '홈으로',        path: '/home',                 icon: 'home' },
     ];
 

@@ -54,3 +54,9 @@ export async function videoBundle(category: string, bundleId: number): Promise<V
   const method = 'get';
   return await request(url, method);
 }
+
+export async function videoExamine(): Promise<void> {
+  const url = '/videos/examine';
+  const method = 'post';
+  return await request(url, method);
+}
