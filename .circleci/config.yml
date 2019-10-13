@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build:
+  test:
     docker:
       # specify the version you desire here
       - image: circleci/node:10.16.3
@@ -18,9 +18,7 @@ jobs:
 
     steps:
       - checkout
-      - run: sudo apt install rsync -y
 
-      # Download and cache dependencies
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
@@ -35,33 +33,26 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - run: npm run tslint
-      - run: npm run build
+  
+  deploy:
+    machine:
+      enabled: true
+    steps:
       - add_ssh_keys:
           fingerprints:
             - "7b:42:e7:9f:87:83:6f:ad:58:ba:4d:cc:82:4a:75:5c"
-      - run: echo yes | ssh hyunsub@home.hyunsub.kim "echo hello"
+      - run: sudo apt install rsync -y
+      - run: npm run build
       - run: rsync -ah --progress ~/repo/build/ hyunsub@home.hyunsub.kim:/home/hyunsub/hyunsub/frontend/
-  
-#   deploy:
-#     machine:
-#       enabled: true
-#     steps:
-#       - add_ssh_keys:
-#           fingerprints:
-#             - "7b:42:e7:9f:87:83:6f:ad:58:ba:4d:cc:82:4a:75:5c"
-#       - run:
-#           name: Deploy Over SSH
-#           command: |
-#             ssh hyunsub@home.hyunsub.kim "cd ~/hyunsub/react && git pull origin master && npm install"
 
-# workflows:
-#   version: 2
-#   build-and-deploy:
-#     jobs:
-#       - build
-#       - deploy:
-#           requires:
-#             - build
-#           filters:
-#             branches:
-#               only: master
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - test
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
