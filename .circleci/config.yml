@@ -33,29 +33,33 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      # run tests!
       - run: npm run tslint
-  
-  deploy:
-    machine:
-      enabled: true
-    steps:
+      - run: npm run build
       - add_ssh_keys:
           fingerprints:
             - "7b:42:e7:9f:87:83:6f:ad:58:ba:4d:cc:82:4a:75:5c"
-      - run:
-          name: Deploy Over SSH
-          command: |
-            ssh hyunsub@home.hyunsub.kim "cd ~/hyunsub/react && git pull origin master && npm install"
+      - run: rsync -ah --progress ~/repo/build/ hyunsub@home.hyunsub.kim:/home/hyunsub/hyunsub/frontend/
+  
+#   deploy:
+#     machine:
+#       enabled: true
+#     steps:
+#       - add_ssh_keys:
+#           fingerprints:
+#             - "7b:42:e7:9f:87:83:6f:ad:58:ba:4d:cc:82:4a:75:5c"
+#       - run:
+#           name: Deploy Over SSH
+#           command: |
+#             ssh hyunsub@home.hyunsub.kim "cd ~/hyunsub/react && git pull origin master && npm install"
 
-workflows:
-  version: 2
-  build-and-deploy:
-    jobs:
-      - build
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
+# workflows:
+#   version: 2
+#   build-and-deploy:
+#     jobs:
+#       - build
+#       - deploy:
+#           requires:
+#             - build
+#           filters:
+#             branches:
+#               only: master
