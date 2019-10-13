@@ -26,7 +26,7 @@ const AdminPage: React.FunctionComponent<Props> = (props) => {
           <Route path="/admin/register-code*" component={RegisterCodePage} />
           <Route path="/admin/video-manage/edit" component={VideoArticleEditPage} />
           <Route path="/admin/video-manage" component={VideoManagePage} />
-          <Route page="/admin/video/examine" component={VideoExaminePage} />
+          <Route path="/admin/video/examine" component={VideoExaminePage} />
           <Route render={_ => <Redirect to="/admin/encode" />} />
         </Switch>
       </AdminLayout>
