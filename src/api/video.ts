@@ -43,6 +43,12 @@ export async function videoArticleUpdate(params: VideoArticleUpdateParams): Prom
   await request(url, method, params.params);
 }
 
+export async function videoBundleCategories(): Promise<string[]> {
+  const url = '/bundles/videos/categories';
+  const method = 'get';
+  return await request(url, method);
+}
+
 export async function videoBundleList(category: string): Promise<VideoBundle[]> {
   const url = `/bundles/videos/${category}`;
   const method = 'get';

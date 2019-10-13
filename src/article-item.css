@@ -55,6 +55,8 @@
 .article-item .article-date {
   color: rgba(0,0,0,0.65);
   font-size: 11px;
+  min-width: 50px;
+  text-align: right;
 }
 
 @media only screen and (max-width: 768px) {
