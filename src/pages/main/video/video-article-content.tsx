@@ -1,6 +1,6 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { PageHeader, Typography } from 'antd';
+import { PageHeader, Row, Col, Statistic } from 'antd';
 import * as socketio from 'socket.io-client';
 import { connect } from 'react-redux';
 import * as qs from 'query-string';
@@ -9,8 +9,6 @@ import { videoArticle } from 'actions';
 import { VideoPlayer } from 'components';
 import { VideoArticle, Subtitle, Video } from 'models';
 import { BACKEND_SERVER, USER_VIDEO_SOCKET_PATH } from 'config';
-
-const { Title, Text } = Typography;
 
 interface Props extends RouteComponentProps {
   videoArticle(articleId: number): ReturnType<typeof videoArticle.request>;
@@ -94,12 +92,14 @@ class VideoArticleContentPage extends React.Component<Props, State> {
         >
           {videoPlayer}
         </div>
-        <div style={{ padding: '12px' }}>
-          <div>
-            <Title className="video-title" level={4}>{article.title}</Title>
-          </div>
-          <Text type="secondary">{article.date}</Text>
-        </div>
+        <Row className="border-bottom" style={{ padding: '12px' }} type="flex" gutter={32}>
+          <Col><Statistic title="Durtaion" value={video.durationString} /></Col>
+          <Col><Statistic title="Size" value={video.sizeString} /></Col>
+          <Col><Statistic title="Screen" value={`${video.width}x${video.height}`} /></Col>
+          <Col><Statistic title="Bitrate" value={video.bitrateString} /></Col>
+          <Col><Statistic title="Resolution" value={video.resolution} /></Col>
+          <Col><Statistic title="Date" value={article.date} /></Col>
+        </Row>
       </div>
     );
   }

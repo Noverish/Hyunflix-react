@@ -37,7 +37,7 @@ const UserVideoItem: React.FunctionComponent<Props> = (props) => {
       </div>
       <div className="second section">
         <span className="article-date">{percent}% 시청,</span>
-        <span className="article-date">총 시간: {time.second2String(video.duration)},</span>
+        <span className="article-date">총 시간: {video.durationString},</span>
         <span className="article-date">{userVideo.date} 시청</span>
       </div>
     </Link>

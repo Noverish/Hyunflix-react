@@ -16,3 +16,7 @@ body {
 .border-top {
   border-top: 1px solid #dddddd;
 }
+
+.border-bottom {
+  border-bottom: 1px solid #dddddd;
+}

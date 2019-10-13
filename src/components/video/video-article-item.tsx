@@ -3,7 +3,7 @@ import { Tag, Tooltip, Checkbox } from 'antd';
 import { connect } from 'react-redux';
 
 import { VideoArticle } from 'models';
-import { time } from 'utils';
+import { resolution2Color } from 'utils';
 
 interface Props {
   onClick(article: VideoArticle): void;
@@ -52,7 +52,7 @@ class VideoItem extends React.Component<Props> {
 
     // TODO 여러 비디오 지원
     const video = article.videos[0];
-    const { resolution, color } = widthToResolutionAndColor(video.width);
+    const color = resolution2Color(video.resolution);
 
     return (
       <div className="article-item" onClick={this.onClick}>
@@ -63,9 +63,9 @@ class VideoItem extends React.Component<Props> {
           {this.renderTitle(article.title)}
         </div>
         <div className="second section">
-          <span className="article-date">{time.second2String(video.duration)}</span>
+          <span className="article-date">{video.durationString}</span>
           <Tooltip placement="top" title={`${video.width}x${video.height}`}>
-            <Tag className="resolution" color={color}>{resolution}</Tag>
+            <Tag className="resolution" color={color}>{video.resolution}</Tag>
           </Tooltip>
           <span className="article-date">{article.date}</span>
         </div>
@@ -92,24 +92,3 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(VideoItem);
-
-function widthToResolutionAndColor(width: number) {
-  const list = {
-    1920: { resolution: '1080p', color: 'purple' },
-    1280: { resolution: '720p', color: 'geekblue' },
-    854: { resolution: '480p', color: 'green' },
-    640: { resolution: '360p', color: 'red' },
-  };
-
-  let diff = 10000;
-  let key = 0;
-  Object.keys(list).forEach((n) => {
-    const d = Math.abs(parseInt(n) - width);
-    if (d < diff) {
-      diff = d;
-      key = parseInt(n);
-    }
-  });
-
-  return list[key];
-}

@@ -6,6 +6,10 @@ export interface Video {
   height: number;
   bitrate: number;
   size: string;
+  durationString: string;
+  bitrateString: string;
+  sizeString: string;
+  resolution: string;
 }
 
 export interface Subtitle {
