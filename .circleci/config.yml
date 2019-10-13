@@ -39,7 +39,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "7b:42:e7:9f:87:83:6f:ad:58:ba:4d:cc:82:4a:75:5c"
-      - run: ssh hyunsub@home.hyunsub.kim "echo hello"
+      - run: echo yes | ssh hyunsub@home.hyunsub.kim "echo hello"
       - run: rsync -ah --progress ~/repo/build/ hyunsub@home.hyunsub.kim:/home/hyunsub/hyunsub/frontend/
   
 #   deploy:
