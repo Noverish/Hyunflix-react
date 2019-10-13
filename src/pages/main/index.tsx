@@ -9,6 +9,7 @@ import VideoArticleContent from './video/video-article-content';
 import VideoArticleList from './video/video-article-list';
 import VideoBundleContent from './video/video-bundle-content';
 import VideoBundleList from './video/video-bundle-list';
+import UserVideo from './user-video/user-video';
 import NotFound from 'pages/not-found';
 
 const MainPage: React.FunctionComponent = () => {
@@ -29,6 +30,8 @@ const MainPage: React.FunctionComponent = () => {
         <Route path="/musics/articles/add" component={MusicArticleAdd} />
         <Route path="/musics/articles" component={MusicArticleList} />
         <Route exact={true} path="/musics" render={_ => <Redirect to="/musics/articles" />} />
+
+        <Route path="/user/videos" component={UserVideo} />
 
         <Route component={NotFound} />
       </Switch>

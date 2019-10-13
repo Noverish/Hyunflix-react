@@ -22,3 +22,5 @@ export { default as FileItem } from './etc/file-item';
 export { default as RenameModal } from './etc/rename-modal';
 
 export { default as RegCodeArticleItem } from './regcode/regcode-article-item';
+export { default as UserVideoList } from './user/user-video-list';
+export { default as UserAvatarMenu } from './user/user-avatar-menu';

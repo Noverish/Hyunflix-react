@@ -2,6 +2,8 @@ import React from 'react';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import { connect } from 'react-redux';
+
+import { UserAvatarMenu } from 'components';
 import './main-layout.css';
 
 const { Header, Content, Footer } = Layout;
@@ -32,7 +34,7 @@ const MainLayout: React.FunctionComponent<Props> = (props) => {
 
   return (
     <Layout className="main-layout">
-      <Header className="main-layout-header">
+      <Header className="header">
         <Menu
           theme="dark"
           mode="horizontal"
@@ -41,6 +43,7 @@ const MainLayout: React.FunctionComponent<Props> = (props) => {
         >
           {itemComps}
         </Menu>
+        <UserAvatarMenu />
       </Header>
       <Content className="main-layout-content">
         <div className="main-layout-content-inner">

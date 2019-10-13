@@ -4,8 +4,14 @@
   align-items: center;
 }
 
-.main-layout-header {
+.main-layout .header {
   align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+
+.main-layout .header .ant-menu {
+  flex: 1 1 auto;
 }
 
 .main-layout-content {
@@ -28,15 +34,15 @@
 }
 
 @media only screen and (max-width: 768px) {
-  .main-layout-header {
+  .main-layout .header {
     padding: 0 !important;
   }
   
-  .main-layout-header > ul {
+  .main-layout .header > ul {
     display: flex;
   }
   
-  .main-layout-header > ul > li:nth-child(even) {
+  .main-layout .header > ul > li:nth-child(even) {
     flex-grow: 1 !important;
     display: flex !important;
     justify-content: center !important;
