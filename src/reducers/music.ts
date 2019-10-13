@@ -19,7 +19,7 @@ export const nowPlaying = createReducer(null as (Music | null))
 
 export const randomPlay = createReducer(false as boolean)
   .handleAction(musicRandomPlayToggle, (state, _) => !state);
-  
+
 export const loopPlay = createReducer(0 as number)
   .handleAction(musicLoopPlayToggle, (state, _) => (state + 1) % 3);
 
@@ -27,9 +27,9 @@ export const tags = createReducer(new Map<string, string>())
   .handleAction(musicTagListAsync.success, (_, action: ReturnType<typeof musicTagListAsync.success>) => {
     const map = new Map<string, string>();
     const tags: string[] = action.payload;
-    
+
     tags.forEach((t, i) => map.set(t, COLORS[i % COLORS.length]));
-    
+
     return map;
   });
 

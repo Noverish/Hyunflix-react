@@ -11,17 +11,17 @@ interface Props {
 }
 
 interface State {
-  
+
 }
 
 class MusicPlayList extends React.Component<Props, State> {
   render() {
     const playlist: Music[] = this.props.playlist;
-    
+
     return (
       <List
         className="music-play-list"
-        bordered
+        bordered={true}
         dataSource={playlist}
         renderItem={music =>
           <MusicPlayItem
@@ -31,7 +31,7 @@ class MusicPlayList extends React.Component<Props, State> {
           />
         }
       />
-    )
+    );
   }
 }
 
@@ -39,7 +39,7 @@ const mapStateToProps = (state) => {
   return {
     playlist: state.music.playlist,
     nowPlaying: state.music.nowPlaying,
-  }
-}
+  };
+};
 
 export default connect(mapStateToProps)(MusicPlayList);

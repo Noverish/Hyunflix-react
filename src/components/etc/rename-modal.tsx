@@ -16,11 +16,11 @@ interface State {
 
 export default class RenameModal extends React.Component<Props, State> {
   input: Input | null = null;
-  
+
   state = {
-    confirmLoading: false
-  }
-  
+    confirmLoading: false,
+  };
+
   render() {
     return (
       <Modal
@@ -30,16 +30,16 @@ export default class RenameModal extends React.Component<Props, State> {
         onCancel={this.onCancel}
         confirmLoading={this.state.confirmLoading}
       >
-        <Input ref={ref => { this.input = ref }} defaultValue={this.props.path} />
+        <Input ref={ref => this.input = ref} defaultValue={this.props.path} />
       </Modal>
-    )
+    );
   }
-  
+
   onOk = () => {
     this.setState({ confirmLoading: true });
     const fromPath = this.props.path;
     const toPath = this.input!.state.value;
-    
+
     rename(fromPath, toPath)
       .then(() => {
         this.props.onClose();
@@ -47,9 +47,9 @@ export default class RenameModal extends React.Component<Props, State> {
       })
       .catch((msg) => {
         this.props.onClose();
-      })
+      });
   }
-  
+
   onCancel = () => {
     this.props.onClose();
   }

@@ -1,4 +1,4 @@
-import { File } from 'models'
+import { File } from 'models';
 import { tokenExpire } from 'actions';
 import { store } from '../index';
 
@@ -15,12 +15,12 @@ export * from './user';
 export async function request(path: string, method: string, data: any = undefined) {
   const url = path.startsWith('/') ? `${BACKEND_SERVER}${path}` : path;
   const headers = {};
-  
+
   const token = store.getState().auth.token;
-  if(token) {
-    headers['Authorization'] = `Bearer ${token}`
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
   }
-  
+
   try {
     return (await axios({ url, method, headers, data })).data;
   } catch (err) {
@@ -30,13 +30,13 @@ export async function request(path: string, method: string, data: any = undefine
       config: err.config,
       request: err.request,
     });
-    
+
     if (err.response && err.response.status === 401) {
       store.dispatch(tokenExpire());
     }
-    
+
     let errMsg = '';
-    
+
     if (err.response && err.response.data && err.response.data.msg) {
       errMsg = err.response.data.msg;
     } else if (err.response && err.response.data) {
@@ -44,37 +44,37 @@ export async function request(path: string, method: string, data: any = undefine
     } else {
       errMsg = err.message;
     }
-    
+
     handleError(errMsg);
-    
+
     throw errMsg;
   }
 }
 
 export async function readdir(path: string): Promise<File[]> {
-  const url = `/explorer/readdir`;
+  const url = '/explorer/readdir';
   const method = 'post';
-  const body = { path }
+  const body = { path };
   return await request(url, method, body);
 }
 
 export async function rename(fromPath: string, toPath: string) {
-  const url = `/explorer/rename`;
+  const url = '/explorer/rename';
   const method = 'post';
-  const body = { fromPath, toPath }
+  const body = { fromPath, toPath };
   return await request(url, method, body);
 }
 
 export async function isdir(path: string): Promise<boolean> {
-  const url = `/explorer/isdir`;
+  const url = '/explorer/isdir';
   const method = 'post';
-  const body = { path }
+  const body = { path };
   return (await request(url, method, body)).isdir;
 }
 
 export async function exists(path: string): Promise<boolean> {
-  const url = `/explorer/exists`;
+  const url = '/explorer/exists';
   const method = 'post';
-  const body = { path }
+  const body = { path };
   return (await request(url, method, body)).exists;
 }

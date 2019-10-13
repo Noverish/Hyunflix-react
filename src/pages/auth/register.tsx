@@ -19,10 +19,10 @@ interface State {
 
 class RegistrationForm extends React.Component<Props, State> {
   state = {
-    password2Dirty: false
+    password2Dirty: false,
   };
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll({ force: true }, (err, values) => {
       if (err) {
@@ -30,22 +30,22 @@ class RegistrationForm extends React.Component<Props, State> {
         // alert('입력하신 내용에 오류가 있습니다');
         return;
       }
-      
+
       const username = values['username'];
       const password = values['password1'];
       const regCode = values['reg_code'];
-      
+
       this.props.registerAsyncRequest({ username, password, regCode });
     });
-  };
-  
-  handleConfirmBlur = e => {
+  }
+
+  handleConfirmBlur = (e) => {
     const { value } = e.target;
     this.setState({ password2Dirty: this.state.password2Dirty || !!value });
-  };
-  
+  }
+
   validateID = (rule, value, callback) => {
-    if(value) {
+    if (value) {
       if (value.length < 4) {
         callback(new Error('아이디는 4자리 이상이어야 합니다'));
       } else if ((/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/).test(value)) {
@@ -54,13 +54,13 @@ class RegistrationForm extends React.Component<Props, State> {
     }
     callback();
   }
-  
+
   validatePassword1 = (rule, value, callback) => {
     if (value) {
       if (this.state.password2Dirty) {
         this.props.form.validateFields(['password2'], (err, values) => {});
       }
-      
+
       if (value.length < 4) {
         callback(new Error('비밀번호는 4자리 이상이어야 합니다'));
       } else if ((/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/).test(value)) {
@@ -77,7 +77,7 @@ class RegistrationForm extends React.Component<Props, State> {
     } else {
       callback();
     }
-  };
+  }
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -98,7 +98,7 @@ class RegistrationForm extends React.Component<Props, State> {
               ],
             })(<Input />)}
           </Form.Item>
-          <Form.Item label="비밀번호" hasFeedback>
+          <Form.Item label="비밀번호" hasFeedback={true}>
             {getFieldDecorator('password1', {
               rules: [
                 {
@@ -111,7 +111,7 @@ class RegistrationForm extends React.Component<Props, State> {
               ],
             })(<Input.Password />)}
           </Form.Item>
-          <Form.Item label="비밀번호 확인" hasFeedback>
+          <Form.Item label="비밀번호 확인" hasFeedback={true}>
             {getFieldDecorator('password2', {
               rules: [
                 {
@@ -149,9 +149,9 @@ class RegistrationForm extends React.Component<Props, State> {
   }
 }
 
-let mapDispatchToProps = {
+const mapDispatchToProps = {
   registerAsyncRequest: registerAsync.request,
-}
+};
 
 const form =  Form.create({ name: 'register' })(RegistrationForm);
 export default connect(undefined, mapDispatchToProps)(form);

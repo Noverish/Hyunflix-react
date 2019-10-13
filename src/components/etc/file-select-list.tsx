@@ -23,12 +23,12 @@ class FileSelectList extends React.Component<Props, State> {
     files: [],
     selected: null,
   };
-  
+
   componentDidMount() {
     const { path } = this.state;
     this.refresh(path);
   }
-  
+
   refresh = (path: string) => {
     const parent: File = {
       path: dirname(path),
@@ -36,41 +36,41 @@ class FileSelectList extends React.Component<Props, State> {
       isdir: true,
       size: '',
       url: '',
-    }
-    
+    };
+
     Api.readdir(path)
       .then((files: File[]) => {
         if (path !== '/') {
           files.unshift(parent);
         }
-          
+
         this.setState({ files, path, selected: null });
       });
   }
-  
+
   renderBreadcrumb = () => {
     const { path } = this.state;
     const items = path.split('/').map(p => (
       <Breadcrumb.Item key={p}>{p}</Breadcrumb.Item>
-    ))
-    
+    ));
+
     return (
       <Breadcrumb>
         <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
-        { items }
+        {items}
       </Breadcrumb>
-    )
+    );
   }
-  
+
   render() {
     const { topRight } = this.props;
     const { files } = this.state;
-    
+
     return (
       <div className="article-list-page">
         <div className="page-header">
           <PageHeader title={this.renderBreadcrumb()} />
-          { topRight }
+          {topRight}
         </div>
         <List
           className="page-content"
@@ -84,13 +84,13 @@ class FileSelectList extends React.Component<Props, State> {
           )}
         />
       </div>
-    )
+    );
   }
-  
+
   onClick = (file: File) => {
     const selected: File | null = this.state.selected;
     const path: string = file.path;
-    
+
     if (selected === file) {
       this.refresh(path);
     } else {

@@ -15,7 +15,7 @@ interface Props extends FormComponentProps, RouteComponentProps {
 }
 
 interface State {
-  
+
 }
 
 class NormalLoginForm extends React.Component<Props, State> {
@@ -26,14 +26,14 @@ class NormalLoginForm extends React.Component<Props, State> {
         message.error(err);
         return;
       }
-    
+
       const username = values['username'];
       const password = values['password'];
-      
+
       this.props.loginAsyncRequest({ username, password });
     });
-  };
-  
+  }
+
   onRegisterClicked = (e) => {
     e.preventDefault();
     this.props.history.push('/register');
@@ -84,7 +84,7 @@ class NormalLoginForm extends React.Component<Props, State> {
 
 const mapDispatchToProps = {
   loginAsyncRequest: loginAsync.request,
-}
+};
 
-const form = Form.create({ name: 'normal_login' })(NormalLoginForm)
+const form = Form.create({ name: 'normal_login' })(NormalLoginForm);
 export default connect(undefined, mapDispatchToProps)(form);

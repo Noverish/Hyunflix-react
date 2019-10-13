@@ -22,44 +22,44 @@ interface State {
 class VideoBundleList extends React.Component<Props, State> {
   public static defaultProps = {
     title: 'Video Bundle',
-    subTitle: ''
-  }
-  
+    subTitle: '',
+  };
+
   state = {
     page: 1,
-  }
-  
+  };
+
   componentDidMount() {
-    
+
   }
-  
+
   renderItem = (bundle: VideoBundle) => {
     return (
       <VideoBundleItem
         bundle={bundle}
         link={`/videos/bundles/${bundle.category}/${bundle.id}`}
       />
-    )
+    );
   }
-  
+
   render() {
     const { bundles, onBack } = this.props;
     const { page } = this.state;
     const title: string = this.props.title || VideoBundleList.defaultProps.title;
     const subTitle: string = this.props.subTitle || VideoBundleList.defaultProps.subTitle;
-    
+
     const searched = bundles;
     const sliced = searched.slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
-    
+
     const props = (onBack)
       ? { onBack }
-      : { backIcon: false }
-    
+      : { backIcon: false };
+
     return (
       <div className="article-list-page">
         <div className="page-header">
           <PageHeader {...props} title={title} subTitle={subTitle} />
-          <Search onChange={this.onQueryChange} enterButton />
+          <Search onChange={this.onQueryChange} enterButton={true} />
         </div>
         <div className="page-content">
           <List
@@ -68,33 +68,33 @@ class VideoBundleList extends React.Component<Props, State> {
           />
         </div>
         <div className="page-footer">
-          <div className="left wrapper"></div>
+          <div className="left wrapper"/>
           <div className="center wrapper">
             <Pagination current={page} total={searched.length} pageSize={PAGE_SIZE} onChange={this.onPageChange} />
           </div>
-          <div className="right wrapper"></div>
+          <div className="right wrapper"/>
         </div>
       </div>
-    )
+    );
   }
-  
+
   onQueryChange = (e) => {
-    
+
   }
-  
+
   onPageChange = (page: number) => {
-    this.setState({ page })
+    this.setState({ page });
   }
 }
 
-let mapDispatchToProps = {
-  
-}
+const mapDispatchToProps = {
 
-let mapStateToProps = (state) => {
+};
+
+const mapStateToProps = (state) => {
   return {
-    
-  }
-}
+
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(VideoBundleList);

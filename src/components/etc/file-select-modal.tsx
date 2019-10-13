@@ -23,7 +23,7 @@ class VideoEditModal extends React.Component<Props, State> {
     files: [],
     selected: null,
   };
-  
+
   componentDidMount() {
     const { path } = this.state;
     Api.readdir(path)
@@ -36,34 +36,34 @@ class VideoEditModal extends React.Component<Props, State> {
     const { path } = this.state;
     const items = path.split('/').map(p => (
       <Breadcrumb.Item key={p}>{p}</Breadcrumb.Item>
-    ))
-    
+    ));
+
     return (
       <Breadcrumb>
         <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
-        { items }
+        {items}
       </Breadcrumb>
-    )
+    );
   }
-  
+
   renderFileItem = (f: File) => {
     const { selected } = this.state;
-    const iconType = f.isdir ? "folder" : "file";
+    const iconType = f.isdir ? 'folder' : 'file';
     const className = (selected === f)
-      ? "modal-file-item selected"
-      : "modal-file-item";
-    
+      ? 'modal-file-item selected'
+      : 'modal-file-item';
+
     return (
       <div className={className} onClick={() => this.onClick(f)} key={f.name}>
         <Icon type={iconType} />
         <span>{f.name}</span>
       </div>
-    )
+    );
   }
-  
+
   render() {
     const files: File[] = this.state.files;
-    
+
     return (
       <Modal
         className="file-select-modal"
@@ -72,35 +72,35 @@ class VideoEditModal extends React.Component<Props, State> {
         onOk={this.onOk}
         onCancel={this.onCancel}
       >
-        { this.renderBreadcrumb() }
+        {this.renderBreadcrumb()}
         <List
-          bordered
+          bordered={true}
           dataSource={files}
           renderItem={(f: File) => this.renderFileItem(f)}
         />
       </Modal>
-    )
+    );
   }
-  
+
   onOk = () => {
     this.props.onClose(this.state.selected);
   }
-  
+
   onCancel = () => {
     this.props.onClose(null);
   }
-  
+
   onClick = (file: File) => {
     const selected: File | null = this.state.selected;
     const path: string = file.path;
     const isdir: boolean = file.isdir;
-    
+
     if (selected === file) {
       if (!isdir) {
         this.props.onClose(this.state.selected);
         return;
       }
-      
+
       Api.readdir(path)
         .then((files: File[]) => {
           if (path !== '/') {
@@ -112,11 +112,11 @@ class VideoEditModal extends React.Component<Props, State> {
               url: '',
             });
           }
-          
+
           this.setState({ files, path, selected: null });
         });
     } else {
-      this.setState({ selected: file })
+      this.setState({ selected: file });
     }
   }
 }

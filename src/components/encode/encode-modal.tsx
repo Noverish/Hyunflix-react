@@ -23,29 +23,27 @@ class EncodeModal extends React.Component<Props, State> {
   inpathTextArea; // TODO Add Type
   optionsTextArea;
   outpathTextArea;
-  
+
   state = {
     inpath: this.props.path,
     outpath: dirname(this.props.path) + '/' + basename(this.props.path, extname(this.props.path)) + '.mp4',
     options: '',
     encodePresets: {},
     confirmLoading: false,
-  }
-  
+  };
+
   componentDidMount() {
     encodePresets()
       .then(presets => this.setState({ encodePresets: presets }))
-      .catch(msg => {
-        
-      });
+      .catch();
   }
-  
+
   render () {
     const presets = this.state.encodePresets;
     const radioButtons = Object.keys(presets).map((k: string) => {
-      return <Radio.Button value={presets[k]} key={k}>{k}</Radio.Button>
+      return <Radio.Button value={presets[k]} key={k}>{k}</Radio.Button>;
     });
-    
+
     return (
       <Modal
         title="비디오 인코딩"
@@ -62,29 +60,30 @@ class EncodeModal extends React.Component<Props, State> {
             ref={ref => this.inpathTextArea = ref}
             placeholder="inpath"
             value={this.state.inpath}
-            onChange={this.onChange} />
-            
+            onChange={this.onChange}
+          />
           <Input.TextArea
-            autosize
+            autosize={true}
             ref={ref => this.optionsTextArea = ref}
             placeholder="options"
             value={this.state.options}
-            onChange={this.onChange}  />
-            
+            onChange={this.onChange}
+          />
           <Input.TextArea
             ref={ref => this.outpathTextArea = ref}
             placeholder="outpath"
             value={this.state.outpath}
-            onChange={this.onChange} />
+            onChange={this.onChange}
+          />
         </div>
       </Modal>
-    )
+    );
   }
-  
+
   onPresetSelect = (e) => {
     this.setState({ options: e.target.value });
   }
-  
+
   onChange = (e) => {
     switch (e.target.placeholder) {
       case 'inpath': {
@@ -101,13 +100,13 @@ class EncodeModal extends React.Component<Props, State> {
       }
     }
   }
-  
+
   onOk = (e) => {
     this.setState({ confirmLoading: true });
     const inpath = this.state.inpath;
     const options = this.state.options;
     const outpath = this.state.outpath;
-    
+
     encodeFile(inpath, options, outpath)
       .then(() => {
         this.props.onClose();
@@ -115,9 +114,9 @@ class EncodeModal extends React.Component<Props, State> {
       })
       .catch((msg) => {
         this.props.onClose();
-      })
+      });
   }
-  
+
   onCancel = () => {
     this.props.onClose();
   }

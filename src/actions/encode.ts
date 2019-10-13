@@ -19,12 +19,12 @@ export interface EncodeListSuccessAction {
 export function encodeList(): EncodeListAction {
   return {
     type: ENCODE_LIST,
-  }
+  };
 }
 
 export function encodeListSuccess(encodes: Encode[]): EncodeListSuccessAction {
   return {
     type: ENCODE_LIST_SUCCESS,
     encodes,
-  }
+  };
 }

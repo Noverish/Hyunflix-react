@@ -7,7 +7,7 @@ import { VideoArticle, Subtitle } from 'models';
 
 export function* fetchVideoArticle(action: ReturnType<typeof videoArticle.request>) {
   const articleId: number = action.payload;
-  
+
   try {
     const article: VideoArticle = yield call([Api, 'videoArticle'], articleId);
     yield put(videoArticle.success(article));
@@ -30,7 +30,7 @@ export function* fetchVideoTagList() {
 
 export function* fetchVideoSubtitleList(action: ReturnType<typeof videoSubtitleList.request>) {
   const videoId: number = action.payload;
-  
+
   try {
     const result: Subtitle[] = yield call([Api, 'videoSubtitleList'], videoId);
     yield put(videoSubtitleList.success(result));
@@ -55,4 +55,4 @@ export default [
   watchVideoArticleContent(),
   watchVideoTagList(),
   watchVideoSubtitleList(),
-]
+];

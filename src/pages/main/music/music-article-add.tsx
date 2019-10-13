@@ -15,7 +15,7 @@ const { Option } = Select;
 const { Step } = Steps;
 
 interface Props extends RouteComponentProps, FormComponentProps {
-  musicTagListAsync(): ReturnType<typeof musicTagListAsync.request>
+  musicTagListAsync(): ReturnType<typeof musicTagListAsync.request>;
   tags: Map<string, string>;
 }
 
@@ -27,20 +27,20 @@ interface State {
 
 class MusicArticleAddPage extends React.Component<Props, State> {
   socket: socketio.Socket | null = null;
-  
+
   state = {
     stage: -1,
     progress: 0,
     eta: 0,
-  }
-  
+  };
+
   componentDidMount() {
     this.props.musicTagListAsync();
   }
-  
+
   renderSteps = (stepStage: number) => {
     const { stage, progress, eta } = this.state;
-    
+
     let percent = 0;
     if (stage < stepStage) {
       percent = 0;
@@ -49,7 +49,7 @@ class MusicArticleAddPage extends React.Component<Props, State> {
     } else {
       percent = 100;
     }
-    
+
     let subTitle = '';
     if (stage < stepStage) {
       subTitle = '준비중';
@@ -58,27 +58,27 @@ class MusicArticleAddPage extends React.Component<Props, State> {
     } else {
       subTitle = '완료';
     }
-    
+
     switch (stepStage) {
       case YoutubeStage.ready: {
-        return <Step title="준비" subTitle={subTitle} />
+        return <Step title="준비" subTitle={subTitle} />;
       }
       case YoutubeStage.download: {
-        return <Step title="다운로드" subTitle={subTitle} description={ <Progress percent={percent} /> } />
+        return <Step title="다운로드" subTitle={subTitle} description={<Progress percent={percent} />} />;
       }
       case YoutubeStage.encode: {
-        return <Step title="인코딩" subTitle={subTitle} description={ <Progress percent={percent} /> } />
+        return <Step title="인코딩" subTitle={subTitle} description={<Progress percent={percent} />} />;
       }
     }
   }
-  
+
   render() {
     const { stage } = this.state;
     const { tags } = this.props;
     const { getFieldDecorator } = this.props.form;
-    
+
     const options = Array.from(tags.keys()).map(t => <Option key={t}>{t}</Option>);
-    
+
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -89,7 +89,7 @@ class MusicArticleAddPage extends React.Component<Props, State> {
         sm: { span: 12 },
       },
     };
-    
+
     const tailFormItemLayout = {
       wrapperCol: {
         xs: {
@@ -102,7 +102,7 @@ class MusicArticleAddPage extends React.Component<Props, State> {
         },
       },
     };
-    
+
     return (
       <div className="article-list-page music-article-add">
         <div className="page-header">
@@ -112,14 +112,14 @@ class MusicArticleAddPage extends React.Component<Props, State> {
           <Form {...formItemLayout}>
             <Form.Item label="Youtube URL">
               {getFieldDecorator('url', {
-                rules: [ { required: true, message: 'Youtube 링크를 입력해주세요!' } ]
+                rules: [{ required: true, message: 'Youtube 링크를 입력해주세요!' }],
               })(<Input />)}
             </Form.Item>
             <Form.Item label="Tags">
               {getFieldDecorator('tags')(
                 <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']}>
                   {options}
-                </Select>
+                </Select>,
               )}
             </Form.Item>
             <Form.Item {...tailFormItemLayout}>
@@ -127,31 +127,31 @@ class MusicArticleAddPage extends React.Component<Props, State> {
             </Form.Item>
           </Form>
           <Steps direction="vertical" current={stage}>
-            { this.renderSteps(YoutubeStage.ready) }
-            { this.renderSteps(YoutubeStage.download) }
-            { this.renderSteps(YoutubeStage.encode) }
+            {this.renderSteps(YoutubeStage.ready)}
+            {this.renderSteps(YoutubeStage.download)}
+            {this.renderSteps(YoutubeStage.encode)}
           </Steps>
         </div>
       </div>
-    )
+    );
   }
-    
+
   onSubmit = () => {
     const url: string = this.props.form.getFieldValue('url');
     const tags: string[] = this.props.form.getFieldValue('tags');
-    
+
     (async () => {
       this.socket = socketio.connect(FFMPEG_SERVER, { path: YOUTUBE_SOCKET_PATH });
       this.socket.on('message', (data: Buffer) => {
         const payload = JSON.parse(data.toString());
         this.setState(payload);
-        
+
         if (payload.stage === YoutubeStage.success) {
           this.socket.disconnect();
           message.success('추가 완료');
         }
       });
-      
+
       await musicAdd(url, tags);
     })().catch(console.error);
   }
@@ -160,12 +160,12 @@ class MusicArticleAddPage extends React.Component<Props, State> {
 const mapStateToProps = (state) => {
   return {
     tags: state.music.tags,
-  }
-}
+  };
+};
 
 const mapDispatchToProps = {
-  musicTagListAsync: musicTagListAsync.request
-}
+  musicTagListAsync: musicTagListAsync.request,
+};
 
-const form = Form.create()(MusicArticleAddPage)
+const form = Form.create()(MusicArticleAddPage);
 export default connect(mapStateToProps, mapDispatchToProps)(form);

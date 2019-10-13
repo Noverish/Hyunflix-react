@@ -7,7 +7,7 @@ import { videoArticleList } from 'api';
 import { VideoArticleList } from 'components';
 
 interface Props extends Partial<React.ComponentProps<typeof VideoArticleList>> {
-  
+
 }
 
 interface State {
@@ -25,18 +25,18 @@ class VideoArticleListContainer extends React.Component<Props, State> {
     loading: false,
     total: 0,
     articles: [],
-  }
-  
+  };
+
   componentDidMount() {
     const { query, page } = this.state;
-    
+
     videoArticleList(query, page, PAGE_SIZE)
       .then(r => this.setState({ total: r.total, articles: r.results }));
   }
-  
+
   render() {
     const { total, articles, page, loading } = this.state;
-    
+
     return (
       <VideoArticleList
         articles={articles}
@@ -46,18 +46,18 @@ class VideoArticleListContainer extends React.Component<Props, State> {
         onPageChange={this.onPageChange}
         onQueryChange={this.onQueryChange}
         loading={loading}
-        { ...this.props }
+        {...this.props}
       />
-    )
+    );
   }
-  
+
   onPageChange = (page: number) => {
     const { query } = this.state;
     this.setState({ loading: true });
     videoArticleList(query, page, PAGE_SIZE)
       .then(r => this.setState({ page, total: r.total, articles: r.results, loading: false }));
   }
-  
+
   onQueryChange = (query: string) => {
     const page = 1;
     this.setState({ loading: true });

@@ -8,7 +8,7 @@ export interface VideoArticleListResult {
 }
 
 export async function videoArticleList(query: string, page: number, pageSize: number): Promise<VideoArticleListResult> {
-  const querystring = stringify({ q: query, p: page, ps: pageSize});
+  const querystring = stringify({ q: query, p: page, ps: pageSize });
   const url = `/articles/videos?${querystring}`;
   const method = 'get';
   return await request(url, method);
@@ -21,7 +21,7 @@ export async function videoArticle(articleId: number): Promise<VideoArticle> {
 }
 
 export async function videoTagList(): Promise<string[]> {
-  const url = `/articles/videos/tags`;
+  const url = '/articles/videos/tags';
   const method = 'get';
   return await request(url, method);
 }

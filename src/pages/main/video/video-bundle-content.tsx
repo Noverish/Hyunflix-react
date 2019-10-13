@@ -7,16 +7,16 @@ import { videoBundle } from 'api';
 
 const VideoBundleContentPage: React.FunctionComponent<RouteComponentProps> = (props) => {
   const [bundle, setBundle] = useState(null as VideoBundle | null);
-  
+
   const category: string = props.match.params['category'];
   const bundleId: number = parseInt(props.match.params['bundleId'], 10);
-  
+
   useEffect(() => {
     videoBundle(category, bundleId)
       .then(bundle => setBundle(bundle))
       .catch();
-  }, [category, bundleId]);
-    
+  },        [category, bundleId]);
+
   if (bundle) {
     return (
       <VideoArticleList
@@ -26,10 +26,10 @@ const VideoBundleContentPage: React.FunctionComponent<RouteComponentProps> = (pr
         title={bundle.title}
         subTitle={`총 ${bundle.articles.length}편`}
       />
-    )
-  } else {
-    return <div />
+    );
   }
-}
+
+  return <div />;
+};
 
 export default VideoBundleContentPage;

@@ -18,7 +18,7 @@ function* fetchRegCodeList(action: ReturnType<typeof regCodeListAsync.request>):
 function* fetchRegCodeAdd(action: ReturnType<typeof regCodeAddAsync.request>): Generator {
   const realname = action.payload.realname;
   const code = action.payload.code;
-  
+
   try {
     const regCode: RegCode = (yield call([Api, 'regCodeAdd'], realname, code)) as RegCode;
     yield put(regCodeAddAsync.success(regCode));
@@ -29,7 +29,7 @@ function* fetchRegCodeAdd(action: ReturnType<typeof regCodeAddAsync.request>): G
 
 function* fetchUserVideoList(action: ReturnType<typeof userVideoList.request>) {
   const userId = store.getState().auth.userId;
-  
+
   try {
     const userVideos: UserVideo[] = (yield call([Api, 'userVideoList'], userId)) as UserVideo[];
     yield put(userVideoList.success(userVideos));
@@ -54,4 +54,4 @@ export default [
   watchRegCodeList(),
   watchRegCodeAdd(),
   watchUserVideoList(),
-]
+];

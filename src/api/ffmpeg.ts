@@ -1,6 +1,6 @@
 import { request } from './';
 import { FFMPEG_SERVER } from 'config';
-import { Encode } from 'models'
+import { Encode } from 'models';
 
 export async function ffmpegPause() {
   const url = `${FFMPEG_SERVER}/ffmpeg/pause`;

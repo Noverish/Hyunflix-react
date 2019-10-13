@@ -10,7 +10,7 @@ import { time } from 'utils';
 interface Props extends RouteComponentProps {
   music: Music;
   highlight: string;
-  
+
   // Redux Props
   musicPlaylistAdd(musics: Music[]): void;
   musicPlaylistRemove(music: Music): ReturnType<typeof musicPlaylistRemove>;
@@ -19,13 +19,13 @@ interface Props extends RouteComponentProps {
 }
 
 interface State {
-  
+
 }
 
 class MusicItem extends React.Component<Props, State> {
   renderTitle = (title: string) => {
     const { highlight } = this.props;
-    
+
     const index = title.search(new RegExp(highlight, 'i'));
     const beforeStr = title.substr(0, index);
     const matchStr = title.substr(index, highlight.length);
@@ -42,27 +42,27 @@ class MusicItem extends React.Component<Props, State> {
         <span className="article-title">{title}</span>
       );
   }
-  
+
   renderTags = () => {
     const { music, tags } = this.props;
-    
+
     return music.tags.map(t => (
       <Tag color={tags.get(t)} key={t}>{t}</Tag>
-    ))
+    ));
   }
-  
+
   render() {
     const { playlist, music } = this.props;
     const checked: boolean = playlist.some(m => m.id === music.id);
     const link = `/musics/articles/${music.id}`;
-    
+
     return (
       <a href={link} className="article-item" onClick={this.onClick}>
         <div className="first section">
           <Checkbox className="check-box" checked={checked} />
           <span className="article-id">{music.id}</span>
-          { this.renderTags() }
-          { this.renderTitle(music.title) }
+          {this.renderTags()}
+          {this.renderTitle(music.title)}
           { music.youtube && (
             <div onClick={this.youtubeClicked}>
               <Icon type="youtube" style={{ color: '#f5222d' }} />
@@ -73,24 +73,24 @@ class MusicItem extends React.Component<Props, State> {
           <span className="article-date">{time.second2String(music.duration)}</span>
         </div>
       </a>
-    )
+    );
   }
-  
+
   onClick = (e) => {
     e.preventDefault();
     const { playlist, music } = this.props;
     const isInPlaylist: boolean = playlist.some(m => m.id === music.id);
-    
+
     if (!isInPlaylist) {
       this.props.musicPlaylistAdd([music]);
     } else {
       this.props.musicPlaylistRemove(music);
     }
-    
+
     // const link = `/musics/${this.props.music.id}`;
     // this.props.history.push(link);
   }
-  
+
   youtubeClicked = (e) => {
     const url = `https://www.youtube.com/watch?v=${this.props.music.youtube}`;
     e.preventDefault();
@@ -103,13 +103,13 @@ class MusicItem extends React.Component<Props, State> {
 const mapDispatchToProps = {
   musicPlaylistAdd,
   musicPlaylistRemove,
-}
+};
 
-let mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
   return {
     playlist: state.music.playlist,
     tags: state.music.tags,
-  }
-}
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MusicItem));

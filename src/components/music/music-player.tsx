@@ -15,44 +15,44 @@ interface Props {
 }
 
 interface State {
-  
+
 }
 
 class MusicPlayer extends React.Component<Props, State> {
   audioTag: HTMLAudioElement | null = null;
-  
+
   shouldComponentUpdate(nextProps: Props, nextState: State) {
     return nextProps.nowPlaying !== this.props.nowPlaying;
   }
-  
+
   render() {
     const { nowPlaying } = this.props;
-    
+
     const source = (nowPlaying)
       ? <source src={encodeURI(nowPlaying!.url)} type="audio/mpeg" />
-      : null
-    
+      : null;
+
     const title = (nowPlaying)
-      ? <Typography.Title style={{textAlign: 'center'}}>{nowPlaying!.title}</Typography.Title>
-      : null
-    
+      ? <Typography.Title style={{ textAlign: 'center' }}>{nowPlaying!.title}</Typography.Title>
+      : null;
+
     return (
       <div className="music-player">
         {title}
-        <audio controls autoPlay style={{ width: '100%' }} onEnded={this.onMusicEnded} ref={ref => { this.audioTag = ref }}>
+        <audio controls={true} autoPlay={true} style={{ width: '100%' }} onEnded={this.onMusicEnded} ref={ref => this.audioTag = ref}>
           {source}
         </audio>
         <MusicPlayControl />
       </div>
-    )
+    );
   }
-  
+
   componentDidUpdate() {
-    if(this.audioTag) {
+    if (this.audioTag) {
       this.audioTag.load();
     }
   }
-  
+
   onMusicEnded = (e) => {
     this.props.musicPlayNext();
   }
@@ -60,7 +60,7 @@ class MusicPlayer extends React.Component<Props, State> {
 
 const mapDispatchToProps = {
   musicPlayNext: musicPlayNextAsync.request,
-}
+};
 
 const mapStateToProps = (state) => {
   return {
@@ -68,7 +68,7 @@ const mapStateToProps = (state) => {
     nowPlaying: state.music.nowPlaying,
     randomPlay: state.music.randomPlay,
     loopPlay: state.music.loopPlay,
-  }
-}
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MusicPlayer);

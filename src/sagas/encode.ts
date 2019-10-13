@@ -8,7 +8,7 @@ export function* fetchEncodeList(action: EncodeListAction) {
     const encodes: Encode[] = yield call([Api, 'encodeStatus']);
     yield put(encodeListSuccess(encodes));
   } catch (errMsg) {
-    
+
   }
 }
 
@@ -18,4 +18,4 @@ export function* watchEncodeList() {
 
 export default [
   watchEncodeList(),
-]
+];

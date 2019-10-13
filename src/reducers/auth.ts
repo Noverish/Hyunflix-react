@@ -33,4 +33,3 @@ const reducer = combineReducers({
 export default reducer;
 
 export type AuthState = ReturnType<typeof reducer>;
-  

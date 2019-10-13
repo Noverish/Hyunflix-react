@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { debounce } from "debounce";
+import { debounce } from 'debounce';
 
 import Main from 'pages/main';
 import Admin from 'pages/admin';
@@ -19,16 +19,16 @@ interface Props {
 }
 
 interface State {
-  
+
 }
 
 class App extends Component<Props, State> {
   componentDidMount() {
     window.onresize = debounce(this.props.windowResize, 500);
   }
-  
+
   render() {
-    let inner = (this.props.token)
+    const inner = (this.props.token)
       ? (
         <Switch>
           <Route path="/admin" component={Admin} />
@@ -38,26 +38,26 @@ class App extends Component<Props, State> {
         <Switch>
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
-          <Route render={_ => <Redirect to="/login" /> } />
+          <Route render={_ => <Redirect to="/login" />} />
         </Switch>
       );
-    
+
     return (
       <BrowserRouter>
         {inner}
       </BrowserRouter>
-    )
+    );
   }
 }
 
 const mapDispatchToProps = {
   windowResize,
-}
+};
 
 const mapStateToProps = (state) => {
   return {
-    token: state.auth.token
+    token: state.auth.token,
   };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

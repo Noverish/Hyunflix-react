@@ -27,21 +27,21 @@ const AdminPage: React.FunctionComponent<Props> = (props) => {
           <Route path="/admin/register-code*" component={RegisterCodePage} />
           <Route path="/admin/video-manage/edit" component={VideoArticleEditPage} />
           <Route path="/admin/video-manage" component={VideoManagePage} />
-          <Route render={_ => <Redirect to="/admin/explorer" /> } />
+          <Route render={_ => <Redirect to="/admin/explorer" />} />
         </Switch>
       </AdminLayout>
-    )
-  } else {
-    return (
-      <NotFound />
-    )
+    );
   }
+
+  return (
+    <NotFound />
+  );
 };
 
 const mapStateToProps = (state) => {
   return {
     isAdmin: state.auth.isAdmin,
-  }
-}
+  };
+};
 
 export default connect(mapStateToProps)(AdminPage);

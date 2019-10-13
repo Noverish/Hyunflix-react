@@ -7,9 +7,9 @@ import { VideoArticleListContainer } from 'components';
 
 const VideoArticleListPage: React.FunctionComponent<RouteComponentProps> = (props) => {
   const onItemClick = (article: VideoArticle) => {
-    props.history.push(`/videos/articles/${article.id}`)
-  }
-  
+    props.history.push(`/videos/articles/${article.id}`);
+  };
+
   return (
     <div className="video-article-list-page">
       <Button.Group className="category-button-bar" style={{ marginBottom: '16px' }}>
@@ -18,7 +18,7 @@ const VideoArticleListPage: React.FunctionComponent<RouteComponentProps> = (prop
       </Button.Group>
       <VideoArticleListContainer onItemClick={onItemClick} subTitle="영화, 드라마, 예능" />
     </div>
-  )
-}
+  );
+};
 
 export default VideoArticleListPage;

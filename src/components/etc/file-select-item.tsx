@@ -12,9 +12,9 @@ interface Props {
 
 const FileSelectItem: React.FunctionComponent<Props> = (props) => {
   const { file, onClick, selected } = props;
-  const iconType = file.isdir ? "folder" : "file";
+  const iconType = file.isdir ? 'folder' : 'file';
   const className = classnames('article-item', { selected });
-  
+
   return (
     <div className={className} onClick={_ => onClick(file)}>
       <div className="first section">
@@ -25,7 +25,7 @@ const FileSelectItem: React.FunctionComponent<Props> = (props) => {
         <div className="article-date">{file.size}</div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default FileSelectItem;

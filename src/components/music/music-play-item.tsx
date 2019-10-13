@@ -10,23 +10,23 @@ import './music-play-item.css';
 interface Props {
   musicNowPlayingChange(music: Music | null): ReturnType<typeof musicNowPlayingChange>;
   musicPlaylistRemove(music: Music): ReturnType<typeof musicPlaylistRemove>;
-  
+
   index: number;
   music: Music;
   selected: boolean;
 }
 
 interface State {
-  
+
 }
 
 class MusicSearchItem extends React.Component<Props, State> {
   render() {
     const music = this.props.music;
     const className = (this.props.selected)
-      ? "music-play-item selected"
-      : "music-play-item"
-    
+      ? 'music-play-item selected'
+      : 'music-play-item';
+
     return (
       <div className={className}>
         <div className="info" onClick={this.onClick}>
@@ -38,13 +38,13 @@ class MusicSearchItem extends React.Component<Props, State> {
           <Icon type="close"/>
         </div>
       </div>
-    )
+    );
   }
-  
+
   onClick = () => {
     this.props.musicNowPlayingChange(this.props.music);
   }
-  
+
   onRemoveClick = () => {
     this.props.musicPlaylistRemove(this.props.music);
   }
@@ -53,6 +53,6 @@ class MusicSearchItem extends React.Component<Props, State> {
 const mapDispatchToProps = {
   musicNowPlayingChange,
   musicPlaylistRemove,
-}
+};
 
 export default connect(undefined, mapDispatchToProps)(MusicSearchItem);

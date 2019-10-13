@@ -8,13 +8,13 @@ const style = {
   alignItems: 'center',
   justifyContent: 'center',
   display: 'flex',
-}
+};
 
 const NotFoundPage: React.FunctionComponent<RouteComponentProps> = (props) => {
   const onClick = () => {
     props.history.push('/');
-  }
-  
+  };
+
   return (
     <div style={style}>
       <Result
@@ -24,7 +24,7 @@ const NotFoundPage: React.FunctionComponent<RouteComponentProps> = (props) => {
         extra={<Button type="primary" onClick={onClick}>홈으로 가기</Button>}
       />
     </div>
-  )
-}
+  );
+};
 
 export default withRouter(NotFoundPage);

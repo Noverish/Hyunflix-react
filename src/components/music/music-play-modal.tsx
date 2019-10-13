@@ -11,7 +11,7 @@ interface Props {
 }
 
 interface State {
-  
+
 }
 
 class MusicPlayModal extends React.Component<Props, State> {
@@ -26,26 +26,26 @@ class MusicPlayModal extends React.Component<Props, State> {
       >
         <MusicPlayList />
       </Modal>
-    )
+    );
   }
-  
+
   onOk = () => {
     this.props.dismissCallback();
   }
-  
+
   onCancel = () => {
     this.props.dismissCallback();
   }
 }
 
 const mapDispatchToProps = {
-  
-}
 
-let mapStateToProps = (state) => {
+};
+
+const mapStateToProps = (state) => {
   return {
-    
-  }
-}
+
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MusicPlayModal);

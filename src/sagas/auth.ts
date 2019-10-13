@@ -55,4 +55,4 @@ export default [
   watchLogin(),
   watchLogout(),
   watchRegister(),
-]
+];

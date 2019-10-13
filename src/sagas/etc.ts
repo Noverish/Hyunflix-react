@@ -9,14 +9,14 @@ export function* fetchReaddir(action: ReturnType<typeof readdir.request>) {
   const path: string = action.payload;
   try {
     const exists: boolean = yield call([Api, 'exists'], path);
-    
-    if(!exists) {
+
+    if (!exists) {
       yield put(readdir.failure('존재하지 않는 경로 입니다'));
       return;
     }
-    
+
     const isdir: boolean = yield call([Api, 'isdir'], path);
-    if(isdir) {
+    if (isdir) {
       const files: File[] = yield call([Api, 'readdir'], path);
       yield put(readdir.success(files));
     } else {
@@ -33,4 +33,4 @@ export function* watchReaddir() {
 
 export default [
   watchReaddir(),
-]
+];

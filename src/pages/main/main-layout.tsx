@@ -12,7 +12,7 @@ interface Props extends RouteComponentProps {
 
 const MainLayout: React.FunctionComponent<Props> = (props) => {
   const path: string = props.location.pathname;
-  
+
   const items = [
     { name: 'Home', path: '/home' },
     { name: 'Video', path: '/videos' },
@@ -21,15 +21,15 @@ const MainLayout: React.FunctionComponent<Props> = (props) => {
   if (props.isAdmin) {
     items.push({ name: 'Admin', path: '/admin' });
   }
-  
+
   const itemComps = items.map(i => (
     <Menu.Item key={i.name}>
       <Link to={i.path}>{i.name}</Link>
     </Menu.Item>
-  ))
-  
+  ));
+
   const selectedKeys: string[] = items.filter(i => path.startsWith(i.path)).map(i => i.name);
-  
+
   return (
     <Layout className="main-layout">
       <Header className="main-layout-header">
@@ -49,13 +49,13 @@ const MainLayout: React.FunctionComponent<Props> = (props) => {
       </Content>
       <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
     </Layout>
-  ) 
-}
+  );
+};
 
 const mapStateToProps = (state) => {
   return {
     isAdmin: state.auth.isAdmin,
-  }
-}
+  };
+};
 
 export default connect(mapStateToProps)(withRouter(MainLayout));

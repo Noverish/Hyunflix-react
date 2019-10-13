@@ -26,32 +26,32 @@ interface State {
 
 class MusicArticleList extends React.Component<Props, State> {
   query: string = '';
-  
+
   state = {
     page: 1,
-  }
-  
+  };
+
   componentDidMount() {
     const { tags } = this.props;
     this.props.musicListRequest();
-    
+
     if (tags.size === 0) {
       this.props.musicTagList();
     }
   }
-  
+
   render() {
     const { searched, loading } = this.props;
     const { page } = this.state;
     const { query } = this;
-    
+
     const sliced = searched.slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
-    
+
     return (
       <div className="article-list-page">
         <div className="page-header">
           <PageHeader backIcon={false} title="Music" subTitle="가요, 팝송, BGM" />
-          <Search onChange={this.onQueryChange} enterButton />
+          <Search onChange={this.onQueryChange} enterButton={true} />
           <Button.Group className="button-group">
             <Button onClick={this.onAddAllClicked} icon="plus" type="primary">Add all to Playlist</Button>
           </Button.Group>
@@ -71,24 +71,24 @@ class MusicArticleList extends React.Component<Props, State> {
           <div className="center wrapper">
             <Pagination current={page} total={searched.length} pageSize={PAGE_SIZE} onChange={this.onPageChange} />
           </div>
-          <div className="right wrapper"></div>
+          <div className="right wrapper"/>
         </div>
       </div>
-    )
+    );
   }
-  
+
   onAddAllClicked = () => {
     const { searched } = this.props;
     this.props.musicPlaylistAdd(searched);
   }
-  
+
   onQueryChange = (e) => {
     const query = e.target.value;
     this.props.musicSearch(query);
     this.query = query;
     this.setState({ page: 1 });
   }
-  
+
   onPageChange = (page: number) => {
     this.setState({ page });
   }
@@ -99,14 +99,14 @@ const mapDispatchToProps = {
   musicPlaylistAdd,
   musicSearch: musicSearch.request,
   musicTagList: musicTagListAsync.request,
-}
+};
 
-let mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
   return {
     searched: state.music.searched,
     loading: state.music.loading,
     tags: state.music.tags,
-  }
-}
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MusicArticleList));

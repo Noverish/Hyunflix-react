@@ -7,13 +7,13 @@ interface State {
 
 const initalState: State = {
   encodes: [],
-}
+};
 
 const reducer = (state: State = initalState, action) => {
-  switch(action.type) {
+  switch (action.type) {
     case ENCODE_LIST_SUCCESS: return { ...state, encodes: action.encodes };
     default: return state;
   }
-}
+};
 
 export default reducer;

@@ -7,22 +7,22 @@ import './file-item.css';
 
 interface Props {
   file: File;
-  onClick: (File) => void;
-  onRenameClick: (File) => void;
-  onEncodeClick: (File) => void;
+  onClick: (file: File) => void;
+  onRenameClick: (file: File) => void;
+  onEncodeClick: (file: File) => void;
 }
 
 interface State {
-  
+
 }
 
 class Fileitem extends React.Component<Props, State> {
-  
+
   render () {
     const isVideo = ['.mp4', '.avi', '.mkv'].includes(extname(this.props.file.name));
     const isMP4 = extname(this.props.file.name) === '.mp4';
-    
-    let link: React.ReactNode = (this.props.file.isdir || isMP4)
+
+    const link: React.ReactNode = (this.props.file.isdir || isMP4)
       ? (
         <a
           className="file-item-name"
@@ -39,11 +39,11 @@ class Fileitem extends React.Component<Props, State> {
           <span>{this.props.file.name}</span>
         </a>
       );
-    
+
     return (
       <div className="file-item">
         <div className="file-item-name-layout">
-          { link }
+          {link}
         </div>
         <div className="file-item-etc-layout">
           <div className="file-item-size">{this.props.file.size}</div>
@@ -52,18 +52,18 @@ class Fileitem extends React.Component<Props, State> {
           <Button className="file-item-button"><Icon type="delete"/></Button>
         </div>
       </div>
-    )
+    );
   }
-  
+
   onClick = (e) => {
     e.preventDefault();
     this.props.onClick(this.props.file);
   }
-  
+
   onRenameClick = (e) => {
     this.props.onRenameClick(this.props.file);
   }
-  
+
   onEncodeClick = (e) => {
     this.props.onEncodeClick(this.props.file);
   }

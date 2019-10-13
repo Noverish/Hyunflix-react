@@ -34,7 +34,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run: echo "hello world"
+      - run: npm run tslint
   
   deploy:
     machine:

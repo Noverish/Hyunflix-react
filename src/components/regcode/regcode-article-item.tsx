@@ -7,17 +7,17 @@ interface Props {
 }
 
 interface State {
-  
+
 }
 
 class RegCodeItem extends React.Component<Props, State> {
   onClick = (e) => {
-    
+
   }
-  
+
   render() {
     const { regCode } = this.props;
-    
+
     return (
       <div className="article-item" onClick={this.onClick}>
         <div>
@@ -28,7 +28,7 @@ class RegCodeItem extends React.Component<Props, State> {
           <span className="">{regCode.date}</span>
         </div>
       </div>
-    )
+    );
   }
 }
 

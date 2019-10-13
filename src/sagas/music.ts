@@ -28,12 +28,12 @@ function* fetchMusicTagList(): Generator {
 
 function* fetchMusicPlayNext(): Generator {
   const { playlist, randomPlay, loopPlay, nowPlaying } = store.getState().music;
-  
+
   let nextIndex: number = 0;
-  
+
   if (nowPlaying !== null) {
     const index: number = playlist.indexOf(nowPlaying);
-    
+
     if (loopPlay === LoopPlayType.LOOP_ONE) {
       nextIndex = index;
     } else if (loopPlay === LoopPlayType.NO_LOOP) {
@@ -49,14 +49,14 @@ function* fetchMusicPlayNext(): Generator {
         nextIndex = (index + 1) % playlist.length;
       }
     }
-    
+
     if (nextIndex === index) {
-      const nextMusic = {...nowPlaying} as Music;
+      const nextMusic = { ...nowPlaying } as Music;
       yield put(musicPlayNextAsync.success(nextMusic));
       return;
     }
   }
-  
+
   const nextMusic = (playlist[nextIndex]) ? playlist[nextIndex] : null;
   yield put(musicPlayNextAsync.success(nextMusic));
 }
@@ -65,18 +65,18 @@ function* fetchMusicSearch(action: ReturnType<typeof musicSearch.request>): Gene
   yield delay(USER_INPUT_DEBOUNCE);
   const { musics } = store.getState().music;
   const query: string = action.payload.replace(' ', '');
-  
+
   const koSearcher = new hangul.Searcher(query);
   const enSearcher = new RegExp(query, 'i');
-  
+
   const searched = (query) ? musics.filter((m: Music) => {
     const targets = [m.title, ...m.tags];
-    return targets.some(t => {
-      t = t.replace(/ /g, '');
-      return t.search(enSearcher) >= 0 || koSearcher.search(t) >= 0;
+    return targets.some((t) => {
+      const t2 = t.replace(/ /g, '');
+      return t2.search(enSearcher) >= 0 || koSearcher.search(t2) >= 0;
     });
   }) : musics;
-  
+
   yield put(musicSearch.success(searched));
 }
 
@@ -101,4 +101,4 @@ export default [
   watchMusicTagList(),
   watchMusicPlayNext(),
   watchMusicSearch(),
-]
+];
