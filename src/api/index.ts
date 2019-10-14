@@ -1,4 +1,3 @@
-import { File } from 'models';
 import { tokenExpire } from 'actions';
 import { message } from 'antd';
 import { store } from '../index';
@@ -12,6 +11,7 @@ export * from './auth';
 export * from './music';
 export * from './video';
 export * from './user';
+export * from './fs';
 
 export async function request(path: string, method: string, data: any = undefined) {
   const url = path.startsWith('/') ? `${BACKEND_SERVER}${path}` : path;
@@ -46,7 +46,7 @@ export async function request(path: string, method: string, data: any = undefine
       errMsg = err.message;
     }
 
-    if (err.response.status === 500) {
+    if (err.response && err.response.status === 500) {
       handleError(errMsg);
     } else {
       message.error(errMsg);
@@ -54,32 +54,4 @@ export async function request(path: string, method: string, data: any = undefine
 
     throw errMsg;
   }
-}
-
-export async function readdir(path: string): Promise<File[]> {
-  const url = '/explorer/readdir';
-  const method = 'post';
-  const body = { path };
-  return await request(url, method, body);
-}
-
-export async function rename(fromPath: string, toPath: string) {
-  const url = '/explorer/rename';
-  const method = 'post';
-  const body = { fromPath, toPath };
-  return await request(url, method, body);
-}
-
-export async function isdir(path: string): Promise<boolean> {
-  const url = '/explorer/isdir';
-  const method = 'post';
-  const body = { path };
-  return (await request(url, method, body)).isdir;
-}
-
-export async function exists(path: string): Promise<boolean> {
-  const url = '/explorer/exists';
-  const method = 'post';
-  const body = { path };
-  return (await request(url, method, body)).exists;
 }

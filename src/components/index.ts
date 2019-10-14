@@ -18,7 +18,6 @@ export { default as MusicArticleItem } from './music/music-article-item';
 export { default as FileSelectModal } from './etc/file-select-modal';
 export { default as FileSelectList } from './etc/file-select-list';
 export { default as FileSelectItem } from './etc/file-select-item';
-export { default as RenameModal } from './etc/rename-modal';
 
 export { default as RegCodeArticleItem } from './regcode/regcode-article-item';
 export { default as UserVideoList } from './user/user-video-list';

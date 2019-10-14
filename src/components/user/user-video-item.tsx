@@ -4,7 +4,6 @@ import { Tag } from 'antd';
 import { connect } from 'react-redux';
 
 import { UserVideo } from 'models';
-import { time } from 'utils';
 
 interface Props {
   userVideo: UserVideo;
