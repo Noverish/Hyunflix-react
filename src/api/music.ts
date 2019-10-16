@@ -1,9 +1,16 @@
 import { request } from './';
 import { Music } from 'models';
+import { stringify } from 'querystring';
 import { FFMPEG_SERVER } from 'config';
 
-export async function musicList(): Promise<Music[]> {
-  const url = '/musics';
+export interface MusicListResult {
+  total: number;
+  results: Music[];
+}
+
+export async function musicList(query: string, page: number, pageSize: number): Promise<MusicListResult> {
+  const querystring = stringify({ q: query, p: page, ps: pageSize });
+  const url = `/musics?${querystring}`;
   const method = 'get';
   return await request(url, method);
 }

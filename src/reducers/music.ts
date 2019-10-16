@@ -1,12 +1,9 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
 
-import { musicListAsync, musicPlaylistAdd, musicNowPlayingChange, musicRandomPlayToggle, musicLoopPlayToggle, musicPlayNextAsync, musicTagListAsync, musicSearch, musicPlaylistRemove } from 'actions';
+import { musicPlaylistAdd, musicNowPlayingChange, musicRandomPlayToggle, musicLoopPlayToggle, musicPlayNextAsync, musicTagListAsync, musicPlaylistRemove } from 'actions';
 import { Music } from 'models';
 import { COLORS } from 'config';
-
-export const musics = createReducer([] as Music[])
-  .handleAction(musicListAsync.success, (_, action: ReturnType<typeof musicListAsync.success>) => action.payload);
 
 export const playlist = createReducer([] as Music[])
   .handleAction(musicPlaylistAdd, (state, action: ReturnType<typeof musicPlaylistAdd>) => [...state, ...action.payload.filter(m => !state.includes(m))])
@@ -33,23 +30,12 @@ export const tags = createReducer(new Map<string, string>())
     return map;
   });
 
-export const searched = createReducer([] as Music[])
-  .handleAction(musicListAsync.success, (_, action: ReturnType<typeof musicListAsync.success>) => action.payload)
-  .handleAction(musicSearch.success, (_, action: ReturnType<typeof musicSearch.success>) => action.payload);
-
-export const loading = createReducer(false as boolean)
-  .handleAction([musicListAsync.request, musicSearch.request], () => true)
-  .handleAction([musicListAsync.success, musicListAsync.failure, musicSearch.success, musicSearch.failure], () => false);
-
 const reducer = combineReducers({
-  loading,
-  musics,
   playlist,
   nowPlaying,
   randomPlay,
   loopPlay,
   tags,
-  searched,
 });
 
 export default reducer;

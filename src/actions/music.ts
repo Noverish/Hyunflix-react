@@ -2,12 +2,6 @@ import { createAsyncAction, createStandardAction } from 'typesafe-actions';
 
 import { Music } from 'models';
 
-export const musicListAsync = createAsyncAction(
-  'MUSIC_LIST_REQUEST',
-  'MUSIC_LIST_SUCCESS',
-  'MUSIC_LIST_FAILURE',
-)<undefined, Music[], string>();
-
 export const musicPlaylistAdd = createStandardAction('MUSIC_PLAYLIST_ADD')<Music[]>();
 export const musicPlaylistRemove = createStandardAction('MUSIC_PLAYLIST_REMOVE')<Music>();
 
@@ -29,12 +23,6 @@ export const musicTagListAsync = createAsyncAction(
   'MUSIC_TAG_LIST_SUCCESS',
   'MUSIC_TAG_LIST_FAILURE',
 )<undefined, string[], string>();
-
-export const musicSearch = createAsyncAction(
-  'MUSIC_SEARCH_REQUEST',
-  'MUSIC_SEARCH_SUCCESS',
-  'MUSIC_SEARCH_FAILURE',
-)<string, Music[], Error>();
 
 export const musicAdd = createAsyncAction(
   'MUSIC_ADD_REQUEST',

@@ -1,21 +1,10 @@
-import { put, call, delay, takeEvery, takeLatest } from 'redux-saga/effects';
+import { put, call, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
-import * as hangul from 'hangul-js';
 
-import { musicListAsync, musicPlayNextAsync, musicTagListAsync, musicSearch } from 'actions';
+import { musicPlayNextAsync, musicTagListAsync } from 'actions';
 import * as Api from 'api';
 import { Music, LoopPlayType } from 'models';
 import { store } from 'index';
-import { USER_INPUT_DEBOUNCE } from 'config';
-
-function* fetchMusicList(): Generator {
-  try {
-    const musics: Music[] = (yield call([Api, 'musicList'])) as Music[];
-    yield put(musicListAsync.success(musics));
-  } catch (err) {
-    yield put(musicListAsync.failure(err));
-  }
-}
 
 function* fetchMusicTagList(): Generator {
   try {
@@ -61,29 +50,6 @@ function* fetchMusicPlayNext(): Generator {
   yield put(musicPlayNextAsync.success(nextMusic));
 }
 
-function* fetchMusicSearch(action: ReturnType<typeof musicSearch.request>): Generator {
-  yield delay(USER_INPUT_DEBOUNCE);
-  const { musics } = store.getState().music;
-  const query: string = action.payload.replace(' ', '');
-
-  const koSearcher = new hangul.Searcher(query);
-  const enSearcher = new RegExp(query, 'i');
-
-  const searched = (query) ? musics.filter((m: Music) => {
-    const targets = [m.title, ...m.tags];
-    return targets.some((t) => {
-      const t2 = t.replace(/ /g, '');
-      return t2.search(enSearcher) >= 0 || koSearcher.search(t2) >= 0;
-    });
-  }) : musics;
-
-  yield put(musicSearch.success(searched));
-}
-
-export function* watchMusicList() {
-  yield takeEvery(getType(musicListAsync.request), fetchMusicList);
-}
-
 export function* watchMusicTagList() {
   yield takeEvery(getType(musicTagListAsync.request), fetchMusicTagList);
 }
@@ -92,13 +58,7 @@ export function* watchMusicPlayNext() {
   yield takeEvery(getType(musicPlayNextAsync.request), fetchMusicPlayNext);
 }
 
-export function* watchMusicSearch() {
-  yield takeLatest(getType(musicSearch.request), fetchMusicSearch);
-}
-
 export default [
-  watchMusicList(),
   watchMusicTagList(),
   watchMusicPlayNext(),
-  watchMusicSearch(),
 ];
