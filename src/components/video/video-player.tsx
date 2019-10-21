@@ -14,30 +14,24 @@ interface Props {
   currentTime?: number;
 }
 
-interface State {
-
-}
-
-interface CaptionOption {
-  kind: string;
-  srclang: string;
-  label: string;
-  src: string;
-  default: boolean;
-}
-
-export default class VideoPlayer extends React.Component<Props, State> {
+export default class VideoPlayer extends React.Component<Props> {
   player: videojs.Player | null = null;
-  videoNode: HTMLVideoElement | null = null;
+  videoNode = React.createRef<HTMLVideoElement>();
 
-  initPlayer = () => {
+  componentDidMount() {
     const videoOption = {
       autoplay: false,
       controls: true,
       sources: [],
     };
 
-    const player = videojs(this.videoNode, videoOption, this.onPlayerReady);
+    const textTractSettings = {
+      backgroundColor: '#000',
+      backgroundOpacity: '0',
+      edgeStyle: 'uniform',
+    };
+
+    const player = videojs(this.videoNode.current, videoOption, this.onPlayerReady);
 
     // @ts-ignore
     player.seekButtons({
@@ -54,12 +48,6 @@ export default class VideoPlayer extends React.Component<Props, State> {
       });
     }
 
-    const textTractSettings = {
-      backgroundColor: '#000',
-      backgroundOpacity: '0',
-      edgeStyle: 'uniform',
-    };
-
     // @ts-ignore
     const settings = player.textTrackSettings;
     settings.setValues(textTractSettings);
@@ -69,29 +57,57 @@ export default class VideoPlayer extends React.Component<Props, State> {
   }
 
   onPlayerReady = () => {
-    const { subtitles, src, currentTime } = this.props;
-    const player: videojs.Player | null = this.player;
+    const player = this.player!;
+    this.setSrc(player, this.props.src);
+    this.setSubtitles(player, this.props.subtitles);
+    this.setCurrentTime(player, this.props.currentTime);
+  }
 
-    if (player === null) {
-      console.warn('onPlayerReady called while player is null!');
-      return;
-    }
-
+  setSrc = (player: videojs.Player, src: string) => {
     player.src({ src, type: 'video/mp4' });
+  }
 
+  setSubtitles = (player: videojs.Player, subtitles: Subtitle[]) => {
     for (const subtitle of subtitles) {
-      player.addRemoteTextTrack({
+      const option: videojs.TextTrackOptions = {
         kind: 'subtitles',
         srclang: subtitle.language,
         label: subtitle.language,
         src: subtitle.url,
+        mode: (subtitle.language === 'ko') ? 'showing' : 'hidden',
         default: subtitle.language === 'ko',
-      },                        false);
-    }
+      };
 
+      player.addRemoteTextTrack(option, false);
+    }
+  }
+
+  setCurrentTime = (player: videojs.Player, currentTime: number | undefined) => {
     if (currentTime) {
       player.currentTime(currentTime);
     }
+  }
+
+  shouldComponentUpdate(nextProps: Props) {
+    const player = this.player;
+    if (player) {
+      if (nextProps.src !== this.props.src) {
+        this.setSrc(player, nextProps.src);
+      }
+
+      if (nextProps.subtitles !== this.props.subtitles) {
+        this.setSubtitles(player, nextProps.subtitles);
+      }
+
+      if (nextProps.currentTime !== this.props.currentTime) {
+        this.setCurrentTime(player, nextProps.currentTime);
+      }
+    }
+
+    const widthDiff = nextProps.width !== this.props.width;
+    const heightDiff = nextProps.height !== this.props.height;
+
+    return widthDiff || heightDiff;
   }
 
   componentWillUnmount() {
@@ -104,26 +120,16 @@ export default class VideoPlayer extends React.Component<Props, State> {
   // so videojs won't create additional wrapper in the DOM
   // see https://github.com/videojs/video.js/pull/3856
   render() {
-    if (this.player) {
-      this.onPlayerReady();
-    }
+    const { width, height } = this.props;
 
     const style = {
-      width: `${this.props.width}px`,
-      height: `${this.props.height}px`,
+      width: `${width}px`,
+      height: `${height}px`,
     };
 
     return (
       <div data-vjs-player={true} style={style}>
-        <video
-          ref={(node) => {
-            if (!this.videoNode && node) {
-              this.videoNode = node;
-              this.initPlayer();
-            }
-          }}
-          className="video-js"
-        />
+        <video className="video-js" ref={this.videoNode} />
       </div>
     );
   }

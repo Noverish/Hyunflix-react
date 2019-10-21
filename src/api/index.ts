@@ -1,10 +1,10 @@
 import { tokenExpire } from 'actions';
 import { message } from 'antd';
 import { store } from '../index';
+import axios, { AxiosRequestConfig, Method } from 'axios';
 
 import { API_SERVER } from 'config';
 import { handleError, cookie } from 'utils';
-const axios = require('axios');
 
 export * from './ffmpeg';
 export * from './auth';
@@ -13,7 +13,8 @@ export * from './video';
 export * from './user';
 export * from './fs';
 
-export async function request(path: string, method: string, data: any = undefined) {
+// TODO axios interceptor 사용하기
+export async function request(path: string, method: Method, data: any = undefined, validateStatus: boolean = true) {
   const url = path.startsWith('/') ? `${API_SERVER}${path}` : path;
   const headers = {};
 
@@ -23,7 +24,13 @@ export async function request(path: string, method: string, data: any = undefine
   }
 
   try {
-    return (await axios({ url, method, headers, data })).data;
+    const config: AxiosRequestConfig = { url, method, headers, data };
+
+    if (!validateStatus) {
+      config.validateStatus = status => status < 500;
+    }
+
+    return (await axios(config)).data;
   } catch (err) {
     console.log({
       message: err.message,
