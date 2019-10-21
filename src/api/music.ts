@@ -1,7 +1,7 @@
 import { request } from './';
 import { Music } from 'models';
 import { stringify } from 'querystring';
-import { FFMPEG_SERVER } from 'config';
+import { FS_SERVER } from 'config';
 
 export interface MusicListResult {
   total: number;
@@ -22,7 +22,7 @@ export async function musicTagList(): Promise<string[]> {
 }
 
 export async function musicAdd(youtubeUrl: string, tags: string[]): Promise<void> {
-  const url = `${FFMPEG_SERVER}/youtube`;
+  const url = `${FS_SERVER}/youtube`;
   const method = 'post';
   const payload = {
     tags,

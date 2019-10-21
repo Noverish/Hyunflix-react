@@ -3,7 +3,7 @@ import { PageHeader, Button } from 'antd';
 import * as socketio from 'socket.io-client';
 
 import { videoExamine } from 'api';
-import { BACKEND_SERVER, VIDEO_EXAMINE_SOCKET_PATH } from 'config';
+import { SOCKET_SERVER, VIDEO_EXAMINE_SOCKET_PATH } from 'config';
 
 let socket: socketio.Socket | null = null;
 
@@ -11,10 +11,10 @@ const VideoExaminePage: React.FunctionComponent = () => {
   const [msgs, setMsgs] = useState([] as string[]);
 
   useEffect(() => {
-    socket = socketio.connect(BACKEND_SERVER, { path: VIDEO_EXAMINE_SOCKET_PATH });
+    socket = socketio.connect(SOCKET_SERVER, { path: VIDEO_EXAMINE_SOCKET_PATH });
 
-    socket.on('message', (msg: string) => {
-      setMsgs(msgs => [...msgs, msg]);
+    socket.on('message', (msg: Buffer) => {
+      setMsgs(msgs => [...msgs, msg.toString()]);
     });
 
     return () => {

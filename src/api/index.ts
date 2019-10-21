@@ -2,8 +2,8 @@ import { tokenExpire } from 'actions';
 import { message } from 'antd';
 import { store } from '../index';
 
-import { BACKEND_SERVER } from 'config';
-import { handleError } from 'utils';
+import { API_SERVER } from 'config';
+import { handleError, cookie } from 'utils';
 const axios = require('axios');
 
 export * from './ffmpeg';
@@ -14,10 +14,10 @@ export * from './user';
 export * from './fs';
 
 export async function request(path: string, method: string, data: any = undefined) {
-  const url = path.startsWith('/') ? `${BACKEND_SERVER}${path}` : path;
+  const url = path.startsWith('/') ? `${API_SERVER}${path}` : path;
   const headers = {};
 
-  const token = store.getState().auth.token;
+  const token = cookie.getCookie('x-hyunsub-token');
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }

@@ -9,7 +9,7 @@ import { encodeList, encodeListSuccess, EncodeListAction, EncodeListSuccessActio
 import { EncodeItem } from 'components';
 import { Encode } from 'models';
 import { ffmpegPause, ffmpegResume } from 'api';
-import { FFMPEG_SERVER, FFMPEG_SOCKET_PATH, PAGE_SIZE } from 'config';
+import { SOCKET_SERVER, FFMPEG_SOCKET_PATH, PAGE_SIZE } from 'config';
 
 interface Props extends RouteComponentProps {
   onEncodeList(): EncodeListAction;
@@ -31,7 +31,7 @@ class EncodePage extends React.Component<Props, State> {
   componentDidMount() {
     this.props.onEncodeList();
 
-    this.socket = socketio.connect(FFMPEG_SERVER, { path: FFMPEG_SOCKET_PATH });
+    this.socket = socketio.connect(SOCKET_SERVER, { path: FFMPEG_SOCKET_PATH });
     this.socket.on('message', (data: Buffer) => {
       const payload = JSON.parse(data.toString());
       const encodes = this.props.encodes;

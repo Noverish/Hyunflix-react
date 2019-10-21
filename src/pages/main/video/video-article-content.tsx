@@ -8,7 +8,7 @@ import * as qs from 'query-string';
 import { videoArticle } from 'actions';
 import { VideoPlayer } from 'components';
 import { VideoArticle, Subtitle, Video } from 'models';
-import { BACKEND_SERVER, USER_VIDEO_SOCKET_PATH } from 'config';
+import { SOCKET_SERVER, USER_VIDEO_SOCKET_PATH } from 'config';
 
 interface Props extends RouteComponentProps {
   videoArticle(articleId: number): ReturnType<typeof videoArticle.request>;
@@ -36,7 +36,7 @@ class VideoArticleContentPage extends React.Component<Props, State> {
 
     this.props.videoArticle(articleId);
 
-    this.socket = socketio.connect(BACKEND_SERVER, { path: USER_VIDEO_SOCKET_PATH });
+    this.socket = socketio.connect(SOCKET_SERVER, { path: USER_VIDEO_SOCKET_PATH });
   }
 
   componentWillUnmount() {

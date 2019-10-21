@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import * as socketio from 'socket.io-client';
 
 import { YoutubeStage } from 'models';
-import { FFMPEG_SERVER, YOUTUBE_SOCKET_PATH } from 'config';
+import { SOCKET_SERVER, YOUTUBE_SOCKET_PATH } from 'config';
 import { musicTagListAsync } from 'actions';
 import { musicAdd } from 'api';
 import './music-article-add.css';
@@ -141,7 +141,7 @@ class MusicArticleAddPage extends React.Component<Props, State> {
     const tags: string[] = this.props.form.getFieldValue('tags');
 
     (async () => {
-      this.socket = socketio.connect(FFMPEG_SERVER, { path: YOUTUBE_SOCKET_PATH });
+      this.socket = socketio.connect(SOCKET_SERVER, { path: YOUTUBE_SOCKET_PATH });
       this.socket.on('message', (data: Buffer) => {
         const payload = JSON.parse(data.toString());
         this.setState(payload);
