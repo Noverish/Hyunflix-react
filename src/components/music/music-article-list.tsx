@@ -1,9 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { PageHeader, List, Pagination, Input, Button, Spin } from 'antd';
-import { connect } from 'react-redux';
 
-import { musicTagListAsync } from 'actions';
 import { MusicArticleItem } from 'components';
 import { Music } from 'models';
 
@@ -21,10 +19,6 @@ interface Props {
   pageSize: number;
   loading: boolean;
   topRight?: React.ReactNode;
-
-  // redux
-  musicTagList(): ReturnType<typeof musicTagListAsync.request>;
-  tags: Map<string, string>;
 }
 
 const renderItem = (props: Props, music: Music) => {
@@ -41,13 +35,7 @@ const renderItem = (props: Props, music: Music) => {
 };
 
 const MusicArticleList: React.FunctionComponent<Props> = function (props) {
-  const { musics, loading, onBack, page, pageSize, total, onPageChange, topRight, onQueryChange, tags, musicTagList } = props;
-
-  useEffect(() => {
-    if (!tags.size) {
-      musicTagList();
-    }
-  }, [tags, musicTagList]);
+  const { musics, loading, onBack, page, pageSize, total, onPageChange, topRight, onQueryChange } = props;
 
   const pageHeaderProps = (onBack)
       ? { onBack }
@@ -85,12 +73,4 @@ const MusicArticleList: React.FunctionComponent<Props> = function (props) {
   );
 };
 
-const mapStateToProps = state => ({
-  tags: state.music.tags,
-});
-
-const mapDispatchToProps = {
-  musicTagList: musicTagListAsync.request,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(MusicArticleList);
+export default MusicArticleList;

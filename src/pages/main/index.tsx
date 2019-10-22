@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import { musicTagListAsync, videoTagList } from 'actions';
 
 import MainLayout from './main-layout';
 import Home from './home/home';
@@ -12,7 +15,19 @@ import VideoBundleList from './video/video-bundle-list';
 import UserVideo from './user-video/user-video';
 import NotFound from 'pages/not-found';
 
-const MainPage: React.FunctionComponent = () => {
+interface Props {
+  musicTagList: typeof musicTagListAsync.request;
+  videoTagList: typeof videoTagList.request;
+}
+
+const MainPage: React.FunctionComponent<Props> = (props) => {
+  const { musicTagList, videoTagList } = props;
+
+  useEffect(() => {
+    musicTagList();
+    videoTagList();
+  }, [musicTagList, videoTagList]);
+
   return (
     <MainLayout>
       <Switch>
@@ -39,4 +54,9 @@ const MainPage: React.FunctionComponent = () => {
   );
 };
 
-export default MainPage;
+const mapDispatchToProps = {
+  musicTagList: musicTagListAsync.request,
+  videoTagList: videoTagList.request,
+};
+
+export default connect(undefined, mapDispatchToProps)(MainPage);
