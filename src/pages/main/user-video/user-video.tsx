@@ -1,63 +1,95 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'antd';
 
 import { UserVideoList } from 'components';
 import { UserVideo } from 'models';
-import { userVideoList } from 'api';
+import { userVideoList, deleteUserVideoBulk } from 'api';
 
 interface Props {
   userId: number;
 }
 
-const UserVideoPage: React.FunctionComponent<Props> = (props) => {
-  const { userId } = props;
-  const [userVideos, setUserVideos] = useState(null as UserVideo[] | null);
-  const [checklist, setChecklist] = useState(undefined as UserVideo[] | undefined);
+interface State {
+  userVideos: UserVideo[];
+  loading: boolean;
+  checklist: UserVideo[];
+  checkable: boolean;
+}
 
-  useEffect(() => {
+class UserVideoPage extends React.Component<Props, State> {
+  state: State = {
+    userVideos: [],
+    loading: true,
+    checklist: [],
+    checkable: false,
+  };
+
+  componentDidMount() {
+    const { userId } = this.props;
     userVideoList(userId)
-      .then(userVideos => setUserVideos(userVideos))
+      .then(userVideos => this.setState({ userVideos, loading: false }))
       .catch();
-  }, [userId]);
+  }
 
-  const toggleMode = () => {
-    setChecklist(checklist === undefined ? [] : undefined);
-  };
+  render() {
+    const { userVideos, loading, checklist, checkable } = this.state;
 
-  const deleteUserVideos = () => {
-    console.log('Delete User Videos!', checklist);
-  };
+    const extra = (checkable)
+      ? (
+        <React.Fragment>
+          <Button type="danger" onClick={this.deleteUserVideos} disabled={checklist.length === 0}>삭제</Button>
+          <Button onClick={this.toggleMode}>취소</Button>
+        </React.Fragment>
+      )
+      : <Button type="danger" onClick={this.toggleMode}>삭제</Button>;
 
-  const onItemCheck = (userVideo: UserVideo, checked: boolean) => {
-    if (checklist) {
-      if (checked) {
-        setChecklist([...checklist, userVideo]);
-      } else {
-        setChecklist(checklist.filter(v => v !== userVideo));
-      }
-    }
-  };
+    return (
+      <UserVideoList
+        userVideos={userVideos || []}
+        loading={loading}
+        checklist={checkable ? checklist : undefined}
+        onItemCheck={this.onItemCheck}
+        headerExtra={extra}
+      />
+    );
+  }
 
-  const extra = (checklist !== undefined)
-    ? (
-      <React.Fragment>
-        <Button type="danger" onClick={deleteUserVideos}>삭제</Button>
-        <Button onClick={toggleMode}>취소</Button>
-      </React.Fragment>
-    )
-    : <Button type="danger" onClick={toggleMode}>삭제</Button>;
+  toggleMode = () => {
+    const { checkable } = this.state;
+    this.setState({ checkable: !checkable });
+  }
 
-  return (
-    <UserVideoList
-      userVideos={userVideos || []}
-      loading={userVideos === null}
-      checklist={checklist}
-      onItemCheck={onItemCheck}
-      headerExtra={extra}
-    />
-  );
-};
+  deleteUserVideos = () => {
+    const { userId } = this.props;
+    const { userVideos, checklist } = this.state;
+
+    const articleIds = checklist.map(v => v.article.id);
+    const afterDelete = userVideos.filter(v => !checklist.includes(v));
+
+    this.setState({ loading: true });
+
+    deleteUserVideoBulk(userId, articleIds)
+      .then(() => {
+        this.setState({
+          userVideos: afterDelete,
+          checklist: [],
+          loading: false,
+        });
+      })
+      .catch();
+  }
+
+  onItemCheck = (userVideo: UserVideo, checked: boolean) => {
+    const { checklist } = this.state;
+
+    const newChecklist = (checked)
+      ? [...checklist, userVideo]
+      : checklist.filter(v => v !== userVideo);
+
+    this.setState({ checklist: newChecklist });
+  }
+}
 
 const mapStateToProps = (state) => {
   return {

@@ -17,3 +17,10 @@ export async function userVideo(userId: number, articleId: number): Promise<User
     return payload as UserVideo;
   }
 }
+
+export async function deleteUserVideoBulk(userId: number, articleIds: number[]): Promise<void> {
+  const url = `/users/${userId}/videos`;
+  const method = 'delete';
+  const body = { articleIds };
+  await request(url, method, body);
+}

@@ -30,11 +30,12 @@ const UserVideoItem: React.FunctionComponent<Props> = (props) => {
   const percent = Math.floor(userVideo.time / video.duration * 100);
   const link = `/videos/articles/${article.id}?t=${userVideo.time}`;
 
-  const _onClick = (onCheck !== undefined) ?
-    (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const _onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (onCheck !== undefined && checked !== undefined) {
       e.preventDefault();
       onCheck(userVideo, !checked);
-    } : undefined;
+    }
+  };
 
   return (
     <Link to={link} className="article-item" onClick={_onClick}>
