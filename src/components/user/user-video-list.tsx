@@ -1,15 +1,16 @@
 import React from 'react';
-import { PageHeader, List } from 'antd';
+import { PageHeader, List, Spin } from 'antd';
 
 import UserVideoItem from './user-video-item';
 import { UserVideo } from 'models';
 
 interface Props {
   userVideos: UserVideo[];
+  loading: boolean;
 }
 
 const VideoHistoryList: React.FunctionComponent<Props> = (props) => {
-  const { userVideos } = props;
+  const { userVideos, loading } = props;
 
   const renderItem = userVideo => (
     <UserVideoItem userVideo={userVideo} />
@@ -21,10 +22,12 @@ const VideoHistoryList: React.FunctionComponent<Props> = (props) => {
         <PageHeader title="시청기록" />
       </div>
       <div className="page-content">
-        <List
-          dataSource={userVideos}
-          renderItem={renderItem}
-        />
+        <Spin spinning={loading} tip="Loading...">
+          <List
+            dataSource={userVideos}
+            renderItem={renderItem}
+          />
+        </Spin>
       </div>
     </div>
   );

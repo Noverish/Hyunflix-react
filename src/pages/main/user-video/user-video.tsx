@@ -9,19 +9,28 @@ interface Props {
   userId: number;
 }
 
+interface State {
+  userVideos: UserVideo[];
+  loading: boolean;
+}
+
 const UserVideoPage: React.FunctionComponent<Props> = (props) => {
   const { userId } = props;
-  const [userVideos, setUserVideos] = useState([] as UserVideo[]);
+  const [state, setState] = useState({
+    userVideos: [],
+    loading: true,
+  } as State);
 
   useEffect(() => {
     userVideoList(userId)
-      .then(userVideos => setUserVideos(userVideos))
+      .then(userVideos => setState({ userVideos, loading: false }) )
       .catch();
   }, [userId]);
 
   return (
     <UserVideoList
-      userVideos={userVideos}
+      userVideos={state.userVideos}
+      loading={state.loading}
     />
   );
 };
