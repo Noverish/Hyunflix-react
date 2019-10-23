@@ -1,12 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Tag } from 'antd';
+import { Tag, Checkbox } from 'antd';
 import { connect } from 'react-redux';
 
 import { UserVideo } from 'models';
 
 interface Props {
   userVideo: UserVideo;
+  checked?: boolean;
+  onCheck?(userVideo: UserVideo, checked: boolean): void;
 
   // Redux Props
   tags: Map<string, string>;
@@ -21,16 +23,23 @@ const UserVideoItem: React.FunctionComponent<Props> = (props) => {
     ));
   };
 
-  const { userVideo } = props;
+  const { userVideo, checked, onCheck } = props;
   const article = userVideo.article;
   const video = article.videos[0]; // TODO 여러 비디오 지원
 
   const percent = Math.floor(userVideo.time / video.duration * 100);
   const link = `/videos/articles/${article.id}?t=${userVideo.time}`;
 
+  const _onClick = (onCheck !== undefined) ?
+    (e: React.MouseEvent<HTMLAnchorElement>) => {
+      e.preventDefault();
+      onCheck(userVideo, !checked);
+    } : undefined;
+
   return (
-    <Link to={link} className="article-item">
+    <Link to={link} className="article-item" onClick={_onClick}>
       <div className="first section">
+        {checked !== undefined && <Checkbox checked={checked} />}
         {renderTags()}
         <span className="article-title">{article.title}</span>
       </div>
