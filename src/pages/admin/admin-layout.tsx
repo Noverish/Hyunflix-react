@@ -27,7 +27,8 @@ class AdminLayout extends React.Component<Props, State> {
       { name: '비디오 인코딩', path: '/admin/encode',         icon: 'youtube' },
       { name: '회원가입 코드', path: '/admin/register-codes', icon: 'bold' },
       { name: '비디오 관리',   path: '/admin/video-manage',   icon: 'play-circle' },
-      { name: '비디오 검사',   path: '/admin/video/examine',   icon: 'play-circle' },
+      { name: '비디오 검사',   path: '/admin/video/examine',  icon: 'play-circle' },
+      { name: '음악 검사',     path: '/admin/music/examine',  icon: 'customer-service' },
       { name: '홈으로',        path: '/home',                 icon: 'home' },
     ];
 

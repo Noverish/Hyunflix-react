@@ -32,3 +32,9 @@ export async function musicAdd(youtubeUrl: string, tags: string[]): Promise<void
   };
   return await request(url, method, payload);
 }
+
+export async function musicExamine(): Promise<void> {
+  const url = '/musics/examine';
+  const method = 'post';
+  return await request(url, method);
+}
