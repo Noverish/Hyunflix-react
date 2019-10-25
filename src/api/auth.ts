@@ -49,3 +49,16 @@ export async function regCodeAdd(realname: string, code: string): Promise<RegCod
   const body = { realname, code };
   return await request(url, method, body);
 }
+
+export async function changePassword(oldPassword: string, newPassword: string): Promise<void> {
+  const publicKeyString: string = await getRSAKey();
+  const publicKey = new NodeRSA(publicKeyString, 'pkcs8-public');
+
+  const url = `${AUTH_SERVER}/change-password`;
+  const method = 'post';
+  const body = {
+    oldPassword: publicKey.encrypt(oldPassword, 'base64'),
+    newPassword: publicKey.encrypt(newPassword, 'base64'),
+  };
+  await request(url, method, body);
+}

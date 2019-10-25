@@ -13,6 +13,7 @@ import VideoArticleList from './video/video-article-list';
 import VideoBundleContent from './video/video-bundle-content';
 import VideoBundleList from './video/video-bundle-list';
 import UserVideo from './user-video/user-video';
+import PasswordChangePage from './user/password-change';
 import NotFound from 'pages/not-found';
 
 interface Props {
@@ -47,6 +48,7 @@ const MainPage: React.FunctionComponent<Props> = (props) => {
         <Route exact={true} path="/musics" render={_ => <Redirect to="/musics/articles" />} />
 
         <Route path="/user/videos" component={UserVideo} />
+        <Route path="/user/password-change" component={PasswordChangePage} />
 
         <Route component={NotFound} />
       </Switch>
