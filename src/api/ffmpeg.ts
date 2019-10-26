@@ -1,5 +1,5 @@
 import { request } from './';
-import { FS_SERVER } from 'config';
+import { FS_SERVER, API_SERVER } from 'config';
 import { Encode } from 'models';
 
 export async function ffmpegPause() {
@@ -20,8 +20,8 @@ export async function ffmpegIsRunning() {
   return (await request(url, method)).running === 'true';
 }
 
-export async function encodeStatus(): Promise<Encode[]> {
-  const url = `${FS_SERVER}/encode/status`;
+export async function encodeList(): Promise<Encode[]> {
+  const url = `${API_SERVER}/encodes`;
   const method = 'get';
   return await request(url, method);
 }

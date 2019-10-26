@@ -5,7 +5,7 @@ import { Encode } from 'models';
 
 export function* fetchEncodeList(action: EncodeListAction) {
   try {
-    const encodes: Encode[] = yield call([Api, 'encodeStatus']);
+    const encodes: Encode[] = yield call([Api, 'encodeList']);
     yield put(encodeListSuccess(encodes));
   } catch (errMsg) {
 
