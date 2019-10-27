@@ -5,8 +5,6 @@ import { PageHeader, List, Pagination, Input, Button, Spin } from 'antd';
 import { MusicArticleItem } from 'components';
 import { Music } from 'models';
 
-const { Search } = Input;
-
 interface Props {
   musics: Music[];
   onPageChange(page: number): void;
@@ -15,7 +13,9 @@ interface Props {
   page: number;
   pageSize: number;
   loading: boolean;
-  
+
+  title?: string;
+  subTitle?: string;
   onItemClick?(music: Music): void;
   link?(music: Music): string;
   onBack?(): void;
@@ -23,9 +23,14 @@ interface Props {
   topRight?: React.ReactNode;
 }
 
+type DefaultProps = Pick<Props, 'title'>;
+const defaultProps: DefaultProps = {
+  title: 'Music',
+};
+
 const renderItem = (props: Props, music: Music) => {
   const { checklist, onItemClick, link } = props;
-  
+
   const checked = (checklist !== undefined)
     ? checklist.some(m => m.id === music.id)
     : undefined;
@@ -45,18 +50,24 @@ const onChange = (props: Props, e: React.ChangeEvent<HTMLInputElement>) => {
 };
 
 const MusicArticleList: React.FunctionComponent<Props> = function (props) {
-  const { musics, loading, onBack, page, pageSize, total, onPageChange, topRight } = props;
+  const { musics, loading, onBack, page, pageSize, total, onPageChange, topRight, subTitle } = props;
+  const title = props.title || defaultProps.title;
 
   const pageHeaderProps = (onBack)
       ? { onBack }
       : { backIcon: false };
 
+  const extra = (
+    <React.Fragment>
+      <Input.Search onChange={onChange.bind(null, props)} enterButton={true} />
+      {topRight}
+    </React.Fragment>
+  );
+
   return (
     <div className="article-list-page">
       <div className="page-header">
-        <PageHeader {...pageHeaderProps} title="Music" subTitle="가요, 팝송, BGM" />
-        <Search onChange={onChange.bind(null, props)} enterButton={true} />
-        {topRight}
+        <PageHeader {...pageHeaderProps} title={title} subTitle={subTitle} extra={extra}/>
       </div>
       <div className="page-content">
         <Spin spinning={loading} tip="로딩중...">

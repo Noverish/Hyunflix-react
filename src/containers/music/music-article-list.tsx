@@ -10,6 +10,8 @@ interface Props {
   onItemClick?(music: Music): void;
   checklist?: Music[];
   topRight?: React.ReactNode;
+  title?: string;
+  subTitle?: string;
 }
 
 interface State {
@@ -30,16 +32,16 @@ class MusicArticleListWrapper extends React.Component<Props, State> {
     loading: false,
     query: '',
   };
-  
+
   link = (music: Music) => `/musics/articles/${music.id}`;
 
   componentDidMount() {
     const { query, page, pageSize } = this.state;
     this.search(query, page, pageSize);
   }
-  
+
   render() {
-    const { onItemClick, checklist, topRight } = this.props;
+    const { onItemClick, checklist, topRight, title, subTitle } = this.props;
     const { musics, total, page, pageSize, loading } = this.state;
 
     return (
@@ -48,19 +50,21 @@ class MusicArticleListWrapper extends React.Component<Props, State> {
         checklist={checklist}
         topRight={topRight}
         link={this.link}
-        
+        title={title}
+        subTitle={subTitle}
+
         musics={musics}
         total={total}
         page={page}
         pageSize={pageSize}
         loading={loading}
-        
+
         onPageChange={this.onPageChange}
         onQueryChange={this.onQueryChange}
       />
     );
   }
-  
+
   debouncedOnQueryChange = debounce((query: string) => {
     const { pageSize } = this.state;
     if (this.state.query !== query) {
@@ -79,7 +83,7 @@ class MusicArticleListWrapper extends React.Component<Props, State> {
     const { query, pageSize } = this.state;
     this.search(query, page, pageSize);
   }
-  
+
   search = (query: string, page: number, pageSize: number) => {
     this.setState({ loading: true });
 

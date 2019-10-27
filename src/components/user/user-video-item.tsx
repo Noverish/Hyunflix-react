@@ -29,7 +29,7 @@ const UserVideoItem: React.FunctionComponent<Props> = (props) => {
   const video = article.videos[0]; // TODO 여러 비디오 지원
 
   const percent = Math.floor(userVideo.time / video.duration * 100);
-  
+
   const _link = link ? link(userVideo) : '';
   const _onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (onCheck !== undefined && checked !== undefined) {

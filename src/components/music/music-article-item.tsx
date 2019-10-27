@@ -34,7 +34,7 @@ const onClick = (props: Props, e: React.MouseEvent<HTMLAnchorElement>) => {
 const MusicItem: React.FunctionComponent<Props> = (props) => {
   const { music, checked, link } = props;
   // TODO const youtubeUrl = music.youtube && `https://www.youtube.com/watch?v=${music.youtube}`;
-  
+
   const _link: string = link ? link(music) : '';
 
   return (

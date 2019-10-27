@@ -19,7 +19,7 @@ interface Props extends RouteComponentProps {
 
 class MusicArticleListPage extends React.Component<Props> {
   musicListWrapper = React.createRef<MusicArticleListWrapper>();
-  
+
   render() {
     const { playlist } = this.props;
 
@@ -27,7 +27,7 @@ class MusicArticleListPage extends React.Component<Props> {
       <Button.Group className="button-group">
         <Button onClick={this.onAddAllClicked} icon="plus" type="primary">Add all to Playlist</Button>
       </Button.Group>
-    )
+    );
 
     return (
       <div className="music-article-list-page">
