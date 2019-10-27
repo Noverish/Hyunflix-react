@@ -8,6 +8,7 @@ import { UserVideo } from 'models';
 interface Props {
   userVideo: UserVideo;
   checked?: boolean;
+  link?(userVideo: UserVideo): string;
   onCheck?(userVideo: UserVideo, checked: boolean): void;
 
   // Redux Props
@@ -23,13 +24,13 @@ const UserVideoItem: React.FunctionComponent<Props> = (props) => {
     ));
   };
 
-  const { userVideo, checked, onCheck } = props;
+  const { userVideo, checked, onCheck, link } = props;
   const article = userVideo.article;
   const video = article.videos[0]; // TODO 여러 비디오 지원
 
   const percent = Math.floor(userVideo.time / video.duration * 100);
-  const link = `/videos/articles/${article.id}?t=${userVideo.time}`;
-
+  
+  const _link = link ? link(userVideo) : '';
   const _onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (onCheck !== undefined && checked !== undefined) {
       e.preventDefault();
@@ -38,7 +39,7 @@ const UserVideoItem: React.FunctionComponent<Props> = (props) => {
   };
 
   return (
-    <Link to={link} className="article-item" onClick={_onClick}>
+    <Link to={_link} className="article-item" onClick={_onClick}>
       <div className="first section">
         {checked !== undefined && <Checkbox checked={checked} />}
         {renderTags()}

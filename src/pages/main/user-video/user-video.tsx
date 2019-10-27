@@ -44,10 +44,13 @@ class UserVideoPage extends React.Component<Props, State> {
       )
       : <Button type="danger" onClick={this.toggleMode}>삭제</Button>;
 
+    const link = userVideo => `/videos/articles/${userVideo.article.id}`;
+
     return (
       <UserVideoList
         userVideos={userVideos || []}
         loading={loading}
+        link={link}
         checklist={checkable ? checklist : undefined}
         onItemCheck={this.onItemCheck}
         headerExtra={extra}

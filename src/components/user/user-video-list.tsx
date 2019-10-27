@@ -7,18 +7,20 @@ import { UserVideo } from 'models';
 interface Props {
   userVideos: UserVideo[];
   loading: boolean;
+  link?(userVideo: UserVideo): string;
   onItemCheck?(userVideo: UserVideo, checked: boolean): void;
   checklist?: UserVideo[];
   headerExtra?: React.ReactNode;
 }
 
 const VideoHistoryList: React.FunctionComponent<Props> = (props) => {
-  const { userVideos, loading, headerExtra, checklist, onItemCheck } = props;
+  const { userVideos, loading, headerExtra, checklist, onItemCheck, link } = props;
 
   const renderItem = userVideo => (
     <UserVideoItem
       userVideo={userVideo}
       onCheck={onItemCheck}
+      link={link}
       checked={checklist !== undefined ? checklist.includes(userVideo) : undefined}
     />
   );
