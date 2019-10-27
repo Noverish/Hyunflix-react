@@ -8,55 +8,61 @@ import { Music } from 'models';
 const { Search } = Input;
 
 interface Props {
+  musics: Music[];
   onPageChange(page: number): void;
   onQueryChange(query: string): void;
-  onItemClick(music: Music): void;
-  onBack?(): void;
-  musics: Music[];
-  checklist: Music[];
   total: number;
   page: number;
   pageSize: number;
   loading: boolean;
+  
+  onItemClick?(music: Music): void;
+  link?(music: Music): string;
+  onBack?(): void;
+  checklist?: Music[];
   topRight?: React.ReactNode;
 }
 
 const renderItem = (props: Props, music: Music) => {
-  const { checklist, onItemClick } = props;
-  const checked = checklist.some(m => m.id === music.id);
+  const { checklist, onItemClick, link } = props;
+  
+  const checked = (checklist !== undefined)
+    ? checklist.some(m => m.id === music.id)
+    : undefined;
 
   return (
     <MusicArticleItem
       music={music}
       onClick={onItemClick}
+      link={link}
       checked={checked}
     />
   );
 };
 
+const onChange = (props: Props, e: React.ChangeEvent<HTMLInputElement>) => {
+  props.onQueryChange(e.target.value);
+};
+
 const MusicArticleList: React.FunctionComponent<Props> = function (props) {
-  const { musics, loading, onBack, page, pageSize, total, onPageChange, topRight, onQueryChange } = props;
+  const { musics, loading, onBack, page, pageSize, total, onPageChange, topRight } = props;
 
   const pageHeaderProps = (onBack)
       ? { onBack }
       : { backIcon: false };
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onQueryChange(e.target.value);
-  };
-
   return (
     <div className="article-list-page">
       <div className="page-header">
         <PageHeader {...pageHeaderProps} title="Music" subTitle="가요, 팝송, BGM" />
-        <Search onChange={onChange} enterButton={true} />
+        <Search onChange={onChange.bind(null, props)} enterButton={true} />
         {topRight}
       </div>
       <div className="page-content">
         <Spin spinning={loading} tip="로딩중...">
           <List
             dataSource={musics}
-            renderItem={music => renderItem(props, music)}
+            renderItem={renderItem.bind(null, props)}
           />
         </Spin>
       </div>

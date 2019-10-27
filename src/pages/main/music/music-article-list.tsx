@@ -2,13 +2,13 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button } from 'antd';
-import { debounce } from 'debounce';
 
 import { musicPlaylistAdd, musicPlaylistRemove } from 'actions';
+
 import { musicList, MusicListResult } from 'api';
 import { Music } from 'models';
-import { MusicArticleList, MusicPlayer } from 'components';
-import { USER_INPUT_DEBOUNCE, PAGE_SIZE } from 'config';
+import { MusicArticleListWrapper } from 'containers';
+import { MusicPlayer } from 'components';
 import './music-article-list.css';
 
 interface Props extends RouteComponentProps {
@@ -17,74 +17,29 @@ interface Props extends RouteComponentProps {
   playlist: Music[];
 }
 
-interface State {
-  musics: Music[];
-  total: number;
-  page: number;
-  pageSize: number;
-  loading: boolean;
-  query: string;
-}
-
-class MusicArticleListPage extends React.Component<Props, State> {
-  state = {
-    musics: [] as Music[],
-    total: 0,
-    page: 1,
-    pageSize: PAGE_SIZE,
-    loading: false,
-    query: '',
-  };
-
-  componentDidMount() {
-    const { query, page, pageSize } = this.state;
-    this.search(query, page, pageSize);
-  }
-
+class MusicArticleListPage extends React.Component<Props> {
+  musicListWrapper = React.createRef<MusicArticleListWrapper>();
+  
   render() {
     const { playlist } = this.props;
-    const { musics, total, page, pageSize, loading } = this.state;
+
+    const topRight = (
+      <Button.Group className="button-group">
+        <Button onClick={this.onAddAllClicked} icon="plus" type="primary">Add all to Playlist</Button>
+      </Button.Group>
+    )
 
     return (
       <div className="music-article-list-page">
         <MusicPlayer />
-        <MusicArticleList
-          onPageChange={this.onPageChange}
-          onQueryChange={this.onQueryChange}
+        <MusicArticleListWrapper
+          ref={this.musicListWrapper}
           onItemClick={this.onItemClick}
-          musics={musics}
           checklist={playlist}
-          page={page}
-          pageSize={pageSize}
-          loading={loading}
-          total={total}
-          topRight={
-            <Button.Group className="button-group">
-              <Button onClick={this.onAddAllClicked} icon="plus" type="primary">Add all to Playlist</Button>
-            </Button.Group>
-          }
+          topRight={topRight}
         />
       </div>
     );
-  }
-
-  debouncedOnQueryChange = debounce((query: string) => {
-    const { page, pageSize } = this.state;
-    if (this.state.query !== query) {
-      this.search(query, page, pageSize);
-    } else {
-      this.setState({ loading: false });
-    }
-  }, USER_INPUT_DEBOUNCE);
-
-  onQueryChange = (query: string) => {
-    this.state.loading || this.setState({ loading: true });
-    this.debouncedOnQueryChange(query);
-  }
-
-  onPageChange = (page: number) => {
-    const { query, pageSize } = this.state;
-    this.search(query, page, pageSize);
   }
 
   onItemClick = (music: Music) => {
@@ -98,28 +53,11 @@ class MusicArticleListPage extends React.Component<Props, State> {
   }
 
   onAddAllClicked = () => {
-    const { query } = this.state;
+    const query = this.musicListWrapper.current!.state.query;
 
     musicList(query, 0, 0)
       .then((result: MusicListResult) => {
         this.props.musicPlaylistAdd(result.results);
-      })
-      .catch();
-  }
-
-  search = (query: string, page: number, pageSize: number) => {
-    this.setState({ loading: true });
-
-    musicList(query, page, pageSize)
-      .then((result: MusicListResult) => {
-        this.setState({
-          query,
-          page,
-          pageSize,
-          loading: false,
-          musics: result.results,
-          total: result.total,
-        });
       })
       .catch();
   }
