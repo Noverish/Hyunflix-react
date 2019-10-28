@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Modal, Form, Input, Button, Select } from 'antd';
+import React from 'react';
+import { Modal, Form, Input, Select } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Music } from 'models';
 import { connect } from 'react-redux';
@@ -26,19 +26,11 @@ const MusicEditModal: React.FunctionComponent<Props> = (props: Props) => {
   const { music, visible, callback, tags, form } = props;
   const { getFieldDecorator } = props.form;
 
-  useEffect(() => {
-    form.setFieldsValue({
-      [TITLE_FIELD]: music[TITLE_FIELD],
-      [PATH_FIELD]: music[PATH_FIELD],
-      [TAGS_FIELD]: music[TAGS_FIELD],
-    });
-  }, [music]);
-
   const options = Array.from(tags.keys()).map(t => <Select.Option key={t}>{t}</Select.Option>);
 
-  const titleField = getFieldDecorator(TITLE_FIELD)(<Input />);
-  const pathField = getFieldDecorator(PATH_FIELD)(<Input />);
-  const tagsField = getFieldDecorator(TAGS_FIELD)(
+  const titleField = getFieldDecorator(TITLE_FIELD, { initialValue: music[TITLE_FIELD] })(<Input />);
+  const pathField = getFieldDecorator(PATH_FIELD, { initialValue: music[PATH_FIELD] })(<Input />);
+  const tagsField = getFieldDecorator(TAGS_FIELD, { initialValue: music[TAGS_FIELD] })(
     <Select mode="tags" tokenSeparators={[',']}>
       {options}
     </Select>,
