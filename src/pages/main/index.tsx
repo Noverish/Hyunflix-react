@@ -12,7 +12,7 @@ import VideoArticleContent from './video/video-article-content';
 import VideoArticleList from './video/video-article-list';
 import VideoBundleContent from './video/video-bundle-content';
 import VideoBundleList from './video/video-bundle-list';
-import UserVideo from './user-video/user-video';
+import UserVideo from './user/user-video';
 import PasswordChangePage from './user/password-change';
 import NotFound from 'pages/not-found';
 

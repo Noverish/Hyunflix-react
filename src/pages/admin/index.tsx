@@ -11,7 +11,7 @@ import RegisterCodePage from './register-code/register-code';
 import VideoManagePage from './video/video-manage';
 import VideoArticleEditPage from './video/video-article-edit';
 import VideoExaminePage from './video/video-examine';
-import MusicExaminePage from './music-examine/music-examine';
+import MusicExaminePage from './music/music-examine';
 import MusicManagePage from './music/music-manage';
 import AdminLayout from './admin-layout';
 import './index.css';
@@ -37,8 +37,8 @@ const AdminPage: React.FunctionComponent<Props> = (props) => {
           <Route path="/admin/encode/add" component={EncodeAddPage} />
           <Route path="/admin/encode*" component={EncodePage} />
           <Route path="/admin/register-code*" component={RegisterCodePage} />
-          <Route path="/admin/video-manage/edit" component={VideoArticleEditPage} />
-          <Route path="/admin/video-manage" component={VideoManagePage} />
+          <Route path="/admin/video/manage/edit" component={VideoArticleEditPage} />
+          <Route path="/admin/video/manage" component={VideoManagePage} />
           <Route path="/admin/video/examine" component={VideoExaminePage} />
           <Route path="/admin/music/manage" component={MusicManagePage} />
           <Route path="/admin/music/examine" component={MusicExaminePage} />

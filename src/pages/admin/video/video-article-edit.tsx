@@ -103,7 +103,7 @@ class VideoArticleEditPage extends React.Component<Props, State> {
         });
       }
 
-      this.props.history.push('/admin/video-manage');
+      this.props.history.push('/admin/video/manage');
     })().catch(console.error);
   }
 }

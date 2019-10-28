@@ -36,7 +36,7 @@ class VideoManagePage extends React.Component<Props, State> {
 
   onEdit = () => {
     this.props.history.push({
-      pathname: '/admin/video-manage/edit',
+      pathname: '/admin/video/manage/edit',
       state: this.checklist,
     });
   }
