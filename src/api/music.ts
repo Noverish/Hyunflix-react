@@ -33,6 +33,13 @@ export async function musicAdd(youtubeUrl: string, tags: string[]): Promise<void
   return await request(url, method, payload);
 }
 
+export async function musicDelete(ids: number[], deleteFile: boolean): Promise<void> {
+  const url = '/musics';
+  const method = 'delete';
+  const payload = { ids, deleteFile };
+  await request(url, method, payload);
+}
+
 export async function musicExamine(): Promise<void> {
   const url = '/musics/examine';
   const method = 'post';

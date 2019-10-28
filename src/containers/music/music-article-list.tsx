@@ -84,6 +84,11 @@ class MusicArticleListWrapper extends React.Component<Props, State> {
     this.search(query, page, pageSize);
   }
 
+  refresh = () => {
+    const { query, page, pageSize } = this.state;
+    this.search(query, page, pageSize);
+  }
+
   search = (query: string, page: number, pageSize: number) => {
     this.setState({ loading: true });
 
