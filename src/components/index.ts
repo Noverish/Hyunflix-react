@@ -8,6 +8,7 @@ export { default as VideoBundleList } from './video/video-bundle-list';
 export { default as VideoBundleItem } from './video/video-bundle-item';
 export { default as VideoPlayer } from './video/video-player';
 
+export { default as MusicEditModal } from './music/music-edit-modal';
 export { default as MusicPlayModal } from './music/music-play-modal';
 export { default as MusicPlayList } from './music/music-play-list';
 export { default as MusicPlayer } from './music/music-player';

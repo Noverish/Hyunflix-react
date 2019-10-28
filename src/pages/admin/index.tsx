@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch, Redirect, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
+
+import { musicTagListAsync, videoTagList } from 'actions';
 
 import NotFound from 'pages/not-found';
 import EncodePage from './encode/encode';
@@ -16,9 +18,18 @@ import './index.css';
 
 interface Props extends RouteComponentProps {
   isAdmin: boolean;
+  musicTagList: typeof musicTagListAsync.request;
+  videoTagList: typeof videoTagList.request;
 }
 
 const AdminPage: React.FunctionComponent<Props> = (props) => {
+  const { musicTagList, videoTagList } = props;
+
+  useEffect(() => {
+    musicTagList();
+    videoTagList();
+  }, [musicTagList, videoTagList]);
+
   if (props.isAdmin) {
     return (
       <AdminLayout>
@@ -48,4 +59,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(AdminPage);
+const mapDispatchToProps = {
+  musicTagList: musicTagListAsync.request,
+  videoTagList: videoTagList.request,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminPage);
