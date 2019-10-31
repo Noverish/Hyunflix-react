@@ -6,7 +6,6 @@ import axios, { AxiosRequestConfig, Method } from 'axios';
 import { API_SERVER } from 'config';
 import { handleError, cookie } from 'utils';
 
-export * from './ffmpeg';
 export * from './auth';
 export * from './music';
 export * from './video';
