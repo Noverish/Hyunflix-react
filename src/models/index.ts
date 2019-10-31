@@ -10,11 +10,3 @@ export interface File {
   size: string;
   url: string;
 }
-
-export interface RegCode {
-  id: number;
-  userId: number | null;
-  realname: string;
-  code: string;
-  date: string;
-}
