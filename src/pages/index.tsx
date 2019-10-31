@@ -14,7 +14,7 @@ import VideoBundleContent from './video/video-bundle-content';
 import VideoBundleList from './video/video-bundle-list';
 import UserVideo from './user/user-video';
 import PasswordChangePage from './user/password-change';
-import NotFound from 'pages/not-found';
+import NotFound from './not-found/not-found';
 
 interface Props {
   musicTagList: typeof musicTagListAsync.request;

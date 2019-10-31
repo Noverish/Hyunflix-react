@@ -3,8 +3,7 @@ import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { debounce } from 'debounce';
 
-import Main from 'pages/main';
-import Admin from 'pages/admin';
+import IndexPage from 'pages';
 import Login from 'pages/auth/login';
 import Register from 'pages/auth/register';
 
@@ -31,8 +30,7 @@ class App extends Component<Props, State> {
     const inner = (this.props.token)
       ? (
         <Switch>
-          <Route path="/admin" component={Admin} />
-          <Route component={Main} />
+          <Route component={IndexPage} />
         </Switch>
       ) : (
         <Switch>

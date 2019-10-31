@@ -1,18 +1,13 @@
 import React from 'react';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
-import { connect } from 'react-redux';
 
 import { UserAvatarMenu } from 'components';
 import './main-layout.css';
 
 const { Header, Content, Footer } = Layout;
 
-interface Props extends RouteComponentProps {
-  isAdmin: number;
-}
-
-const MainLayout: React.FunctionComponent<Props> = (props) => {
+const MainLayout: React.FunctionComponent<RouteComponentProps> = (props) => {
   const path: string = props.location.pathname;
 
   const items = [
@@ -20,9 +15,6 @@ const MainLayout: React.FunctionComponent<Props> = (props) => {
     { name: 'Video', path: '/videos' },
     { name: 'Music', path: '/musics' },
   ];
-  if (props.isAdmin) {
-    items.push({ name: 'Admin', path: '/admin' });
-  }
 
   const itemComps = items.map(i => (
     <Menu.Item key={i.name}>
@@ -55,10 +47,4 @@ const MainLayout: React.FunctionComponent<Props> = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    isAdmin: state.auth.isAdmin,
-  };
-};
-
-export default connect(mapStateToProps)(withRouter(MainLayout));
+export default withRouter(MainLayout);
