@@ -135,7 +135,7 @@ export default class VideoPlayer extends React.Component<Props> {
   }
 }
 
-// TODO https://github.com/maluklo/Newskin-videojs-v6-v7
+// https://github.com/maluklo/Newskin-videojs-v6-v7
 function skin(videjs) {
   videojs.options.controlBar = {
     // @ts-ignore

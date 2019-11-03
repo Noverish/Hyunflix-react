@@ -6,8 +6,8 @@ import { musicTagListAsync, videoTagList } from 'actions';
 
 import MainLayout from './main-layout';
 import Home from './home/home';
-import MusicArticleAdd from './music/music-article-add';
-import MusicArticleList from './music/music-article-list';
+import MusicAdd from './music/music-add';
+import MusicList from './music/music-list';
 import VideoArticleContent from './video/video-article-content';
 import VideoArticleList from './video/video-article-list';
 import VideoBundleContent from './video/video-bundle-content';
@@ -43,9 +43,8 @@ const MainPage: React.FunctionComponent<Props> = (props) => {
         <Route path="/videos/bundles/:category" component={VideoBundleList} />
         <Route exact={true} path="/videos" render={_ => <Redirect to="/videos/articles" />} />
 
-        <Route path="/musics/articles/add" component={MusicArticleAdd} />
-        <Route path="/musics/articles" component={MusicArticleList} />
-        <Route exact={true} path="/musics" render={_ => <Redirect to="/musics/articles" />} />
+        <Route path="/musics/add" component={MusicAdd} />
+        <Route path="/musics" component={MusicList} />
 
         <Route path="/user/videos" component={UserVideo} />
         <Route path="/user/password-change" component={PasswordChangePage} />

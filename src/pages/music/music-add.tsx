@@ -9,7 +9,6 @@ import { YoutubeStage } from 'models';
 import { SOCKET_SERVER, YOUTUBE_SOCKET_PATH } from 'config';
 import { musicTagListAsync } from 'actions';
 import { musicAdd } from 'api';
-import './music-article-add.css';
 
 const { Option } = Select;
 const { Step } = Steps;
@@ -25,7 +24,7 @@ interface State {
   eta: number;
 }
 
-class MusicArticleAddPage extends React.Component<Props, State> {
+class MusicAddPage extends React.Component<Props, State> {
   socket: socketio.Socket | null = null;
 
   state = {
@@ -104,12 +103,12 @@ class MusicArticleAddPage extends React.Component<Props, State> {
     };
 
     return (
-      <div className="article-list-page music-article-add">
+      <div className="article-list-page">
         <div className="page-header">
           <PageHeader onBack={this.props.history.goBack} title="Music Add" subTitle="유튜브 링크로 음악 추가하기" />
         </div>
         <div className="page-content">
-          <Form {...formItemLayout}>
+          <Form {...formItemLayout} style={{ margin: '8px 0' }}>
             <Form.Item label="Youtube URL">
               {getFieldDecorator('url', {
                 rules: [{ required: true, message: 'Youtube 링크를 입력해주세요!' }],
@@ -167,5 +166,5 @@ const mapDispatchToProps = {
   musicTagListAsync: musicTagListAsync.request,
 };
 
-const form = Form.create()(MusicArticleAddPage);
+const form = Form.create()(MusicAddPage);
 export default connect(mapStateToProps, mapDispatchToProps)(form);

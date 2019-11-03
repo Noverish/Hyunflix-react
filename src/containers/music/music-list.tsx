@@ -2,7 +2,7 @@ import React from 'react';
 import { debounce } from 'debounce';
 
 import { Music } from 'models';
-import { MusicArticleList } from 'components';
+import { MusicList } from 'components';
 import { musicList, MusicListResult } from 'api';
 import { USER_INPUT_DEBOUNCE, PAGE_SIZE } from 'config';
 
@@ -23,7 +23,7 @@ interface State {
   query: string;
 }
 
-class MusicArticleListWrapper extends React.Component<Props, State> {
+class MusicListWrapper extends React.Component<Props, State> {
   state: State = {
     musics: [] as Music[],
     total: 0,
@@ -33,7 +33,7 @@ class MusicArticleListWrapper extends React.Component<Props, State> {
     query: '',
   };
 
-  link = (music: Music) => `/musics/articles/${music.id}`;
+  link = (music: Music) => `/musics/${music.id}`;
 
   componentDidMount() {
     const { query, page, pageSize } = this.state;
@@ -45,7 +45,7 @@ class MusicArticleListWrapper extends React.Component<Props, State> {
     const { musics, total, page, pageSize, loading } = this.state;
 
     return (
-      <MusicArticleList
+      <MusicList
         onItemClick={onItemClick}
         checklist={checklist}
         topRight={topRight}
@@ -107,4 +107,4 @@ class MusicArticleListWrapper extends React.Component<Props, State> {
   }
 }
 
-export default MusicArticleListWrapper;
+export default MusicListWrapper;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { PageHeader, List, Pagination, Input, Button, Spin } from 'antd';
 
-import { MusicArticleItem } from 'components';
+import { MusicItem } from 'components';
 import { Music } from 'models';
 
 interface Props {
@@ -36,7 +36,7 @@ const renderItem = (props: Props, music: Music) => {
     : undefined;
 
   return (
-    <MusicArticleItem
+    <MusicItem
       music={music}
       onClick={onItemClick}
       link={link}
@@ -49,7 +49,7 @@ const onChange = (props: Props, e: React.ChangeEvent<HTMLInputElement>) => {
   props.onQueryChange(e.target.value);
 };
 
-const MusicArticleList: React.FunctionComponent<Props> = function (props) {
+const MusicList: React.FunctionComponent<Props> = function (props) {
   const { musics, loading, onBack, page, pageSize, total, onPageChange, topRight, subTitle } = props;
   const title = props.title || defaultProps.title;
 
@@ -79,7 +79,7 @@ const MusicArticleList: React.FunctionComponent<Props> = function (props) {
       </div>
       <div className="page-footer">
         <div className="left wrapper">
-          <Button><Link to="/musics/articles/add">음악 추가</Link></Button>
+          <Button><Link to="/musics/add">음악 추가</Link></Button>
         </div>
         <div className="center wrapper">
           <Pagination current={page} total={total} pageSize={pageSize} onChange={onPageChange} />
@@ -90,4 +90,4 @@ const MusicArticleList: React.FunctionComponent<Props> = function (props) {
   );
 };
 
-export default MusicArticleList;
+export default MusicList;

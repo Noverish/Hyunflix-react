@@ -7,9 +7,9 @@ import { musicPlaylistAdd, musicPlaylistRemove } from 'actions';
 
 import { musicList, MusicListResult } from 'api';
 import { Music } from 'models';
-import { MusicArticleListWrapper } from 'containers';
+import { MusicListWrapper } from 'containers';
 import { MusicPlayer } from 'components';
-import './music-article-list.css';
+import './music-list.css';
 
 interface Props extends RouteComponentProps {
   musicPlaylistAdd(musics: Music[]): ReturnType<typeof musicPlaylistAdd>;
@@ -17,8 +17,8 @@ interface Props extends RouteComponentProps {
   playlist: Music[];
 }
 
-class MusicArticleListPage extends React.Component<Props> {
-  musicListWrapper = React.createRef<MusicArticleListWrapper>();
+class MusicListPage extends React.Component<Props> {
+  musicListWrapper = React.createRef<MusicListWrapper>();
 
   render() {
     const { playlist } = this.props;
@@ -30,9 +30,9 @@ class MusicArticleListPage extends React.Component<Props> {
     );
 
     return (
-      <div className="music-article-list-page">
+      <div className="music-list-page">
         <MusicPlayer />
-        <MusicArticleListWrapper
+        <MusicListWrapper
           ref={this.musicListWrapper}
           onItemClick={this.onItemClick}
           checklist={playlist}
@@ -74,4 +74,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MusicArticleListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(MusicListPage);
