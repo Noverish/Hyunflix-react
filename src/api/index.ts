@@ -1,63 +1,102 @@
-import { tokenExpire } from 'actions';
-import { message } from 'antd';
-import { store } from '../index';
-import axios, { AxiosRequestConfig, Method } from 'axios';
+import axios from 'axios';
+import React from 'react';
+import { notification } from 'antd';
 
-import { API_SERVER } from 'config';
-import { handleError, cookie } from 'utils';
+import { store } from 'index';
+import { tokenExpire } from 'actions';
+import { cookie } from 'utils';
 
 export * from './auth';
 export * from './music';
 export * from './video';
 export * from './user';
-export * from './fs';
 
-// TODO axios interceptor 사용하기
-export async function request(path: string, method: Method, data: any = undefined, validateStatus: boolean = true) {
-  const url = path.startsWith('/') ? `${API_SERVER}${path}` : path;
-  const headers = {};
-
+axios.interceptors.request.use((config) => {
   const token = cookie.getCookie('x-hyunsub-token');
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    config.headers = { Authorization: `Bearer ${token}` };
   }
 
-  try {
-    const config: AxiosRequestConfig = { url, method, headers, data };
+  return config;
+}, (err) => {
+  handleError(err.message, JSON.stringify(err.config, null, 4));
+  return Promise.reject(err.message);
+});
 
-    if (!validateStatus) {
-      config.validateStatus = status => status < 500;
-    }
+axios.interceptors.response.use((response) => {
+  return response;
+}, (err) => {
+  const status: number = err.response.status;
+  const data: any = err.response.data;
+  const msg: string = (data.msg) ? data.msg : JSON.stringify(data);
 
-    return (await axios(config)).data;
-  } catch (err) {
-    console.log({
-      message: err.message,
-      response: err.response,
-      config: err.config,
-      request: err.request,
-    });
-
-    if (err.response && err.response.status === 401) {
-      store.dispatch(tokenExpire());
-    }
-
-    let errMsg = '';
-
-    if (err.response && err.response.data && err.response.data.msg) {
-      errMsg = err.response.data.msg;
-    } else if (err.response && err.response.data) {
-      errMsg = JSON.stringify(err.response.data);
-    } else {
-      errMsg = err.message;
-    }
-
-    if (err.response && err.response.status === 500) {
-      handleError(errMsg);
-    } else {
-      message.error(errMsg);
-    }
-
-    throw errMsg;
+  if (status === 401) {
+    store.dispatch(tokenExpire());
   }
+
+  if (status === 500) {
+    const lines = msg.split('\n');
+    handleError(lines.shift() || '', lines.join('\n'));
+  }
+
+  return Promise.reject(msg);
+});
+
+function handleError(title: string, content: string) {
+  notification.error({
+    message: title,
+    description: React.createElement('pre', null, content),
+    duration: 0,
+    placement: 'topLeft',
+    style:{ width: '80vw' },
+  });
 }
+
+// export async function request(path: string, method: Method, data: any = undefined, validateStatus: boolean = true) {
+//   const url = path.startsWith('/') ? `${API_SERVER}${path}` : path;
+//   const headers = {};
+
+//   const token = cookie.getCookie('x-hyunsub-token');
+//   if (token) {
+//     headers['Authorization'] = `Bearer ${token}`;
+//   }
+
+//   try {
+//     const config: AxiosRequestConfig = { url, method, headers, data };
+
+//     if (!validateStatus) {
+//       config.validateStatus = status => status < 500;
+//     }
+
+//     return (await axios(config)).data;
+//   } catch (err) {
+//     console.log({
+//       message: err.message,
+//       response: err.response,
+//       config: err.config,
+//       request: err.request,
+//     });
+
+//     if (err.response && err.response.status === 401) {
+//       store.dispatch(tokenExpire());
+//     }
+
+//     let errMsg = '';
+
+//     if (err.response && err.response.data && err.response.data.msg) {
+//       errMsg = err.response.data.msg;
+//     } else if (err.response && err.response.data) {
+//       errMsg = JSON.stringify(err.response.data);
+//     } else {
+//       errMsg = err.message;
+//     }
+
+//     if (err.response && err.response.status === 500) {
+//       handleError(errMsg);
+//     } else {
+//       message.error(errMsg);
+//     }
+
+//     throw errMsg;
+//   }
+// }

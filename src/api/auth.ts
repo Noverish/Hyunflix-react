@@ -1,51 +1,63 @@
+import axios, { AxiosRequestConfig } from 'axios';
 import * as NodeRSA from 'node-rsa';
 
-import { request } from './';
 import { AUTH_SERVER } from 'config';
 import { LoginParam, RegisterParam, LoginResult } from 'models';
 
 export async function getRSAKey(): Promise<string> {
-  const url = `${AUTH_SERVER}/rsa-key`;
-  const method = 'get';
-  return (await request(url, method)).key;
+  const config: AxiosRequestConfig = {
+    url: `${AUTH_SERVER}/rsa-key`,
+    method: 'get',
+  };
+
+  return (await axios(config)).data.key;
 }
 
 export async function login(param: LoginParam): Promise<LoginResult> {
   const publicKeyString: string = await getRSAKey();
   const publicKey = new NodeRSA(publicKeyString, 'pkcs8-public');
 
-  const url = `${AUTH_SERVER}/login`;
-  const method = 'post';
-  const body = {
-    username: publicKey.encrypt(param.username, 'base64'),
-    password: publicKey.encrypt(param.password, 'base64'),
+  const config: AxiosRequestConfig = {
+    url: `${AUTH_SERVER}/login`,
+    method: 'post',
+    data: {
+      username: publicKey.encrypt(param.username, 'base64'),
+      password: publicKey.encrypt(param.password, 'base64'),
+    },
   };
-  return await request(url, method, body);
+
+  return (await axios(config)).data;
 }
 
 export async function register(param: RegisterParam): Promise<LoginResult> {
   const publicKeyString: string = await getRSAKey();
   const publicKey = new NodeRSA(publicKeyString, 'pkcs8-public');
 
-  const url = `${AUTH_SERVER}/register`;
-  const method = 'post';
-  const body = {
-    username: publicKey.encrypt(param.username, 'base64'),
-    password: publicKey.encrypt(param.password, 'base64'),
-    reg_code: publicKey.encrypt(param.regCode, 'base64'),
+  const config: AxiosRequestConfig = {
+    url: `${AUTH_SERVER}/register`,
+    method: 'post',
+    data: {
+      username: publicKey.encrypt(param.username, 'base64'),
+      password: publicKey.encrypt(param.password, 'base64'),
+      reg_code: publicKey.encrypt(param.regCode, 'base64'),
+    },
   };
-  return await request(url, method, body);
+
+  return (await axios(config)).data;
 }
 
 export async function changePassword(oldPassword: string, newPassword: string): Promise<void> {
   const publicKeyString: string = await getRSAKey();
   const publicKey = new NodeRSA(publicKeyString, 'pkcs8-public');
 
-  const url = `${AUTH_SERVER}/change-password`;
-  const method = 'post';
-  const body = {
-    oldPassword: publicKey.encrypt(oldPassword, 'base64'),
-    newPassword: publicKey.encrypt(newPassword, 'base64'),
+  const config: AxiosRequestConfig = {
+    url: `${AUTH_SERVER}/change-password`,
+    method: 'post',
+    data: {
+      oldPassword: publicKey.encrypt(oldPassword, 'base64'),
+      newPassword: publicKey.encrypt(newPassword, 'base64'),
+    },
   };
-  await request(url, method, body);
+
+  await axios(config);
 }

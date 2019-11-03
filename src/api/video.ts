@@ -1,6 +1,7 @@
-import { request } from './';
+import axios, { AxiosRequestConfig } from 'axios';
+
+import { API_SERVER } from 'config';
 import { VideoArticle, Subtitle, VideoBundle } from 'models';
-import { stringify } from 'querystring';
 
 export interface VideoArticleListResult {
   total: number;
@@ -8,61 +9,65 @@ export interface VideoArticleListResult {
 }
 
 export async function videoArticleList(query: string, page: number, pageSize: number): Promise<VideoArticleListResult> {
-  const querystring = stringify({ q: query, p: page, ps: pageSize });
-  const url = `/articles/videos?${querystring}`;
-  const method = 'get';
-  return await request(url, method);
+  const config: AxiosRequestConfig = {
+    url: `${API_SERVER}/articles/videos`,
+    method: 'get',
+    params: { q: query, p: page, ps: pageSize },
+  };
+
+  return (await axios(config)).data;
 }
 
 export async function videoArticle(articleId: number): Promise<VideoArticle> {
-  const url = `/articles/videos/${articleId}`;
-  const method = 'get';
-  return await request(url, method);
+  const config: AxiosRequestConfig = {
+    url: `${API_SERVER}/articles/videos/${articleId}`,
+    method: 'get',
+  };
+
+  return (await axios(config)).data;
 }
 
 export async function videoTagList(): Promise<string[]> {
-  const url = '/articles/videos/tags';
-  const method = 'get';
-  return await request(url, method);
+  const config: AxiosRequestConfig = {
+    url: `${API_SERVER}/articles/videos/tags`,
+    method: 'get',
+  };
+
+  return (await axios(config)).data;
 }
 
 export async function videoSubtitleList(videoId: number): Promise<Subtitle[]> {
-  const url = `/videos/${videoId}/subtitles`;
-  const method = 'get';
-  return await request(url, method);
-}
+  const config: AxiosRequestConfig = {
+    url: `${API_SERVER}/videos/${videoId}/subtitles`,
+    method: 'get',
+  };
 
-export interface VideoArticleUpdateParams {
-  videoArticleId: number;
-  params: Partial<VideoArticle>;
-}
-
-export async function videoArticleUpdate(params: VideoArticleUpdateParams): Promise<void> {
-  const url = `/articles/videos/${params.videoArticleId}`;
-  const method = 'put';
-  await request(url, method, params.params);
+  return (await axios(config)).data;
 }
 
 export async function videoBundleCategories(): Promise<string[]> {
-  const url = '/bundles/videos/categories';
-  const method = 'get';
-  return await request(url, method);
+  const config: AxiosRequestConfig = {
+    url: `${API_SERVER}/bundles/videos/categories`,
+    method: 'get',
+  };
+
+  return (await axios(config)).data;
 }
 
 export async function videoBundleList(category: string): Promise<VideoBundle[]> {
-  const url = `/bundles/videos/${category}`;
-  const method = 'get';
-  return await request(url, method);
+  const config: AxiosRequestConfig = {
+    url: `${API_SERVER}/bundles/videos/${category}`,
+    method: 'get',
+  };
+
+  return (await axios(config)).data;
 }
 
 export async function videoBundle(category: string, bundleId: number): Promise<VideoBundle> {
-  const url = `/bundles/videos/${category}/${bundleId}`;
-  const method = 'get';
-  return await request(url, method);
-}
+  const config: AxiosRequestConfig = {
+    url: `${API_SERVER}/bundles/videos/${category}/${bundleId}`,
+    method: 'get',
+  };
 
-export async function videoExamine(): Promise<void> {
-  const url = '/videos/examine';
-  const method = 'post';
-  return await request(url, method);
+  return (await axios(config)).data;
 }

@@ -38,7 +38,7 @@ class VideoArticleContentPage extends React.Component<Props, State> {
 
     userVideo(userId, articleId)
       .then(userVideo => this.setState({ userVideo }))
-      .catch();
+      .catch(() => {});
 
     (async () => {
       const article: VideoArticle = await videoArticle(articleId);

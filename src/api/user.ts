@@ -1,26 +1,32 @@
-import { request } from './';
+import axios, { AxiosRequestConfig } from 'axios';
+
+import { API_SERVER } from 'config';
 import { UserVideo } from 'models';
 
 export async function userVideoList(userId: number): Promise<UserVideo[]> {
-  const url = `/users/${userId}/videos`;
-  const method = 'get';
-  return await request(url, method);
+  const config: AxiosRequestConfig = {
+    url: `${API_SERVER}/users/${userId}/videos`,
+    method: 'get',
+  };
+
+  return (await axios(config)).data;
 }
 
-export async function userVideo(userId: number, articleId: number): Promise<UserVideo | null> {
-  const url = `/users/${userId}/videos/${articleId}`;
-  const method = 'get';
-  const payload = await request(url, method, undefined, false);
-  if (payload.msg) {
-    return null;
-  } else {
-    return payload as UserVideo;
-  }
+export async function userVideo(userId: number, articleId: number): Promise<UserVideo> {
+  const config: AxiosRequestConfig = {
+    url: `${API_SERVER}/users/${userId}/videos/${articleId}`,
+    method: 'get',
+  };
+
+  return (await axios(config)).data;
 }
 
 export async function deleteUserVideoBulk(userId: number, articleIds: number[]): Promise<void> {
-  const url = `/users/${userId}/videos`;
-  const method = 'delete';
-  const body = { articleIds };
-  await request(url, method, body);
+  const config: AxiosRequestConfig = {
+    url: `${API_SERVER}/users/${userId}/videos`,
+    method: 'delete',
+    data: { articleIds },
+  };
+
+  await axios(config);
 }
