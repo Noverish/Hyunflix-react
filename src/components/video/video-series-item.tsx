@@ -3,23 +3,23 @@ import { Link } from 'react-router-dom';
 import { Tag } from 'antd';
 import { connect } from 'react-redux';
 
-import { VideoBundle } from 'models';
+import { VideoSeries } from 'models';
 
 interface Props {
-  bundle: VideoBundle;
+  series: VideoSeries;
   link: string;
 }
 
-class VideoBundleItem extends React.Component<Props> {
+class VideoSeriesItem extends React.Component<Props> {
   render() {
-    const { bundle, link } = this.props;
+    const { series, link } = this.props;
 
     return (
       <Link to={link} className="article-item">
         <div className="first section">
-          <span className="article-id">{bundle.id}</span>
-          <Tag color="magenta">{bundle.category}</Tag>
-          <span className="article-title">{bundle.title}</span>
+          <span className="article-id">{series.id}</span>
+          <Tag color="magenta">{series.category}</Tag>
+          <span className="article-title">{series.title}</span>
         </div>
       </Link>
     );
@@ -36,4 +36,4 @@ const mapDispathToProps = {
 
 };
 
-export default connect(mapStateToProps, mapDispathToProps)(VideoBundleItem);
+export default connect(mapStateToProps, mapDispathToProps)(VideoSeriesItem);

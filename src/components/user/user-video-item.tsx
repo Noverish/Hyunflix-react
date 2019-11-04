@@ -19,14 +19,13 @@ const UserVideoItem: React.FunctionComponent<Props> = (props) => {
   const renderTags = () => {
     const { userVideo, tags } = props;
 
-    return userVideo.article.tags.map(t => (
+    return userVideo.video.tags.map(t => (
       <Tag color={tags.get(t)} key={t}>{t}</Tag>
     ));
   };
 
   const { userVideo, checked, onCheck, link } = props;
-  const article = userVideo.article;
-  const video = article.videos[0]; // TODO 여러 비디오 지원
+  const video = userVideo.video;
 
   const percent = Math.floor(userVideo.time / video.duration * 100);
 
@@ -43,7 +42,7 @@ const UserVideoItem: React.FunctionComponent<Props> = (props) => {
       <div className="first section">
         {checked !== undefined && <Checkbox checked={checked} />}
         {renderTags()}
-        <span className="article-title">{article.title}</span>
+        <span className="article-title">{video.title}</span>
       </div>
       <div className="second section">
         <span className="article-date">{percent}% 시청,</span>

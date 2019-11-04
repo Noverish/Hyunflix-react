@@ -2,14 +2,14 @@ import React from 'react';
 import { PageHeader, List, Pagination, Input } from 'antd';
 import { connect } from 'react-redux';
 
-import { VideoBundleItem } from 'components';
-import { VideoBundle } from 'models';
+import { VideoSeriesItem } from 'components';
+import { VideoSeries } from 'models';
 import { PAGE_SIZE } from 'config';
 
 const { Search } = Input;
 
 interface Props {
-  bundles: VideoBundle[];
+  serieses: VideoSeries[];
   onBack?(): void;
   title?: string;
   subTitle?: string;
@@ -19,9 +19,9 @@ interface State {
   page: number;
 }
 
-class VideoBundleList extends React.Component<Props, State> {
+class VideoSeriesList extends React.Component<Props, State> {
   public static defaultProps = {
-    title: 'Video Bundle',
+    title: 'Video Series',
     subTitle: '',
   };
 
@@ -33,22 +33,22 @@ class VideoBundleList extends React.Component<Props, State> {
 
   }
 
-  renderItem = (bundle: VideoBundle) => {
+  renderItem = (series: VideoSeries) => {
     return (
-      <VideoBundleItem
-        bundle={bundle}
-        link={`/videos/bundles/${bundle.category}/${bundle.id}`}
+      <VideoSeriesItem
+        series={series}
+        link={`/series/videos/${series.category}/${series.id}`}
       />
     );
   }
 
   render() {
-    const { bundles, onBack } = this.props;
+    const { serieses, onBack } = this.props;
     const { page } = this.state;
-    const title: string = this.props.title || VideoBundleList.defaultProps.title;
-    const subTitle: string = this.props.subTitle || VideoBundleList.defaultProps.subTitle;
+    const title: string = this.props.title || VideoSeriesList.defaultProps.title;
+    const subTitle: string = this.props.subTitle || VideoSeriesList.defaultProps.subTitle;
 
-    const searched = bundles;
+    const searched = serieses;
     const sliced = searched.slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
 
     const props = (onBack)
@@ -97,4 +97,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(VideoBundleList);
+export default connect(mapStateToProps, mapDispatchToProps)(VideoSeriesList);

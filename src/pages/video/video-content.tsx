@@ -5,9 +5,9 @@ import * as socketio from 'socket.io-client';
 import { connect } from 'react-redux';
 
 import { VideoPlayer } from 'components';
-import { VideoArticle, Subtitle, UserVideo } from 'models';
+import { Video, Subtitle, UserVideo, UserVideoTime } from 'models';
 import { SOCKET_SERVER, USER_VIDEO_SOCKET_PATH } from 'config';
-import { videoArticle, userVideo, videoSubtitleList } from 'api';
+import { videoOne , userVideo, videoSubtitleList } from 'api';
 
 interface Props extends RouteComponentProps {
   rootWidth: number;
@@ -16,17 +16,17 @@ interface Props extends RouteComponentProps {
 
 interface State {
   userVideo: UserVideo | null;
-  article: VideoArticle | null;
+  video: Video | null;
   subtitles: Subtitle[];
 }
 
-class VideoArticleContentPage extends React.Component<Props, State> {
+class VideoVideoContentPage extends React.Component<Props, State> {
   videoContainer = React.createRef<HTMLDivElement>();
   socket: socketio.Socket | null = null;
 
   state: State = {
     userVideo: null,
-    article: null,
+    video: null,
     subtitles: [],
   };
 
@@ -34,17 +34,17 @@ class VideoArticleContentPage extends React.Component<Props, State> {
     this.socket = socketio.connect(SOCKET_SERVER, { path: USER_VIDEO_SOCKET_PATH });
 
     const userId: number = this.props.userId;
-    const articleId: number = parseInt(this.props.match.params['articleId']);
+    const videoId: number = parseInt(this.props.match.params['videoId']);
 
-    userVideo(userId, articleId)
+    userVideo(userId, videoId)
       .then(userVideo => this.setState({ userVideo }))
       .catch(() => {});
 
     (async () => {
-      const article: VideoArticle = await videoArticle(articleId);
-      this.setState({ article });
+      const video: Video = await videoOne(videoId);
+      this.setState({ video });
 
-      const subtitles: Subtitle[] = await videoSubtitleList(article.videos[0].id);
+      const subtitles: Subtitle[] = await videoSubtitleList(video.id);
       this.setState({ subtitles });
     })().catch();
   }
@@ -55,20 +55,19 @@ class VideoArticleContentPage extends React.Component<Props, State> {
     }
   }
 
-  // TODO 여러 비디오 하게 하기
   render() {
-    const { article, subtitles, userVideo } = this.state;
+    const { video, subtitles, userVideo } = this.state;
 
     const videoContainer: HTMLDivElement | null = this.videoContainer.current;
     const width = (videoContainer) ? videoContainer.clientWidth : -1;
-    const height: number = (article) ? (width * article.videos[0].height / article.videos[0].width) : -1;
+    const height: number = (video) ? (width * video.height / video.width) : -1;
 
     // const currentTime = qs.parse(location.search, { parseNumbers: true }).t as number | undefined;
     const currentTime = (userVideo) ? userVideo.time : undefined;
 
-    const videoPlayer = (width > 0 && article)
+    const videoPlayer = (width > 0 && video)
       ? <VideoPlayer
-          src={article.videos[0].url}
+          src={video.url}
           subtitles={subtitles}
           width={width}
           height={height}
@@ -77,17 +76,17 @@ class VideoArticleContentPage extends React.Component<Props, State> {
       />
       : null;
 
-    const title = (article) ? article.title : '';
-    const durationString = (article) ? article.videos[0].durationString : '';
-    const sizeString = (article) ? article.videos[0].sizeString : '';
-    const videoWidth = (article) ? article.videos[0].width : 0;
-    const videoHeight = (article) ? article.videos[0].height : 0;
-    const bitrateString = (article) ? article.videos[0].bitrateString : '';
-    const resolution = (article) ? article.videos[0].resolution : '';
-    const date = (article) ? article.date : '';
+    const title = (video) ? video.title : '';
+    const durationString = (video) ? video.durationString : '';
+    const sizeString = (video) ? video.sizeString : '';
+    const videoWidth = (video) ? video.width : 0;
+    const videoHeight = (video) ? video.height : 0;
+    const bitrateString = (video) ? video.bitrateString : '';
+    const resolution = (video) ? video.resolution : '';
+    const date = (video) ? video.date : '';
 
     return (
-      <div className="article-list-page">
+      <div className="video-list-page">
         <div className="page-header">
           <PageHeader onBack={this.onBack} title={title} />
         </div>
@@ -111,15 +110,16 @@ class VideoArticleContentPage extends React.Component<Props, State> {
   }
 
   onTimeUpdate = (time: number) => {
-    const { article } = this.state;
+    const { video } = this.state;
     const { userId } = this.props;
 
-    if (article) {
-      this.socket.send(JSON.stringify({
+    if (video) {
+      const userVideoTime: UserVideoTime = {
         userId,
-        articleId: article.id,
+        videoId: video.id,
         time,
-      }));
+      };
+      this.socket.send(JSON.stringify(userVideoTime));
     }
   }
 }
@@ -131,4 +131,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(VideoArticleContentPage);
+export default connect(mapStateToProps)(VideoVideoContentPage);

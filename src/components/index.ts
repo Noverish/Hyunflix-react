@@ -1,8 +1,7 @@
-export { default as VideoArticleList } from './video/video-article-list';
-export { default as VideoArticleListContainer } from './video/video-article-list-container';
-export { default as VideoArticleItem } from './video/video-article-item';
-export { default as VideoBundleList } from './video/video-bundle-list';
-export { default as VideoBundleItem } from './video/video-bundle-item';
+export { default as VideoList } from './video/video-list';
+export { default as VideoItem } from './video/video-item';
+export { default as VideoSeriesList } from './video/video-series-list';
+export { default as VideoSeriesItem } from './video/video-series-item';
 export { default as VideoPlayer } from './video/video-player';
 
 export { default as MusicPlayModal } from './music/music-play-modal';

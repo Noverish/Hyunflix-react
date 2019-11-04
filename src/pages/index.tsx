@@ -8,10 +8,10 @@ import MainLayout from './main-layout';
 import Home from './home/home';
 import MusicAdd from './music/music-add';
 import MusicList from './music/music-list';
-import VideoArticleContent from './video/video-article-content';
-import VideoArticleList from './video/video-article-list';
-import VideoBundleContent from './video/video-bundle-content';
-import VideoBundleList from './video/video-bundle-list';
+import VideoContent from './video/video-content';
+import VideoList from './video/video-list';
+import VideoSeriesContent from './video/video-series-content';
+import VideoSeriesList from './video/video-series-list';
 import UserVideo from './user/user-video';
 import PasswordChangePage from './user/password-change';
 import NotFound from './not-found/not-found';
@@ -37,11 +37,10 @@ const MainPage: React.FunctionComponent<Props> = (props) => {
         <Route exact={true} path="/register" render={_ => <Redirect to="/home" />} />
         <Route exact={true} path="/" render={_ => <Redirect to="/home" />} />
 
-        <Route path="/videos/articles/:articleId" component={VideoArticleContent} />
-        <Route path="/videos/articles" component={VideoArticleList} />
-        <Route path="/videos/bundles/:category/:bundleId" component={VideoBundleContent} />
-        <Route path="/videos/bundles/:category" component={VideoBundleList} />
-        <Route exact={true} path="/videos" render={_ => <Redirect to="/videos/articles" />} />
+        <Route path="/videos/series/:category/:seriesId" component={VideoSeriesContent} />
+        <Route path="/videos/series/:category" component={VideoSeriesList} />
+        <Route path="/videos/:videoId" component={VideoContent} />
+        <Route path="/videos" component={VideoList} />
 
         <Route path="/musics/add" component={MusicAdd} />
         <Route path="/musics" component={MusicList} />

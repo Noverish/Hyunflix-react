@@ -44,7 +44,7 @@ class UserVideoPage extends React.Component<Props, State> {
       )
       : <Button type="danger" onClick={this.toggleMode}>삭제</Button>;
 
-    const link = userVideo => `/videos/articles/${userVideo.article.id}`;
+    const link = userVideo => `/videos/${userVideo.video.id}`;
 
     return (
       <UserVideoList
@@ -67,12 +67,12 @@ class UserVideoPage extends React.Component<Props, State> {
     const { userId } = this.props;
     const { userVideos, checklist } = this.state;
 
-    const articleIds = checklist.map(v => v.article.id);
+    const videoIds = checklist.map(v => v.video.id);
     const afterDelete = userVideos.filter(v => !checklist.includes(v));
 
     this.setState({ loading: true });
 
-    deleteUserVideoBulk(userId, articleIds)
+    deleteUserVideoBulk(userId, videoIds)
       .then(() => {
         this.setState({
           userVideos: afterDelete,

@@ -3,8 +3,8 @@ import { PageHeader, List, Pagination, Input, Spin } from 'antd';
 import { debounce } from 'debounce';
 import { connect } from 'react-redux';
 
-import { VideoArticleItem } from 'components';
-import { VideoArticle } from 'models';
+import { VideoItem } from 'components';
+import { Video } from 'models';
 import { USER_INPUT_DEBOUNCE, PAGE_SIZE } from 'config';
 
 const { Search } = Input;
@@ -12,10 +12,10 @@ const { Search } = Input;
 interface Props {
   onPageChange?(page: number): void;
   onQueryChange?(query: string): void;
-  onItemClick?(article: VideoArticle): void;
-  onItemCheck?(article: VideoArticle, checked: boolean, checklist: VideoArticle[]): void;
+  onItemClick?(video: Video): void;
+  onItemCheck?(video: Video, checked: boolean, checklist: Video[]): void;
   onBack?(): void;
-  articles: VideoArticle[];
+  videos: Video[];
   total?: number;
   page?: number;
   pageSize?: number;
@@ -31,10 +31,10 @@ interface Props {
 
 interface State {
   page: number;
-  checklist: VideoArticle[];
+  checklist: Video[];
 }
 
-class VideoArticleList extends React.Component<Props, State> {
+class VideoList extends React.Component<Props, State> {
   query = '';
 
   public static defaultProps = {
@@ -52,36 +52,36 @@ class VideoArticleList extends React.Component<Props, State> {
     page: this.props.page ? -1 : 1,
   };
 
-  renderItem = (article: VideoArticle) => {
-    const onItemClick = this.props.onItemClick || VideoArticleList.defaultProps.onItemClick;
+  renderItem = (video: Video) => {
+    const onItemClick = this.props.onItemClick || VideoList.defaultProps.onItemClick;
     const { query } = this;
-    const checkable: boolean = this.props.checkable || VideoArticleList.defaultProps.checkable;
-    const checklist: VideoArticle[] = this.state.checklist;
+    const checkable: boolean = this.props.checkable || VideoList.defaultProps.checkable;
+    const checklist: Video[] = this.state.checklist;
 
     return (
-      <VideoArticleItem
+      <VideoItem
         onClick={onItemClick}
         onCheck={this.onItemCheck}
-        article={article}
+        video={video}
         highlight={query}
         checkable={checkable}
-        checked={checklist.some(a => a.id === article.id)}
+        checked={checklist.some(a => a.id === video.id)}
       />
     );
   }
 
   render() {
-    const { articles, topRight, onBack } = this.props;
+    const { videos, topRight, onBack } = this.props;
     const page = this.props.page || this.state.page;
-    const loading = this.props.loading || VideoArticleList.defaultProps.loading;
-    const pageSize: number = this.props.pageSize || VideoArticleList.defaultProps.pageSize;
-    const total: number = this.props.total || articles.length;
-    const title: string = this.props.title || VideoArticleList.defaultProps.title;
-    const subTitle: string = this.props.subTitle || VideoArticleList.defaultProps.subTitle;
+    const loading = this.props.loading || VideoList.defaultProps.loading;
+    const pageSize: number = this.props.pageSize || VideoList.defaultProps.pageSize;
+    const total: number = this.props.total || videos.length;
+    const title: string = this.props.title || VideoList.defaultProps.title;
+    const subTitle: string = this.props.subTitle || VideoList.defaultProps.subTitle;
 
     const sliced = (this.props.onPageChange)
-      ? articles
-      : articles.slice((page - 1) * pageSize, (page) * pageSize);
+      ? videos
+      : videos.slice((page - 1) * pageSize, (page) * pageSize);
 
     const props = (onBack)
       ? { onBack }
@@ -133,13 +133,13 @@ class VideoArticleList extends React.Component<Props, State> {
     }
   }
 
-  onItemCheck = (article: VideoArticle, checked: boolean) => {
-    const onItemCheck = this.props.onItemCheck || VideoArticleList.defaultProps.onItemCheck;
+  onItemCheck = (video: Video, checked: boolean) => {
+    const onItemCheck = this.props.onItemCheck || VideoList.defaultProps.onItemCheck;
     const { checklist } = this.state;
-    const newChecklist = (checked) ? [...checklist, article] : checklist.filter(v => v !== article);
+    const newChecklist = (checked) ? [...checklist, video] : checklist.filter(v => v !== video);
 
     this.setState({ checklist: newChecklist });
-    onItemCheck(article, checked, newChecklist);
+    onItemCheck(video, checked, newChecklist);
   }
 }
 
@@ -149,4 +149,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(VideoArticleList);
+export default connect(mapStateToProps)(VideoList);

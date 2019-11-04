@@ -2,14 +2,14 @@ import React from 'react';
 import { Tag, Tooltip, Checkbox } from 'antd';
 import { connect } from 'react-redux';
 
-import { VideoArticle } from 'models';
+import { Video } from 'models';
 import { resolution2Color } from 'utils';
 
 interface Props {
-  onClick(article: VideoArticle): void;
-  onCheck(article: VideoArticle, checked: boolean): void;
+  onClick(video: Video): void;
+  onCheck(video: Video, checked: boolean): void;
   highlight: string;
-  article: VideoArticle;
+  video: Video;
   checkable: boolean;
   checked: boolean;
 
@@ -40,46 +40,45 @@ class VideoItem extends React.Component<Props> {
   }
 
   renderTags = () => {
-    const { article, tags } = this.props;
+    const { video, tags } = this.props;
 
-    return article.tags.map(t => (
+    return video.tags.map(t => (
       <Tag color={tags.get(t)} key={t}>{t}</Tag>
     ));
   }
 
   render() {
-    const { article, checkable, checked } = this.props;
+    const { video, checkable, checked } = this.props;
 
     // TODO 여러 비디오 지원
-    const video = article.videos[0];
     const color = resolution2Color(video.resolution);
 
     return (
       <div className="article-item" onClick={this.onClick}>
         <div className="first section">
           {checkable && <Checkbox className="check-box" checked={checked} />}
-          <span className="article-id">{article.id}</span>
+          <span className="article-id">{video.id}</span>
           {this.renderTags()}
-          {this.renderTitle(article.title)}
+          {this.renderTitle(video.title)}
         </div>
         <div className="second section">
           <span className="article-date">{video.durationString}</span>
           <Tooltip placement="top" title={`${video.width}x${video.height}`}>
             <Tag className="resolution" color={color}>{video.resolution}</Tag>
           </Tooltip>
-          <span className="article-date">{article.date}</span>
+          <span className="article-date">{video.date}</span>
         </div>
       </div>
     );
   }
 
   onClick = () => {
-    const { checkable, article, checked } = this.props;
+    const { checkable, video, checked } = this.props;
 
     if (checkable) {
-      this.props.onCheck(article, !checked);
+      this.props.onCheck(video, !checked);
     } else {
-      this.props.onClick(article);
+      this.props.onClick(video);
     }
   }
 }

@@ -10,6 +10,7 @@ export * from './auth';
 export * from './music';
 export * from './video';
 export * from './user';
+export * from './video-series';
 
 axios.interceptors.request.use((config) => {
   const token = cookie.getCookie('x-hyunsub-token');

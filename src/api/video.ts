@@ -1,16 +1,16 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { API_SERVER } from 'config';
-import { VideoArticle, Subtitle, VideoBundle } from 'models';
+import { Video, Subtitle } from 'models';
 
-export interface VideoArticleListResult {
+export interface VideoListResult {
   total: number;
-  results: VideoArticle[];
+  results: Video[];
 }
 
-export async function videoArticleList(query: string, page: number, pageSize: number): Promise<VideoArticleListResult> {
+export async function videoList(query: string, page: number, pageSize: number): Promise<VideoListResult> {
   const config: AxiosRequestConfig = {
-    url: `${API_SERVER}/articles/videos`,
+    url: `${API_SERVER}/videos`,
     method: 'get',
     params: { q: query, p: page, ps: pageSize },
   };
@@ -18,9 +18,9 @@ export async function videoArticleList(query: string, page: number, pageSize: nu
   return (await axios(config)).data;
 }
 
-export async function videoArticle(articleId: number): Promise<VideoArticle> {
+export async function videoOne(videoId: number): Promise<Video> {
   const config: AxiosRequestConfig = {
-    url: `${API_SERVER}/articles/videos/${articleId}`,
+    url: `${API_SERVER}/videos/${videoId}`,
     method: 'get',
   };
 
@@ -29,7 +29,7 @@ export async function videoArticle(articleId: number): Promise<VideoArticle> {
 
 export async function videoTagList(): Promise<string[]> {
   const config: AxiosRequestConfig = {
-    url: `${API_SERVER}/articles/videos/tags`,
+    url: `${API_SERVER}/videos/tags`,
     method: 'get',
   };
 
@@ -39,33 +39,6 @@ export async function videoTagList(): Promise<string[]> {
 export async function videoSubtitleList(videoId: number): Promise<Subtitle[]> {
   const config: AxiosRequestConfig = {
     url: `${API_SERVER}/videos/${videoId}/subtitles`,
-    method: 'get',
-  };
-
-  return (await axios(config)).data;
-}
-
-export async function videoBundleCategories(): Promise<string[]> {
-  const config: AxiosRequestConfig = {
-    url: `${API_SERVER}/bundles/videos/categories`,
-    method: 'get',
-  };
-
-  return (await axios(config)).data;
-}
-
-export async function videoBundleList(category: string): Promise<VideoBundle[]> {
-  const config: AxiosRequestConfig = {
-    url: `${API_SERVER}/bundles/videos/${category}`,
-    method: 'get',
-  };
-
-  return (await axios(config)).data;
-}
-
-export async function videoBundle(category: string, bundleId: number): Promise<VideoBundle> {
-  const config: AxiosRequestConfig = {
-    url: `${API_SERVER}/bundles/videos/${category}/${bundleId}`,
     method: 'get',
   };
 

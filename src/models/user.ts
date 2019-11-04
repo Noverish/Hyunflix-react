@@ -1,8 +1,14 @@
-import { VideoArticle } from 'models';
+import { Video } from 'models';
 
 export interface UserVideo {
   userId: number;
-  article: VideoArticle;
+  video: Video;
   time: number;
   date: string;
+}
+
+export interface UserVideoTime {
+  userId: number;
+  videoId: number;
+  time: number;
 }
