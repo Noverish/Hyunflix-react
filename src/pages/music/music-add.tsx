@@ -8,7 +8,7 @@ import * as socketio from 'socket.io-client';
 import { YoutubeStage } from 'models';
 import { SOCKET_SERVER, YOUTUBE_SOCKET_PATH } from 'config';
 import { musicTagListAsync } from 'actions';
-import { musicAdd } from 'api';
+import { donwloadYoutube } from 'api';
 
 const { Option } = Select;
 const { Step } = Steps;
@@ -22,6 +22,7 @@ interface State {
   stage: number;
   progress: number;
   eta: number;
+  error: string | null;
 }
 
 class MusicAddPage extends React.Component<Props, State> {
@@ -31,6 +32,7 @@ class MusicAddPage extends React.Component<Props, State> {
     stage: -1,
     progress: 0,
     eta: 0,
+    error: null,
   };
 
   componentDidMount() {
@@ -38,7 +40,7 @@ class MusicAddPage extends React.Component<Props, State> {
   }
 
   renderSteps = (stepStage: number) => {
-    const { stage, progress, eta } = this.state;
+    const { stage, progress, eta, error } = this.state;
 
     let percent = 0;
     if (stage < stepStage) {
@@ -58,25 +60,29 @@ class MusicAddPage extends React.Component<Props, State> {
       subTitle = '완료';
     }
 
+    const description = (error && stage === stepStage)
+      ? <pre>{error}</pre>
+      : <Progress percent={percent} />;
+
     switch (stepStage) {
       case YoutubeStage.ready: {
         return <Step title="준비" subTitle={subTitle} />;
       }
       case YoutubeStage.download: {
-        return <Step title="다운로드" subTitle={subTitle} description={<Progress percent={percent} />} />;
+        return <Step title="다운로드" subTitle={subTitle} description={description} />;
       }
       case YoutubeStage.encode: {
-        return <Step title="인코딩" subTitle={subTitle} description={<Progress percent={percent} />} />;
+        return <Step title="인코딩" subTitle={subTitle} description={description} />;
       }
     }
   }
 
   render() {
-    const { stage } = this.state;
+    const { stage, error } = this.state;
     const { tags } = this.props;
     const { getFieldDecorator } = this.props.form;
 
-    const options = Array.from(tags.keys()).map(t => <Option key={t}>{t}</Option>);
+    const options = Array.from(tags.keys()).map(t => <Option key={t} value={t}>{t}</Option>);
 
     const formItemLayout = {
       labelCol: {
@@ -125,7 +131,7 @@ class MusicAddPage extends React.Component<Props, State> {
               <Button type="primary" onClick={this.onSubmit}>추가</Button>
             </Form.Item>
           </Form>
-          <Steps direction="vertical" current={stage}>
+          <Steps direction="vertical" current={stage} status={error ? 'error' : 'process'}>
             {this.renderSteps(YoutubeStage.ready)}
             {this.renderSteps(YoutubeStage.download)}
             {this.renderSteps(YoutubeStage.encode)}
@@ -151,7 +157,7 @@ class MusicAddPage extends React.Component<Props, State> {
         }
       });
 
-      await musicAdd(url, tags);
+      await donwloadYoutube(url, tags);
     })().catch(console.error);
   }
 }

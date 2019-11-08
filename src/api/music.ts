@@ -27,16 +27,11 @@ export async function musicTagList(): Promise<string[]> {
   return (await axios(config)).data;
 }
 
-export async function musicAdd(youtubeUrl: string, tags: string[]): Promise<void> {
+export async function donwloadYoutube(url: string, tags: string[]): Promise<void> {
   const config: AxiosRequestConfig = {
-    url: `${API_SERVER}/musics`,
+    url: `${API_SERVER}/musics/download-youtube`,
     method: 'post',
-    data: {
-      tags,
-      url: youtubeUrl,
-      music: true,
-      video: false,
-    },
+    data: { tags, url },
   };
 
   await axios(config);
