@@ -5,13 +5,15 @@
   justify-content: center;
   display: flex;
   flex-direction: column;
+  padding: 0 24px;
 }
 
 .login-form {
+  width: 100%;
   max-width: 300px;
 }
 .login-form-register {
-  float: right;
+  width: 100%;
 }
 .login-form-button {
   width: 100%;

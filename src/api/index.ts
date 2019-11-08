@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React from 'react';
-import { notification } from 'antd';
+import { notification, message } from 'antd';
 
 import { store } from 'index';
 import { tokenExpire } from 'actions';
@@ -33,11 +33,11 @@ axios.interceptors.response.use((response) => {
 
   if (status === 401) {
     store.dispatch(tokenExpire());
-  }
-
-  if (status === 500) {
+  } else if (status === 500) {
     const lines = msg.split('\n');
     handleError(lines.shift() || '', lines.join('\n'));
+  } else {
+    message.error(msg);
   }
 
   return Promise.reject(msg);
