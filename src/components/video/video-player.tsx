@@ -6,12 +6,11 @@ import './videojs-seek-buttons.css';
 import './videojs-skin.css';
 
 interface Props {
-  width: number;
-  height: number;
-  src: string;
-  subtitles: Subtitle[];
+  src?: string;
+  subtitles?: Subtitle[];
   onTimeUpdate?(time: number): void;
   currentTime?: number;
+  ratio?: number;
 }
 
 export default class VideoPlayer extends React.Component<Props> {
@@ -63,11 +62,19 @@ export default class VideoPlayer extends React.Component<Props> {
     this.setCurrentTime(player, this.props.currentTime);
   }
 
-  setSrc = (player: videojs.Player, src: string) => {
-    player.src({ src, type: 'video/mp4' });
+  setSrc = (player: videojs.Player, src?: string) => {
+    if (src) {
+      player.src({ src, type: 'video/mp4' });
+    } else {
+      player.src();
+    }
   }
 
-  setSubtitles = (player: videojs.Player, subtitles: Subtitle[]) => {
+  setSubtitles = (player: videojs.Player, subtitles?: Subtitle[]) => {
+    if (!subtitles) {
+      return;
+    }
+
     for (const subtitle of subtitles) {
       const option: videojs.TextTrackOptions = {
         kind: 'subtitles',
@@ -82,7 +89,7 @@ export default class VideoPlayer extends React.Component<Props> {
     }
   }
 
-  setCurrentTime = (player: videojs.Player, currentTime: number | undefined) => {
+  setCurrentTime = (player: videojs.Player, currentTime?: number) => {
     if (currentTime) {
       player.currentTime(currentTime);
     }
@@ -104,10 +111,7 @@ export default class VideoPlayer extends React.Component<Props> {
       }
     }
 
-    const widthDiff = nextProps.width !== this.props.width;
-    const heightDiff = nextProps.height !== this.props.height;
-
-    return widthDiff || heightDiff;
+    return nextProps.ratio !== this.props.ratio;
   }
 
   componentWillUnmount() {
@@ -120,16 +124,15 @@ export default class VideoPlayer extends React.Component<Props> {
   // so videojs won't create additional wrapper in the DOM
   // see https://github.com/videojs/video.js/pull/3856
   render() {
-    const { width, height } = this.props;
-
-    const style = {
-      width: `${width}px`,
-      height: `${height}px`,
-    };
+    const ratio = this.props.ratio || (9 / 16 * 100);
 
     return (
-      <div data-vjs-player={true} style={style}>
-        <video className="video-js" ref={this.videoNode} />
+      <div style={{ position: 'relative', paddingTop: `${ratio}%` }}>
+        <div style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%' }}>
+          <div data-vjs-player={true} style={{ width: '100%', height: '100%' }}>
+            <video className="video-js" ref={this.videoNode} />
+          </div>
+        </div>
       </div>
     );
   }

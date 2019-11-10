@@ -10,7 +10,6 @@ import { SOCKET_SERVER, USER_VIDEO_SOCKET_PATH } from 'config';
 import { videoOne , userVideoOne, videoSubtitleList } from 'api';
 
 interface Props extends RouteComponentProps {
-  rootWidth: number;
   userId: number;
   token: string;
 }
@@ -18,11 +17,10 @@ interface Props extends RouteComponentProps {
 interface State {
   userVideo: UserVideo | null;
   video: Video | null;
-  subtitles: Subtitle[];
+  subtitles: Subtitle[] | null;
 }
 
 class VideoVideoContentPage extends React.Component<Props, State> {
-  videoContainer = React.createRef<HTMLDivElement>();
   socket: socketio.Socket | null = null;
 
   state: State = {
@@ -33,22 +31,21 @@ class VideoVideoContentPage extends React.Component<Props, State> {
 
   componentDidMount() {
     this.socket = socketio.connect(SOCKET_SERVER, { path: USER_VIDEO_SOCKET_PATH });
-    const { token } = this.props;
-
-    const videoId: number = parseInt(this.props.match.params['videoId']);
-
-    userVideoOne(videoId)
-      .then(userVideo => this.setState({ userVideo }))
-      .catch(() => {});
 
     (async () => {
-      const video: Video = await videoOne(videoId);
-      this.setState({ video });
+      const { token } = this.props;
+      const videoId: number = parseInt(this.props.match.params['videoId']);
 
-      const subtitles: Subtitle[] = await videoSubtitleList(video.id);
-      subtitles.forEach(v => v.url = `${v.url}?token=${token}`);
-      this.setState({ subtitles });
-    })().catch();
+      const [video, subtitles, userVideo] = await Promise.all([
+        videoOne(videoId),
+        videoSubtitleList(videoId),
+        userVideoOne(videoId),
+      ]);
+
+      subtitles && subtitles.forEach(v => v.url = `${v.url}?token=${token}`);
+
+      this.setState({ video, subtitles, userVideo });
+    })();
   }
 
   componentWillUnmount() {
@@ -60,51 +57,32 @@ class VideoVideoContentPage extends React.Component<Props, State> {
   render() {
     const { video, subtitles, userVideo } = this.state;
 
-    const videoContainer: HTMLDivElement | null = this.videoContainer.current;
-    const width = (videoContainer) ? videoContainer.clientWidth : -1;
-    const height: number = (video) ? (width * video.height / video.width) : -1;
+    const title = (video) ? video.title : ' ';
 
-    // const currentTime = qs.parse(location.search, { parseNumbers: true }).t as number | undefined;
-    const currentTime = (userVideo) ? userVideo.time : undefined;
-
-    console.log(userVideo);
-
-    const videoPlayer = (width > 0 && video)
-      ? <VideoPlayer
-          src={video.url}
-          subtitles={subtitles}
-          width={width}
-          height={height}
-          onTimeUpdate={this.onTimeUpdate}
-          currentTime={currentTime}
-      />
-      : null;
-
-    const title = (video) ? video.title : '';
-    const durationString = (video) ? video.durationString : '';
-    const sizeString = (video) ? video.sizeString : '';
-    const videoWidth = (video) ? video.width : 0;
-    const videoHeight = (video) ? video.height : 0;
-    const bitrateString = (video) ? video.bitrateString : '';
-    const resolution = (video) ? video.resolution : '';
-    const date = (video) ? video.date : '';
+    const statistics = (video)
+      ? (
+        <Row className="border-bottom" style={{ padding: '12px' }} type="flex" gutter={32}>
+          <Col><Statistic title="Durtaion" value={video.durationString} /></Col>
+          <Col><Statistic title="Size" value={video.sizeString} /></Col>
+          <Col><Statistic title="Screen" value={`${video.width}x${video.height}`} /></Col>
+          <Col><Statistic title="Bitrate" value={video.bitrateString} /></Col>
+          <Col><Statistic title="Resolution" value={video.resolution} /></Col>
+          <Col><Statistic title="Date" value={video.date} /></Col>
+        </Row>
+      )
+      : undefined;
 
     return (
       <div className="video-list-page">
-        <div className="page-header">
-          <PageHeader onBack={this.onBack} title={title} />
-        </div>
-        <div ref={this.videoContainer}>
-          {videoPlayer}
-        </div>
-        <Row className="border-bottom" style={{ padding: '12px' }} type="flex" gutter={32}>
-          <Col><Statistic title="Durtaion" value={durationString} /></Col>
-          <Col><Statistic title="Size" value={sizeString} /></Col>
-          <Col><Statistic title="Screen" value={`${videoWidth}x${videoHeight}`} /></Col>
-          <Col><Statistic title="Bitrate" value={bitrateString} /></Col>
-          <Col><Statistic title="Resolution" value={resolution} /></Col>
-          <Col><Statistic title="Date" value={date} /></Col>
-        </Row>
+        <PageHeader className="border-top" onBack={this.onBack} title={title} />
+        <VideoPlayer
+          src={video ? video.url : undefined}
+          subtitles={subtitles ? subtitles : undefined}
+          onTimeUpdate={this.onTimeUpdate}
+          currentTime={userVideo ? userVideo.time : undefined}
+          ratio={video ? (video.height / video.width * 100) : undefined}
+        />
+        {statistics}
       </div>
     );
   }
@@ -130,7 +108,6 @@ class VideoVideoContentPage extends React.Component<Props, State> {
 
 const mapStateToProps = (state) => {
   return {
-    rootWidth: state.etc.width,
     userId: state.auth.userId,
     token: state.auth.token,
   };
