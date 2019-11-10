@@ -18,12 +18,12 @@ type Props = OriginalProps & InjectedProps<VideoSeries> & ReduxProps;
 const VideoSeriesItem: React.FC<Props> = (props) => {
   const { item } = props;
 
-  // TODO make mobile
   return (
     <div className="item desktop">
       <span className="id">{item.id}</span>
       <Tag color="magenta">{item.category}</Tag>
       <span className="title">{item.title}</span>
+      <span className="gray float-right">{`총 ${item.videos.length}편`}</span>
     </div>
   );
 };

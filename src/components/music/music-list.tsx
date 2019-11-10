@@ -34,6 +34,7 @@ const MusicItem: React.FC<Props> = (props) => {
     return (
       <div className={classnames('item mobile', { selected: checked })}>
         <div className="first-row">
+          {checked !== undefined && <Checkbox checked={checked} />}
           <span className="title">{item.title}</span>
           {item.youtube && <Icon type="youtube" style={{ color: '#f5222d' }} />}
         </div>
