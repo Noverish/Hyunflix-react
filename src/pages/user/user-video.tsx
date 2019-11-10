@@ -1,41 +1,33 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Button } from 'antd';
 
 import { UserVideoList } from 'components';
+import withContainer from 'components/hoc/container';
 import { UserVideo } from 'models';
-import { userVideoList, deleteUserVideoBulk } from 'api';
-
-interface Props {
-  userId: number;
-}
+import { deleteUserVideoBulk, userVideoList } from 'api';
 
 interface State {
-  userVideos: UserVideo[];
-  loading: boolean;
   checklist: UserVideo[];
   checkable: boolean;
+  loading: boolean;
 }
 
-class UserVideoPage extends React.Component<Props, State> {
+class UserVideoListContainer extends withContainer<UserVideo>()(UserVideoList) {}
+const link = (userVideo: UserVideo) => `/videos/${userVideo.video.id}`;
+
+class UserVideoPage extends React.Component<{}, State> {
+  userVideoListContainer = React.createRef<UserVideoListContainer>();
+
   state: State = {
-    userVideos: [],
-    loading: true,
     checklist: [],
     checkable: false,
+    loading: false,
   };
 
-  componentDidMount() {
-    const { userId } = this.props;
-    userVideoList(userId)
-      .then(userVideos => this.setState({ userVideos, loading: false }))
-      .catch();
-  }
-
   render() {
-    const { userVideos, loading, checklist, checkable } = this.state;
+    const { checklist, checkable, loading } = this.state;
 
-    const extra = (checkable)
+    const headerExtra = (checkable)
       ? (
         <React.Fragment>
           <Button type="danger" onClick={this.deleteUserVideos} disabled={checklist.length === 0}>삭제</Button>
@@ -44,16 +36,16 @@ class UserVideoPage extends React.Component<Props, State> {
       )
       : <Button type="danger" onClick={this.toggleMode}>삭제</Button>;
 
-    const link = userVideo => `/videos/${userVideo.video.id}`;
-
     return (
-      <UserVideoList
-        userVideos={userVideos || []}
-        loading={loading}
-        link={link}
+      <UserVideoListContainer
+        title="시청 기록"
+        ref={this.userVideoListContainer}
         checklist={checkable ? checklist : undefined}
-        onItemCheck={this.onItemCheck}
-        headerExtra={extra}
+        onItemClick={checkable ? this.onItemClick : undefined}
+        headerExtra={headerExtra}
+        search={userVideoList}
+        link={link}
+        loading={loading}
       />
     );
   }
@@ -64,40 +56,32 @@ class UserVideoPage extends React.Component<Props, State> {
   }
 
   deleteUserVideos = () => {
-    const { userId } = this.props;
-    const { userVideos, checklist } = this.state;
+    const { checklist } = this.state;
 
     const videoIds = checklist.map(v => v.video.id);
-    const afterDelete = userVideos.filter(v => !checklist.includes(v));
 
     this.setState({ loading: true });
 
-    deleteUserVideoBulk(userId, videoIds)
+    deleteUserVideoBulk(videoIds)
       .then(() => {
         this.setState({
-          userVideos: afterDelete,
           checklist: [],
           loading: false,
         });
+        this.userVideoListContainer.current!.refresh();
       })
       .catch();
   }
 
-  onItemCheck = (userVideo: UserVideo, checked: boolean) => {
+  onItemClick = (userVideo: UserVideo) => {
     const { checklist } = this.state;
 
-    const newChecklist = (checked)
-      ? [...checklist, userVideo]
-      : checklist.filter(v => v !== userVideo);
+    const newChecklist = (checklist.includes(userVideo))
+      ? checklist.filter(v => v !== userVideo)
+      : [...checklist, userVideo];
 
     this.setState({ checklist: newChecklist });
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    userId: state.auth.userId,
-  };
-};
-
-export default connect(mapStateToProps)(UserVideoPage);
+export default UserVideoPage;

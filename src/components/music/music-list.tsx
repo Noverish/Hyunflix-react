@@ -1,93 +1,73 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { PageHeader, List, Pagination, Input, Button, Spin } from 'antd';
+import { Checkbox, Tag, Icon } from 'antd';
+import { connect } from 'react-redux';
+import * as classnames from 'classnames';
 
-import { MusicItem } from 'components';
+import withList, { InjectedProps, Options } from 'components/hoc/list';
 import { Music } from 'models';
+import { second2String } from 'utils';
 
-interface Props {
-  musics: Music[];
-  onPageChange(page: number): void;
-  onQueryChange(query: string): void;
-  total: number;
-  page: number;
-  pageSize: number;
-  loading: boolean;
-
-  title?: string;
-  subTitle?: string;
-  onItemClick?(music: Music): void;
-  link?(music: Music): string;
-  onBack?(): void;
-  checklist?: Music[];
-  topRight?: React.ReactNode;
+interface ReduxProps {
+  tags: Map<string, string>;
+  isMobile: boolean;
 }
 
-type DefaultProps = Pick<Props, 'title'>;
-const defaultProps: DefaultProps = {
-  title: 'Music',
+interface OriginalProps {
+
+}
+
+type Props = OriginalProps & InjectedProps<Music> & ReduxProps;
+
+const renderTags = (props: Props) => {
+  const { item, tags } = props;
+
+  return item.tags.map(t => (
+    <Tag color={tags.get(t)} key={t}>{t}</Tag>
+  ));
 };
 
-const renderItem = (props: Props, music: Music) => {
-  const { checklist, onItemClick, link } = props;
+const MusicItem: React.FC<Props> = (props) => {
+  const { item, checked, isMobile } = props;
+  const time = second2String(item.duration);
 
-  const checked = (checklist !== undefined)
-    ? checklist.some(m => m.id === music.id)
-    : undefined;
-
-  return (
-    <MusicItem
-      music={music}
-      onClick={onItemClick}
-      link={link}
-      checked={checked}
-    />
-  );
-};
-
-const onChange = (props: Props, e: React.ChangeEvent<HTMLInputElement>) => {
-  props.onQueryChange(e.target.value);
-};
-
-const MusicList: React.FunctionComponent<Props> = function (props) {
-  const { musics, loading, onBack, page, pageSize, total, onPageChange, topRight, subTitle } = props;
-  const title = props.title || defaultProps.title;
-
-  const pageHeaderProps = (onBack)
-      ? { onBack }
-      : { backIcon: false };
-
-  const extra = (
-    <React.Fragment>
-      <Input.Search onChange={onChange.bind(null, props)} enterButton={true} />
-      {topRight}
-    </React.Fragment>
-  );
-
-  return (
-    <div className="article-list-page">
-      <div className="page-header">
-        <PageHeader {...pageHeaderProps} title={title} subTitle={subTitle} extra={extra}/>
-      </div>
-      <div className="page-content">
-        <Spin spinning={loading} tip="로딩중...">
-          <List
-            dataSource={musics}
-            renderItem={renderItem.bind(null, props)}
-          />
-        </Spin>
-      </div>
-      <div className="page-footer">
-        <div className="left wrapper">
-          <Button><Link to="/musics/add">음악 추가</Link></Button>
+  if (isMobile) {
+    return (
+      <div className={classnames('item mobile', { selected: checked })}>
+        <div className="first-row">
+          <span className="title">{item.title}</span>
+          {item.youtube && <Icon type="youtube" style={{ color: '#f5222d' }} />}
         </div>
-        <div className="center wrapper">
-          <Pagination current={page} total={total} pageSize={pageSize} onChange={onPageChange} />
+        <div className="last-row">
+          {renderTags(props)}
+          <span className="gray float-right">{time}</span>
         </div>
-        <div className="right wrapper"/>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className="item desktop">
+        {checked !== undefined && <Checkbox checked={checked} />}
+        <span className="id">{item.id}</span>
+        {renderTags(props)}
+        <span className="title">{item.title}</span>
+        {item.youtube && <Icon type="youtube" style={{ color: '#f5222d' }} />}
+        <span className="gray float-right">{time}</span>
+      </div>
+    );
+  }
 };
 
-export default MusicList;
+// TODO state to type
+const mapStateToProps = state => ({
+  tags: state.music.tags,
+  isMobile: state.etc.isMobile,
+});
+
+const options: Options<Music> = {
+  compare: (t1, t2) => t1.id === t2.id,
+};
+
+const connected = connect(mapStateToProps)(MusicItem);
+export default withList<Music>(options)<OriginalProps>(connected);
+
+// TODO const youtubeUrl = music.youtube && `https://www.youtube.com/watch?v=${music.youtube}`;

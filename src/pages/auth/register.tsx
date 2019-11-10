@@ -33,7 +33,7 @@ class RegisterPage extends React.Component<Props, State> {
         const username = values[USERNAME_FIELD];
         const password = values[PASSWORD1_FIELD];
         const regCode = values[REGCODE_FIELD];
-  
+
         this.props.registerAsyncRequest({ username, password, regCode });
       }
     });
@@ -62,29 +62,29 @@ class RegisterPage extends React.Component<Props, State> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    
+
     const usernameField = getFieldDecorator(USERNAME_FIELD, {
       rules: [{ required: true, message: '유저이름을 입력해주세요!' }],
-    })(<Input />)
-    
+    })(<Input />);
+
     const passwordField1 = getFieldDecorator(PASSWORD1_FIELD, {
       rules: [
         { required: true, message: '비밀번호를 입력해주세요!' },
         { validator: this.validatePassword1 },
       ],
-    })(<Input.Password />)
-    
+    })(<Input.Password />);
+
     const passwordField2 = getFieldDecorator(PASSWORD2_FIELD, {
       rules: [
         { required: true, message: '위에서 입력하신 비밀번호를 다시 입력해주세요!' },
         { validator: this.validatePassword2 },
       ],
     })(<Input.Password onBlur={this.onPassword2Blur} />);
-    
+
     const regCodeField = getFieldDecorator(REGCODE_FIELD, {
       rules: [{ required: true, message: '회원가입 코드를 입력해주세요!' }],
-    })(<Input />)
-    
+    })(<Input />);
+
     return (
       <div className="register-form-container">
         <Title>회원가입</Title>

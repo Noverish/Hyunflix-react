@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { musicNowPlayingChange, musicPlaylistRemove } from 'actions';
 import { Music } from 'models';
-import { time } from 'utils';
+import { second2String } from 'utils';
 import './music-play-item.css';
 
 interface Props {
@@ -32,7 +32,7 @@ class MusicSearchItem extends React.Component<Props, State> {
         <div className="info" onClick={this.onClick}>
           <span className="index">{this.props.index + 1}</span>
           <span className="title">{music.title}</span>
-          <span className="time">{time.second2String(music.duration)}</span>
+          <span className="time">{second2String(music.duration)}</span>
         </div>
         <div className="remove-btn" onClick={this.onRemoveClick}>
           <Icon type="close"/>

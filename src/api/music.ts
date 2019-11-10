@@ -2,13 +2,9 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 import { API_SERVER } from 'config';
 import { Music } from 'models';
+import { SearchResult } from './';
 
-export interface MusicListResult {
-  total: number;
-  results: Music[];
-}
-
-export async function musicList(query: string, page: number, pageSize: number): Promise<MusicListResult> {
+export async function musicList(query: string, page: number, pageSize: number): Promise<SearchResult<Music>> {
   const config: AxiosRequestConfig = {
     url: `${API_SERVER}/musics`,
     method: 'get',

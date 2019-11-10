@@ -1,35 +1,60 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { VideoList } from 'components';
+import withContainer from 'components/hoc/container';
 import { VideoSeries, Video } from 'models';
 import { videoSeries } from 'api';
 
+class VideoSeriesContentContainer extends withContainer<Video>()(VideoList) {}
+const link = (video: Video) => `/videos/${video.id}`;
+
+const search = async (series: VideoSeries | null, query: string, page: number, pageSize: number) => {
+  if (!series) {
+    return {
+      total: 0,
+      results: [],
+    };
+  }
+
+  const searched = (series)
+    ? series.videos.filter(v => v.title.includes(query))
+    : [];
+
+  const sliced = searched.slice((page - 1) * pageSize, (page) * pageSize);
+
+  return {
+    total: searched.length,
+    results: sliced,
+  };
+};
+
 const VideoSeriesContentPage: React.FunctionComponent<RouteComponentProps> = (props) => {
+  const videoSeriesContentList = useRef<VideoSeriesContentContainer | null>(null);
   const [series, setSeries] = useState(null as VideoSeries | null);
 
-  const category: string = props.match.params['category'];
   const seriesId: number = parseInt(props.match.params['seriesId'], 10);
 
   useEffect(() => {
     videoSeries(seriesId)
-      .then(series => setSeries(series))
+      .then((series) => {
+        setSeries(series);
+        videoSeriesContentList.current!.refresh();
+      })
       .catch();
-  },        [category, seriesId]);
+  },        [seriesId]);
 
-  if (series) {
-    return (
-      <VideoList
-        videos={series.videos}
-        onItemClick={(video: Video) => props.history.push(`/videos/${video.id}`)}
-        onBack={() => props.history.goBack()}
-        title={series.title}
-        subTitle={`총 ${series.videos.length}편`}
-      />
-    );
-  }
+  return (
+    <VideoSeriesContentContainer
+      ref={videoSeriesContentList}
+      title={series ? series.title : ''}
+      subTitle={`총 ${series ? series.videos.length : 0}편`}
+      link={link}
 
-  return <div />;
+      onBack={() => props.history.goBack()}
+      search={search.bind(null, series)}
+    />
+  );
 };
 
 export default VideoSeriesContentPage;

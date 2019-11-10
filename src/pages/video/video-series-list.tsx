@@ -1,26 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { VideoSeriesList } from 'components';
+import withContainer from 'components/hoc/container';
 import { VideoSeries } from 'models';
+import { VideoSeriesList } from 'components';
 import { videoSeriesList } from 'api';
 
+class VideoSeriesListContainer extends withContainer<VideoSeries>()(VideoSeriesList) {}
+const link = (item: VideoSeries) => `/videos/series/${item.id}`;
+
 const VideoSeriesListPage: React.FunctionComponent<RouteComponentProps> = (props) => {
-  const [serieses, setSerieses] = useState([] as VideoSeries[]);
-
-  const category: string = props.match.params['category'];
-
-  useEffect(() => {
-    videoSeriesList()
-      .then(serieses => setSerieses(serieses))
-      .catch();
-  },        [category]);
-
   return (
-    <VideoSeriesList
-      serieses={serieses}
+    <VideoSeriesListContainer
+      title="시리즈 별로 보기"
       onBack={() => props.history.goBack()}
-      title={category}
+      search={videoSeriesList}
+      link={link}
     />
   );
 };

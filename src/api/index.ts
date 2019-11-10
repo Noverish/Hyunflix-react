@@ -12,6 +12,11 @@ export * from './video';
 export * from './user';
 export * from './video-series';
 
+export interface SearchResult<T> {
+  total: number;
+  results: T[];
+}
+
 axios.interceptors.request.use((config) => {
   const token = cookie.getCookie('x-hyunsub-token');
   if (token) {

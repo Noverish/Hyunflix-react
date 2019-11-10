@@ -7,11 +7,12 @@ import { connect } from 'react-redux';
 import { VideoPlayer } from 'components';
 import { Video, Subtitle, UserVideo, UserVideoTime } from 'models';
 import { SOCKET_SERVER, USER_VIDEO_SOCKET_PATH } from 'config';
-import { videoOne , userVideo, videoSubtitleList } from 'api';
+import { videoOne , userVideoOne, videoSubtitleList } from 'api';
 
 interface Props extends RouteComponentProps {
   rootWidth: number;
   userId: number;
+  token: string;
 }
 
 interface State {
@@ -32,11 +33,11 @@ class VideoVideoContentPage extends React.Component<Props, State> {
 
   componentDidMount() {
     this.socket = socketio.connect(SOCKET_SERVER, { path: USER_VIDEO_SOCKET_PATH });
+    const { token } = this.props;
 
-    const userId: number = this.props.userId;
     const videoId: number = parseInt(this.props.match.params['videoId']);
 
-    userVideo(userId, videoId)
+    userVideoOne(videoId)
       .then(userVideo => this.setState({ userVideo }))
       .catch(() => {});
 
@@ -45,6 +46,7 @@ class VideoVideoContentPage extends React.Component<Props, State> {
       this.setState({ video });
 
       const subtitles: Subtitle[] = await videoSubtitleList(video.id);
+      subtitles.forEach(v => v.url = `${v.url}?token=${token}`);
       this.setState({ subtitles });
     })().catch();
   }
@@ -64,6 +66,8 @@ class VideoVideoContentPage extends React.Component<Props, State> {
 
     // const currentTime = qs.parse(location.search, { parseNumbers: true }).t as number | undefined;
     const currentTime = (userVideo) ? userVideo.time : undefined;
+
+    console.log(userVideo);
 
     const videoPlayer = (width > 0 && video)
       ? <VideoPlayer
@@ -128,6 +132,7 @@ const mapStateToProps = (state) => {
   return {
     rootWidth: state.etc.width,
     userId: state.auth.userId,
+    token: state.auth.token,
   };
 };
 

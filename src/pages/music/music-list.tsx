@@ -5,10 +5,10 @@ import { Button } from 'antd';
 
 import { musicPlaylistAdd, musicPlaylistRemove } from 'actions';
 
-import { musicList, MusicListResult } from 'api';
+import { musicList } from 'api';
 import { Music } from 'models';
-import { MusicListWrapper } from 'containers';
-import { MusicPlayer } from 'components';
+import { MusicPlayer, MusicList } from 'components';
+import withContainer from 'components/hoc/container';
 import './music-list.css';
 
 interface Props extends RouteComponentProps {
@@ -17,26 +17,30 @@ interface Props extends RouteComponentProps {
   playlist: Music[];
 }
 
+class MusicListContainer extends withContainer<Music>()(MusicList) {}
+const link = (music: Music) => `/musics/${music.id}`;
+
 class MusicListPage extends React.Component<Props> {
-  musicListWrapper = React.createRef<MusicListWrapper>();
+  musicListContainer = React.createRef<MusicListContainer>();
 
   render() {
     const { playlist } = this.props;
 
-    const topRight = (
-      <Button.Group className="button-group">
-        <Button onClick={this.onAddAllClicked} icon="plus" type="primary">Add all to Playlist</Button>
-      </Button.Group>
+    const headerExtra = (
+      <Button onClick={this.onAddAllClicked} icon="plus" type="primary">Add all to Playlist</Button>
     );
 
     return (
       <div className="music-list-page">
         <MusicPlayer />
-        <MusicListWrapper
-          ref={this.musicListWrapper}
+        <MusicListContainer
+          title="Music"
           onItemClick={this.onItemClick}
+          ref={this.musicListContainer}
           checklist={playlist}
-          topRight={topRight}
+          headerExtra={headerExtra}
+          search={musicList}
+          link={link}
         />
       </div>
     );
@@ -53,10 +57,10 @@ class MusicListPage extends React.Component<Props> {
   }
 
   onAddAllClicked = () => {
-    const query = this.musicListWrapper.current!.state.query;
+    const query = this.musicListContainer.current!.state.query;
 
     musicList(query, 0, 0)
-      .then((result: MusicListResult) => {
+      .then((result) => {
         this.props.musicPlaylistAdd(result.results);
       })
       .catch();

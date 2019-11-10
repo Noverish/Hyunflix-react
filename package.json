@@ -17,6 +17,7 @@
     "hangul-js": "^0.2.5",
     "immutable": "^4.0.0-rc.12",
     "node-rsa": "^1.0.6",
+    "node-sass": "^4.13.0",
     "path": "^0.12.7",
     "query-string": "^6.8.3",
     "react": "^16.10.0",

@@ -1,18 +1,21 @@
 import React from 'react';
-import { RouteComponentProps } from 'react-router-dom';
 
+import withContainer from 'components/hoc/container';
+import { VideoList } from 'components';
 import { Video } from 'models';
-import { VideoListWrapper } from 'containers';
+import { videoList } from 'api';
 
-const VideoListPage: React.FunctionComponent<RouteComponentProps> = (props) => {
-  const onItemClick = (video: Video) => {
-    props.history.push(`/videos/${video.id}`);
-  };
+const VideoListContainer = withContainer<Video>()(VideoList);
+const link = (video: Video) => `/videos/${video.id}`;
 
+const VideoListPage: React.FunctionComponent = () => {
   return (
-    <div className="video-article-list-page">
-      <VideoListWrapper onItemClick={onItemClick} subTitle="영화, 드라마, 예능" />
-    </div>
+    <VideoListContainer
+      title="Video"
+      subTitle="영화, 드라마, 예능"
+      search={videoList}
+      link={link}
+    />
   );
 };
 

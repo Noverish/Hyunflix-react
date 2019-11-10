@@ -1,45 +1,56 @@
 import React from 'react';
-import { PageHeader, List, Spin } from 'antd';
+import { Checkbox, Tag } from 'antd';
+import { connect } from 'react-redux';
 
-import UserVideoItem from './user-video-item';
+import withList, { InjectedProps, Options } from 'components/hoc/list';
 import { UserVideo } from 'models';
 
-interface Props {
-  userVideos: UserVideo[];
-  loading: boolean;
-  link?(userVideo: UserVideo): string;
-  onItemCheck?(userVideo: UserVideo, checked: boolean): void;
-  checklist?: UserVideo[];
-  headerExtra?: React.ReactNode;
+interface ReduxProps {
+  tags: Map<string, string>;
+  isMobile: boolean;
 }
 
-const VideoHistoryList: React.FunctionComponent<Props> = (props) => {
-  const { userVideos, loading, headerExtra, checklist, onItemCheck, link } = props;
+interface OriginalProps {
 
-  const renderItem = userVideo => (
-    <UserVideoItem
-      userVideo={userVideo}
-      onCheck={onItemCheck}
-      link={link}
-      checked={checklist !== undefined ? checklist.includes(userVideo) : undefined}
-    />
-  );
+}
 
+type Props = OriginalProps & InjectedProps<UserVideo> & ReduxProps;
+
+const renderTags = (props: Props) => {
+  const { item, tags } = props;
+
+  return item.video.tags.map(t => (
+    <Tag color={tags.get(t)} key={t}>{t}</Tag>
+  ));
+};
+
+const UserVideoItem: React.FC<Props> = (props) => {
+  const { item, checked } = props;
+  const video = item.video;
+  const percent = Math.floor(item.time / video.duration * 100);
+
+  // TODO make mobile
   return (
-    <div className="article-list-page">
-      <div className="page-header">
-        <PageHeader title="시청기록" extra={headerExtra} />
-      </div>
-      <div className="page-content">
-        <Spin spinning={loading} tip="Loading...">
-          <List
-            dataSource={userVideos}
-            renderItem={renderItem}
-          />
-        </Spin>
-      </div>
+    <div className="item desktop">
+      {checked !== undefined && <Checkbox checked={checked} />}
+      {renderTags(props)}
+      <span className="title">{video.title}</span>
+      <span className="gray">{percent}% 시청,</span>
+      <span className="gray">총 시간: {video.durationString},</span>
+      <span className="gray">{item.date} 시청</span>
     </div>
   );
 };
 
-export default VideoHistoryList;
+// TODO state to type
+const mapStateToProps = state => ({
+  tags: state.video.tags,
+  isMobile: state.etc.isMobile,
+});
+
+const options: Options<UserVideo> = {
+  compare: (t1, t2) => t1.video.id === t2.video.id,
+};
+
+const connected = connect(mapStateToProps)(UserVideoItem);
+export default withList<UserVideo>(options)<OriginalProps>(connected);

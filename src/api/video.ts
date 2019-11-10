@@ -2,13 +2,9 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 import { API_SERVER } from 'config';
 import { Video, Subtitle } from 'models';
+import { SearchResult } from './';
 
-export interface VideoListResult {
-  total: number;
-  results: Video[];
-}
-
-export async function videoList(query: string, page: number, pageSize: number): Promise<VideoListResult> {
+export async function videoList(query: string, page: number, pageSize: number): Promise<SearchResult<Video>> {
   const config: AxiosRequestConfig = {
     url: `${API_SERVER}/videos`,
     method: 'get',

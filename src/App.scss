@@ -1,0 +1,104 @@
+$DIVIER_COLOR: #dddddd;
+$HOVER_BACKGROUND: #eeeeee;
+$SELECT_BACKGROUND: #e6f7ff;
+$BLUE: #1890ff;
+$VISITED: #551A8B;
+$ID: #314659;
+
+.item-wrapper {
+  display: block;
+  
+  &:not(:first-child) {
+    border-top: 1px solid $DIVIER_COLOR;
+  }
+}
+
+.item {
+  padding: 8px;
+  color: #000000;
+  
+  &:hover {
+    background: $HOVER_BACKGROUND;
+  }
+  
+  &.selected {
+    background: $SELECT_BACKGROUND;
+    color: $BLUE;
+  }
+  
+  &.desktop {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    
+    & > *:not(:last-child) {
+      margin-right: 8px;
+    }
+  }
+  
+  &.mobile {
+    display: flex;
+    flex-flow: column nowrap;
+    
+    .first-row {
+      display: block;
+      margin-bottom: 8px;
+      
+      & > *:not(:last-child) {
+        margin-right: 8px;
+      }
+    }
+    
+    .last-row {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      
+      & > *:not(:last-child) {
+        margin-right: 8px;
+      }
+    }
+  }
+  
+  .id {
+    color: $ID;
+  }
+  
+  .title {
+    color: $BLUE;
+  }
+  
+  .gray {
+    color: rgba(0,0,0,0.65);
+    font-size: 11px;
+  }
+  
+  .float-right {
+    margin-left: auto;
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  
+  .ant-page-header {
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+  }
+  
+  .ant-page-header-heading-extra {
+    display: flex;
+  }
+  
+  .ant-spin-nested-loading {
+    border-bottom: 1px solid #dddddd;
+  }
+  
+  .ant-pagination {
+    align-self: center;
+    margin-top: 16px;
+  }
+}
+
+  

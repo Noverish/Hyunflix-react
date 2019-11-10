@@ -9,8 +9,7 @@ import Register from 'pages/auth/register';
 
 import { windowResize } from 'actions';
 import 'antd/dist/antd.css';
-import './article-item.css';
-import './article.css';
+import './App.scss';
 
 interface Props {
   windowResize(): ReturnType<typeof windowResize>;

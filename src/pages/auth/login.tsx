@@ -27,7 +27,7 @@ class LoginPage extends React.Component<Props, State> {
       if (!err) {
         const username = values[USERNAME_FILED];
         const password = values[PASSWORD_FIELD];
-  
+
         this.props.loginAsyncRequest({ username, password });
       }
     });
@@ -35,7 +35,7 @@ class LoginPage extends React.Component<Props, State> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    
+
     const usernameField = getFieldDecorator(USERNAME_FILED, {
       rules: [{ required: true, message: '유저이름을 입력해주세요!' }],
     })(
@@ -44,7 +44,7 @@ class LoginPage extends React.Component<Props, State> {
         placeholder="유저이름"
       />,
     );
-    
+
     const passwordField = getFieldDecorator(PASSWORD_FIELD, {
       rules: [{ required: true, message: '비밀번호를 입력해주세요!' }],
     })(
@@ -53,8 +53,8 @@ class LoginPage extends React.Component<Props, State> {
         type="password"
         placeholder="비밀번호"
       />,
-    )
-    
+    );
+
     return (
       <div className="login-form-container">
         <Title>로그인</Title>

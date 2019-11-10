@@ -37,8 +37,8 @@ const MainPage: React.FunctionComponent<Props> = (props) => {
         <Route exact={true} path="/register" render={_ => <Redirect to="/home" />} />
         <Route exact={true} path="/" render={_ => <Redirect to="/home" />} />
 
-        <Route path="/videos/series/:category/:seriesId" component={VideoSeriesContent} />
-        <Route path="/videos/series/:category" component={VideoSeriesList} />
+        <Route path="/videos/series/:seriesId" component={VideoSeriesContent} />
+        <Route path="/videos/series" component={VideoSeriesList} />
         <Route path="/videos/:videoId" component={VideoContent} />
         <Route path="/videos" component={VideoList} />
 
