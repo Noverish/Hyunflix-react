@@ -16,6 +16,7 @@ const VideoSeriesListPage: React.FunctionComponent<RouteComponentProps> = (props
       onBack={() => props.history.goBack()}
       search={videoSeriesList}
       link={link}
+      history={props.history}
     />
   );
 };

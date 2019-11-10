@@ -41,6 +41,7 @@ class MusicListPage extends React.Component<Props> {
           headerExtra={headerExtra}
           search={musicList}
           link={link}
+          history={this.props.history}
         />
       </div>
     );
@@ -57,7 +58,7 @@ class MusicListPage extends React.Component<Props> {
   }
 
   onAddAllClicked = () => {
-    const query = this.musicListContainer.current!.state.query;
+    const query = this.musicListContainer.current!.extractQuery().query;
 
     musicList(query, 0, 0)
       .then((result) => {

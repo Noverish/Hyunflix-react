@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button } from 'antd';
 
 import withContainer from 'components/hoc/container';
@@ -10,7 +10,7 @@ import { videoList } from 'api';
 const VideoListContainer = withContainer<Video>()(VideoList);
 const link = (video: Video) => `/videos/${video.id}`;
 
-const VideoListPage: React.FunctionComponent = () => {
+const VideoListPage: React.FunctionComponent<RouteComponentProps> = (props) => {
   const headerExtra = (
     <Link to="/videos/series">
       <Button type="primary">시리즈 별로 보기</Button>
@@ -24,6 +24,7 @@ const VideoListPage: React.FunctionComponent = () => {
       search={videoList}
       link={link}
       headerExtra={headerExtra}
+      history={props.history}
     />
   );
 };

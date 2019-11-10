@@ -53,6 +53,7 @@ const VideoSeriesContentPage: React.FunctionComponent<RouteComponentProps> = (pr
 
       onBack={() => props.history.goBack()}
       search={search.bind(null, series)}
+      history={props.history}
     />
   );
 };

@@ -10,11 +10,13 @@ export interface ExternalProps<T> {
   pageSize?: number;
   loading?: boolean;
 
+  query?: string;
+  onQueryChange(query: string): void;
+
   title: string;
   subTitle?: string;
 
   onPageChange(page: number): void;
-  onQueryChange(query: string): void;
   onItemClick?(item: T): void;
   link?(item: T): string;
   onBack?(): void;
@@ -77,7 +79,7 @@ function withList<T>(options: Options<T>) {
     }
 
     const HOCList: FC<CombinedExternalProps> = (props) => {
-      const { items, loading, title, onBack, page, pageSize, total, onPageChange, headerExtra, subTitle } = props;
+      const { items, loading, title, onBack, page, pageSize, total, onPageChange, headerExtra, subTitle, query } = props;
 
       const pageHeaderProps = (onBack)
         ? { onBack }
@@ -85,7 +87,7 @@ function withList<T>(options: Options<T>) {
 
       const extra = (
         <React.Fragment>
-          <Input.Search onChange={onQueryChange.bind(null, props)} enterButton={true} />
+          <Input.Search onChange={onQueryChange.bind(null, props)} defaultValue={query} />
           {headerExtra}
         </React.Fragment>
       );

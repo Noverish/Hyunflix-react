@@ -1,4 +1,5 @@
 import React from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 import { Button } from 'antd';
 
 import { UserVideoList } from 'components';
@@ -15,7 +16,7 @@ interface State {
 class UserVideoListContainer extends withContainer<UserVideo>()(UserVideoList) {}
 const link = (userVideo: UserVideo) => `/videos/${userVideo.video.id}`;
 
-class UserVideoPage extends React.Component<{}, State> {
+class UserVideoPage extends React.Component<RouteComponentProps, State> {
   userVideoListContainer = React.createRef<UserVideoListContainer>();
 
   state: State = {
@@ -46,6 +47,7 @@ class UserVideoPage extends React.Component<{}, State> {
         search={userVideoList}
         link={link}
         loading={loading}
+        history={this.props.history}
       />
     );
   }

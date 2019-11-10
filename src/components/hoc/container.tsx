@@ -1,5 +1,7 @@
 import React, { ComponentType } from 'react';
+import { History } from 'history';
 import { debounce } from 'debounce';
+import { parse, stringify } from 'query-string';
 
 import { ExternalProps as ComponentExternalProps } from './list';
 import { USER_INPUT_DEBOUNCE, PAGE_SIZE } from 'config';
@@ -13,6 +15,7 @@ type ExtractedProps<T> =
 
 interface InjectedProps<T> {
   search: SearchFunction<T>;
+  history: History;
 }
 
 type CombinedExtrnalProps<T> = Without<ComponentExternalProps<T>, ExtractedProps<T>> & InjectedProps<T>;
@@ -24,9 +27,7 @@ export interface Options<T> {
 interface State<T> {
   items: T[];
   total: number;
-  page: number;
   loading: boolean;
-  query: string;
 }
 
 function withContainer<T>(options?: Options<T>) {
@@ -35,19 +36,24 @@ function withContainer<T>(options?: Options<T>) {
       state: State<T> = {
         items: [] as T[],
         total: 0,
-        page: 1,
         loading: false,
-        query: '',
       };
 
       componentDidMount() {
-        const { query, page } = this.state;
-        this.search(query, page);
+        this.refresh();
+      }
+
+      public extractQuery = () => {
+        const { q, p } = parse(window.location.search);
+        const query: string = (q || '') as string;
+        const page: number = parseInt(p as string || '1');
+        return { query, page };
       }
 
       render() {
         const pageSize = this.props.pageSize || PAGE_SIZE;
-        const { items, total, page, loading } = this.state;
+        const { items, total, loading } = this.state;
+        const { page, query } = this.extractQuery();
 
         return (
           <Component
@@ -55,19 +61,23 @@ function withContainer<T>(options?: Options<T>) {
             total={total}
             page={page}
             pageSize={pageSize}
-            loading={loading}
+            query={query}
 
             onPageChange={this.onPageChange}
             onQueryChange={this.onQueryChange}
 
             {...this.props}
+            loading={loading}
           />
         );
       }
 
       debouncedOnQueryChange = debounce((query: string) => {
-        if (this.state.query !== query) {
-          this.search(query, 1);
+        const { query: oldQuery } = this.extractQuery();
+        if (oldQuery !== query) {
+          const querystring = stringify({ p: 1, q: query });
+          this.props.history.push(window.location.pathname + '?' + querystring);
+          this.refresh();
         } else {
           this.setState({ loading: false });
         }
@@ -79,24 +89,20 @@ function withContainer<T>(options?: Options<T>) {
       }
 
       onPageChange = (page: number) => {
-        const { query } = this.state;
-        this.search(query, page);
+        const { query } = this.extractQuery();
+        const querystring = stringify({ q: query, p: page });
+        this.props.history.push(window.location.pathname + '?' + querystring);
+        this.refresh();
       }
 
       public refresh = () => {
-        const { query, page } = this.state;
-        this.search(query, page);
-      }
-
-      search = (query: string, page: number) => {
         const pageSize = this.props.pageSize || PAGE_SIZE;
+        const { query, page } = this.extractQuery();
         this.setState({ loading: true });
 
         this.props.search(query, page, pageSize)
           .then((result: SearchResult<T>) => {
             this.setState({
-              query,
-              page,
               loading: false,
               items: result.results,
               total: result.total,
