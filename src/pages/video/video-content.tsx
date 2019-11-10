@@ -1,6 +1,6 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { PageHeader, Row, Col, Statistic } from 'antd';
+import { PageHeader, Statistic } from 'antd';
 import * as socketio from 'socket.io-client';
 import { connect } from 'react-redux';
 
@@ -42,7 +42,13 @@ class VideoVideoContentPage extends React.Component<Props, State> {
         userVideoOne(videoId),
       ]);
 
-      subtitles && subtitles.forEach(v => v.url = `${v.url}?token=${token}`);
+      if (subtitles) {
+        subtitles.forEach(v => v.url += `?token=${token}`);
+      }
+
+      if (video) {
+        video.url += `?token=${token}`;
+      }
 
       this.setState({ video, subtitles, userVideo });
     })();
@@ -61,14 +67,14 @@ class VideoVideoContentPage extends React.Component<Props, State> {
 
     const statistics = (video)
       ? (
-        <Row className="border-bottom" style={{ padding: '12px' }} type="flex" gutter={32}>
-          <Col><Statistic title="Durtaion" value={video.durationString} /></Col>
-          <Col><Statistic title="Size" value={video.sizeString} /></Col>
-          <Col><Statistic title="Screen" value={`${video.width}x${video.height}`} /></Col>
-          <Col><Statistic title="Bitrate" value={video.bitrateString} /></Col>
-          <Col><Statistic title="Resolution" value={video.resolution} /></Col>
-          <Col><Statistic title="Date" value={video.date} /></Col>
-        </Row>
+        <div className="statistics border-bottom">
+          <Statistic title="Durtaion" value={video.durationString} />
+          <Statistic title="Size" value={video.sizeString} />
+          <Statistic title="Screen" value={`${video.width}x${video.height}`} />
+          <Statistic title="Bitrate" value={video.bitrateString} />
+          <Statistic title="Resolution" value={video.resolution} />
+          <Statistic title="Date" value={video.date} />
+        </div>
       )
       : undefined;
 

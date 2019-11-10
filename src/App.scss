@@ -31,6 +31,10 @@ $ID: #314659;
   &:not(:first-child) {
     border-top: 1px solid $DIVIER_COLOR;
   }
+  
+  &:visited .title {
+    color: $VISITED !important;
+  }
 }
 
 .item {
@@ -121,7 +125,19 @@ $ID: #314659;
   .ant-pagination {
     align-self: center;
     margin-top: 16px;
+    
+    @include mobile {
+      margin-bottom: 16px;
+    }
   }
 }
 
+.statistics {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 16px;
   
+  & > *:not(:last-child) {
+    margin-right: 16px;
+  }
+}

@@ -5,7 +5,7 @@ import { Layout, Menu } from 'antd';
 import { UserAvatarMenu } from 'components';
 import './main-layout.css';
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 const MainLayout: React.FunctionComponent<RouteComponentProps> = (props) => {
   const path: string = props.location.pathname;
@@ -42,7 +42,6 @@ const MainLayout: React.FunctionComponent<RouteComponentProps> = (props) => {
           {props.children}
         </div>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
     </Layout>
   );
 };

@@ -12,6 +12,7 @@ interface Props {
   nowPlaying: Music | null;
   randomPlay: boolean;
   loopPlay: number;
+  token: string;
 }
 
 interface State {
@@ -26,10 +27,10 @@ class MusicPlayer extends React.Component<Props, State> {
   }
 
   render() {
-    const { nowPlaying } = this.props;
+    const { nowPlaying, token } = this.props;
 
     const source = (nowPlaying)
-      ? <source src={encodeURI(nowPlaying!.url)} type="audio/mpeg" />
+      ? <source src={encodeURI(nowPlaying!.url) + `?token=${token}`} type="audio/mpeg" />
       : null;
 
     const title = (nowPlaying)
@@ -68,6 +69,7 @@ const mapStateToProps = (state) => {
     nowPlaying: state.music.nowPlaying,
     randomPlay: state.music.randomPlay,
     loopPlay: state.music.loopPlay,
+    token: state.auth.token,
   };
 };
 
