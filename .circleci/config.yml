@@ -40,5 +40,5 @@ jobs:
             - "7b:42:e7:9f:87:83:6f:ad:58:ba:4d:cc:82:4a:75:5c"
       
       - run: sudo apt install rsync -y
-      - run: rsync -ah -e "ssh -o StrictHostKeyChecking=no" ~/repo/build/ hyunsub@home.hyunsub.kim:/home/hyunsub/docker/frontend/
-      - run: rsync -ah -e "ssh -o StrictHostKeyChecking=no" ~/repo/default.conf hyunsub@home.hyunsub.kim:/home/hyunsub/docker/frontend/
+      - run: rsync -ah --progress -e "ssh -o StrictHostKeyChecking=no" ~/repo/build/ hyunsub@home.hyunsub.kim:/home/hyunsub/docker/frontend/
+      - run: rsync -ah --progress -e "ssh -o StrictHostKeyChecking=no" ~/repo/default.conf hyunsub@home.hyunsub.kim:/home/hyunsub/docker/frontend/
