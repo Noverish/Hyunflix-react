@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 
-import { UserAvatarMenu } from 'components';
+import { UserAvatarMenu, MusicPlayer } from 'components';
 import './main-layout.css';
 
 const { Header, Content } = Layout;
@@ -42,6 +42,7 @@ const MainLayout: React.FunctionComponent<RouteComponentProps> = (props) => {
           {props.children}
         </div>
       </Content>
+      <MusicPlayer />
     </Layout>
   );
 };

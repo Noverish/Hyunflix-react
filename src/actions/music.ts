@@ -5,19 +5,6 @@ import { Music } from 'models';
 export const musicPlaylistAdd = createStandardAction('MUSIC_PLAYLIST_ADD')<Music[]>();
 export const musicPlaylistRemove = createStandardAction('MUSIC_PLAYLIST_REMOVE')<Music>();
 
-export const musicNowPlayingChange = createStandardAction('MUSIC_NOW_PLAYING_CHANGE')<Music | null>();
-
-export const musicRandomPlayToggle = createStandardAction('MUSIC_RANDOM_PLAY_TOGGLE')<undefined>();
-export const musicLoopPlayToggle = createStandardAction('MUSIC_LOOP_PLAY_TOGGLE')<undefined>();
-
-export const musicPlayNextAsync = createAsyncAction(
-  'MUSIC_PLAY_NEXT_REQUEST',
-  'MUSIC_PLAY_NEXT_SUCCESS',
-  'MUSIC_PLAY_NEXT_FAILURE',
-)<undefined, Music | null, undefined>();
-
-export const musicPlayPrev = createStandardAction('MUSIC_PLAY_PREV')<undefined>();
-
 export const musicTagListAsync = createAsyncAction(
   'MUSIC_TAG_LIST_REQUEST',
   'MUSIC_TAG_LIST_SUCCESS',

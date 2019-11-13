@@ -2,19 +2,20 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button } from 'antd';
+import find from 'lodash/find';
 
 import { musicPlaylistAdd, musicPlaylistRemove } from 'actions';
 
 import { musicList } from 'api';
-import { Music } from 'models';
-import { MusicPlayer, MusicList } from 'components';
+import { Music, PlaylistDiff } from 'models';
+import { MusicList } from 'components';
 import withContainer from 'components/hoc/container';
 import './music-list.css';
 
 interface Props extends RouteComponentProps {
   musicPlaylistAdd(musics: Music[]): ReturnType<typeof musicPlaylistAdd>;
   musicPlaylistRemove: typeof musicPlaylistRemove;
-  playlist: Music[];
+  playlistDiff: PlaylistDiff;
 }
 
 class MusicListContainer extends withContainer<Music>()(MusicList) {}
@@ -24,7 +25,7 @@ class MusicListPage extends React.Component<Props> {
   musicListContainer = React.createRef<MusicListContainer>();
 
   render() {
-    const { playlist } = this.props;
+    const { newPlaylist } = this.props.playlistDiff;
 
     const headerExtra = (
       <Button onClick={this.onAddAllClicked} icon="plus" type="primary">Add all to Playlist</Button>
@@ -32,12 +33,11 @@ class MusicListPage extends React.Component<Props> {
 
     return (
       <div className="music-list-page">
-        <MusicPlayer />
         <MusicListContainer
           title="Music"
           onItemClick={this.onItemClick}
           ref={this.musicListContainer}
-          checklist={playlist}
+          checklist={newPlaylist}
           headerExtra={headerExtra}
           search={musicList}
           link={link}
@@ -48,9 +48,9 @@ class MusicListPage extends React.Component<Props> {
   }
 
   onItemClick = (music: Music) => {
-    const { playlist } = this.props;
+    const { newPlaylist } = this.props.playlistDiff;
 
-    if (playlist.includes(music)) {
+    if (find(newPlaylist, music)) {
       this.props.musicPlaylistRemove(music);
     } else {
       this.props.musicPlaylistAdd([music]);
@@ -75,7 +75,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state) => {
   return {
-    playlist: state.music.playlist,
+    playlistDiff: state.music.playlistDiff,
   };
 };
 

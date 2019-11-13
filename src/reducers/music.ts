@@ -1,24 +1,41 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
+import differenceBy from 'lodash/differenceBy';
 
-import { musicPlaylistAdd, musicNowPlayingChange, musicRandomPlayToggle, musicLoopPlayToggle, musicPlayNextAsync, musicTagListAsync, musicPlaylistRemove } from 'actions';
-import { Music } from 'models';
+import { musicTagListAsync, musicPlaylistAdd, musicPlaylistRemove } from 'actions';
+import { PlaylistDiff } from 'models';
 import { COLORS } from 'config';
 
-export const playlist = createReducer([] as Music[])
-  .handleAction(musicPlaylistAdd, (state, action: ReturnType<typeof musicPlaylistAdd>) => [...state, ...action.payload.filter(m => !state.includes(m))])
-  .handleAction(musicPlaylistRemove, (state, action: ReturnType<typeof musicPlaylistRemove>) => state.filter(m => m.id !== action.payload.id));
+const initPlaylistDiff: PlaylistDiff = {
+  oldPlaylist: [],
+  newPlaylist: [],
+  added: [],
+  removed: null,
+};
 
-export const nowPlaying = createReducer(null as (Music | null))
-  .handleAction(musicNowPlayingChange, (_, action: ReturnType<typeof musicNowPlayingChange>) => action.payload)
-  .handleAction(musicPlaylistAdd, (state, action: ReturnType<typeof musicPlaylistAdd>) => (state) ? state : action.payload[0])
-  .handleAction(musicPlayNextAsync.success, (_, action: ReturnType<typeof musicPlayNextAsync.success>) => action.payload);
+export const playlistDiff = createReducer(initPlaylistDiff)
+  .handleAction(musicPlaylistAdd, (state, action: ReturnType<typeof musicPlaylistAdd>) => {
+    const { newPlaylist } = state;
+    const added = differenceBy(action.payload, newPlaylist, 'id');
 
-export const randomPlay = createReducer(false as boolean)
-  .handleAction(musicRandomPlayToggle, (state, _) => !state);
+    return {
+      oldPlaylist: newPlaylist,
+      newPlaylist: [...newPlaylist, ...added],
+      added,
+      removed: null,
+    };
+  })
+  .handleAction(musicPlaylistRemove, (state, action: ReturnType<typeof musicPlaylistRemove>) => {
+    const { newPlaylist } = state;
+    const removed = action.payload;
 
-export const loopPlay = createReducer(0 as number)
-  .handleAction(musicLoopPlayToggle, (state, _) => (state + 1) % 3);
+    return {
+      oldPlaylist: newPlaylist,
+      newPlaylist: differenceBy(newPlaylist, [removed], 'id'),
+      added: [],
+      removed,
+    };
+  });
 
 export const tags = createReducer(new Map<string, string>())
   .handleAction(musicTagListAsync.success, (_, action: ReturnType<typeof musicTagListAsync.success>) => {
@@ -31,10 +48,7 @@ export const tags = createReducer(new Map<string, string>())
   });
 
 const reducer = combineReducers({
-  playlist,
-  nowPlaying,
-  randomPlay,
-  loopPlay,
+  playlistDiff,
   tags,
 });
 

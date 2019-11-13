@@ -20,3 +20,10 @@ export enum YoutubeStage {
   encode = 2,
   success = 3,
 }
+
+export interface PlaylistDiff {
+  oldPlaylist: Music[];
+  newPlaylist: Music[];
+  added: Music[];
+  removed: Music | null;
+}

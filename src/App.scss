@@ -141,3 +141,67 @@ $ID: #314659;
     margin-right: 16px;
   }
 }
+
+.music-player-floating-button {
+  bottom: 40px;
+  
+  .ant-back-top-inner {
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    border-radius: 4px;
+    background-color: #1088e9;
+    color: #fff;
+    text-align: center;
+    font-size: 20px;
+  }
+}
+
+.music-player-modal {
+  top: 100px;
+
+  .rc-dialog-content {
+    background-color: transparent;
+  }
+  
+  .aplayer {
+    border-radius: 6px;
+  }
+}
+
+.aplayer {
+  .aplayer-icon-back,
+  .aplayer-icon-play,
+  .aplayer-icon-forward {
+    display: inline-block;
+  }
+  
+  .aplayer-icon-back,
+  .aplayer-icon-play,
+  .aplayer-icon-forward {
+    position: absolute;
+    bottom: 27px;
+    width: 20px;
+    height: 20px;
+  }
+  
+  .aplayer-icon-back {
+    right: 50px;
+  }
+  
+  .aplayer-icon-play {
+    right: 25px;
+  }
+  
+  .aplayer-icon-forward {
+    right: 0px;
+  }
+  
+  .aplayer-icon-menu {
+    display: none;
+  }
+  
+  .aplayer-music {
+    padding-right: 75px;
+  }
+}
