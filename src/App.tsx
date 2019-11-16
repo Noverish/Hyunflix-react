@@ -20,6 +20,7 @@ interface State {
 
 }
 
+// TODO destroy vanta after login or register success
 class App extends Component<Props, State> {
   componentDidMount() {
     window.onresize = debounce(this.props.windowResize, 500);
