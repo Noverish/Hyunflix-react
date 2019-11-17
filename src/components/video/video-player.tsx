@@ -1,16 +1,13 @@
 import React from 'react';
 import videojs from 'video.js';
 import { Subtitle } from 'models';
-import { LARGE_SEEK_RANGE, SMALL_SEEK_RANGE } from 'config';
+import { LARGE_SEEK_RANGE, SMALL_SEEK_RANGE, VIDEO_SCREEN_RATIO } from 'config';
 import 'videojs-seek-buttons';
 import './videojs-seek-buttons.css';
 import './videojs-skin.css';
 
 interface Props {
-  src?: string;
-  subtitles?: Subtitle[];
   onTimeUpdate?(time: number): void;
-  currentTime?: number;
   ratio?: number;
 }
 
@@ -49,24 +46,12 @@ export default class VideoPlayer extends React.Component<Props> {
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDown);
 
-    const videoOption = {
-      autoplay: false,
-      controls: true,
-      sources: [],
-    };
-
-    const textTractSettings = {
-      backgroundColor: '#000',
-      backgroundOpacity: '0',
-      edgeStyle: 'uniform',
-    };
-
-    const player = videojs(this.videoNode.current, videoOption, this.onPlayerReady);
+    const player = videojs(this.videoNode.current, { controls: true });
 
     // @ts-ignore
     player.seekButtons({
-      forward: 10,
-      back: 10,
+      forward: SMALL_SEEK_RANGE,
+      back: SMALL_SEEK_RANGE,
     });
 
     skin(player);
@@ -78,6 +63,12 @@ export default class VideoPlayer extends React.Component<Props> {
       });
     }
 
+    const textTractSettings = {
+      backgroundColor: '#000',
+      backgroundOpacity: '0',
+      edgeStyle: 'uniform',
+    };
+
     // @ts-ignore
     const settings = player.textTrackSettings;
     settings.setValues(textTractSettings);
@@ -86,63 +77,36 @@ export default class VideoPlayer extends React.Component<Props> {
     this.player = player;
   }
 
-  onPlayerReady = () => {
-    const player = this.player!;
-    this.setSrc(player, this.props.src);
-    this.setSubtitles(player, this.props.subtitles);
-    this.setCurrentTime(player, this.props.currentTime);
-  }
-
-  setSrc = (player: videojs.Player, src?: string) => {
-    if (src) {
-      player.src({ src, type: 'video/mp4' });
-    } else {
-      player.src();
-    }
-  }
-
-  setSubtitles = (player: videojs.Player, subtitles?: Subtitle[]) => {
-    if (!subtitles) {
-      return;
-    }
-
-    for (const subtitle of subtitles) {
-      const option: videojs.TextTrackOptions = {
-        kind: 'subtitles',
-        srclang: subtitle.language,
-        label: subtitle.language,
-        src: subtitle.url,
-        mode: (subtitle.language === 'ko') ? 'showing' : 'hidden',
-        default: subtitle.language === 'ko',
-      };
-
-      player.addRemoteTextTrack(option, false);
-    }
-  }
-
-  setCurrentTime = (player: videojs.Player, currentTime?: number) => {
-    if (currentTime) {
-      player.currentTime(currentTime);
-    }
-  }
-
-  shouldComponentUpdate(nextProps: Props) {
+  public src = (src: string) => {
     const player = this.player;
     if (player) {
-      if (nextProps.src !== this.props.src) {
-        this.setSrc(player, nextProps.src);
-      }
+      player.src({ src, type: 'video/mp4' });
+    }
+  }
 
-      if (nextProps.subtitles !== this.props.subtitles) {
-        this.setSubtitles(player, nextProps.subtitles);
-      }
+  public addSubtitles = (subtitles: Subtitle[]) => {
+    const player = this.player;
+    if (player) {
+      for (const subtitle of subtitles) {
+        const option: videojs.TextTrackOptions = {
+          kind: 'subtitles',
+          srclang: subtitle.language,
+          label: subtitle.language,
+          src: subtitle.url,
+          mode: (subtitle.language === 'ko') ? 'showing' : 'hidden',
+          default: subtitle.language === 'ko',
+        };
 
-      if (nextProps.currentTime !== this.props.currentTime) {
-        this.setCurrentTime(player, nextProps.currentTime);
+        player.addRemoteTextTrack(option, false);
       }
     }
+  }
 
-    return nextProps.ratio !== this.props.ratio;
+  public setCurrentTime = (currentTime: number) => {
+    const player = this.player;
+    if (player) {
+      player.currentTime(currentTime);
+    }
   }
 
   componentWillUnmount() {
@@ -156,7 +120,7 @@ export default class VideoPlayer extends React.Component<Props> {
   // so videojs won't create additional wrapper in the DOM
   // see https://github.com/videojs/video.js/pull/3856
   render() {
-    const ratio = this.props.ratio || (9 / 16 * 100);
+    const ratio = (this.props.ratio || VIDEO_SCREEN_RATIO) * 100;
 
     return (
       <div style={{ position: 'relative', paddingTop: `${ratio}%` }}>

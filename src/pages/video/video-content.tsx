@@ -15,43 +15,42 @@ interface Props extends RouteComponentProps {
 }
 
 interface State {
-  userVideo: UserVideo | null;
   video: Video | null;
-  subtitles: Subtitle[] | null;
 }
 
 class VideoVideoContentPage extends React.Component<Props, State> {
   socket: socketio.Socket | null = null;
+  player = React.createRef<VideoPlayer>();
 
   state: State = {
-    userVideo: null,
     video: null,
-    subtitles: [],
   };
 
   componentDidMount() {
     this.socket = socketio.connect(SOCKET_SERVER, { path: USER_VIDEO_SOCKET_PATH });
 
-    (async () => {
-      const { token } = this.props;
-      const videoId: number = parseInt(this.props.match.params['videoId']);
+    const { token } = this.props;
+    const videoId: number = parseInt(this.props.match.params['videoId']);
 
-      const [video, subtitles, userVideo] = await Promise.all([
-        videoOne(videoId),
-        videoSubtitleList(videoId),
-        userVideoOne(videoId),
-      ]);
-
-      if (subtitles) {
-        subtitles.forEach(v => v.url += `?token=${token}`);
-      }
-
-      if (video) {
+    videoOne(videoId)
+      .then((video: Video) => {
         video.url += `?token=${token}`;
-      }
+        this.player.current!.src(video.url);
+        this.setState({ video });
+      });
 
-      this.setState({ video, subtitles, userVideo });
-    })();
+    videoSubtitleList(videoId)
+      .then((subtitles: Subtitle[]) => {
+        subtitles.forEach(v => v.url += `?token=${token}`);
+        this.player.current!.addSubtitles(subtitles);
+      });
+
+    userVideoOne(videoId)
+      .then((userVideo: UserVideo | null) => {
+        if (userVideo) {
+          this.player.current!.setCurrentTime(userVideo.time);
+        }
+      });
   }
 
   componentWillUnmount() {
@@ -61,10 +60,9 @@ class VideoVideoContentPage extends React.Component<Props, State> {
   }
 
   render() {
-    const { video, subtitles, userVideo } = this.state;
+    const { video } = this.state;
 
     const title = (video) ? video.title : ' ';
-
     const statistics = (video)
       ? (
         <div className="statistics border-bottom">
@@ -82,11 +80,9 @@ class VideoVideoContentPage extends React.Component<Props, State> {
       <div className="video-list-page">
         <PageHeader className="border-top" onBack={this.onBack} title={title} />
         <VideoPlayer
-          src={video ? video.url : undefined}
-          subtitles={subtitles ? subtitles : undefined}
+          ref={this.player}
           onTimeUpdate={this.onTimeUpdate}
-          currentTime={userVideo ? userVideo.time : undefined}
-          ratio={video ? (video.height / video.width * 100) : undefined}
+          ratio={video ? (video.height / video.width) : undefined}
         />
         {statistics}
       </div>
@@ -99,7 +95,7 @@ class VideoVideoContentPage extends React.Component<Props, State> {
 
   onTimeUpdate = (time: number) => {
     const { video } = this.state;
-    const { userId } = this.props;
+    const { userId } = this.props; // TOKEN으로 바꾸기
 
     if (video) {
       const userVideoTime: UserVideoTime = {
