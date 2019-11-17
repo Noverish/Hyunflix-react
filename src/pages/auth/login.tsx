@@ -33,6 +33,20 @@ class LoginPage extends React.Component<Props, State> {
     });
   }
 
+  componentDidMount() {
+    try {
+      // @ts-ignore
+      window.startVanta();
+    } catch (_) {
+
+    }
+  }
+
+  componentWillUnmount() {
+    // @ts-ignore
+    window.stopVanta();
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
 
