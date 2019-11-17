@@ -37,6 +37,7 @@
     "typesafe-actions": "^4.4.2",
     "typescript": "^3.6.3",
     "video.js": "^7.6.5",
+    "videojs-landscape-fullscreen": "^1.0.3",
     "videojs-seek-buttons": "^1.5.0"
   },
   "scripts": {

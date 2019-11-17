@@ -3,6 +3,7 @@ import videojs from 'video.js';
 import { Subtitle } from 'models';
 import { LARGE_SEEK_RANGE, SMALL_SEEK_RANGE, VIDEO_SCREEN_RATIO } from 'config';
 import 'videojs-seek-buttons';
+import 'videojs-landscape-fullscreen';
 import './videojs-seek-buttons.css';
 import './videojs-skin.css';
 
@@ -47,6 +48,9 @@ export default class VideoPlayer extends React.Component<Props> {
     document.addEventListener('keydown', this.onKeyDown);
 
     const player = videojs(this.videoNode.current, { controls: true });
+
+    // @ts-ignore
+    player.landscapeFullscreen();
 
     // @ts-ignore
     player.seekButtons({
