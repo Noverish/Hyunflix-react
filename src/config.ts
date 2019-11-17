@@ -1,4 +1,6 @@
 export const PAGE_SIZE = 15;
+export const LARGE_SEEK_RANGE = 60;
+export const SMALL_SEEK_RANGE = 10;
 
 export const MOBILE_BREAKPOINT = 768;
 export const USER_INPUT_DEBOUNCE = 500;

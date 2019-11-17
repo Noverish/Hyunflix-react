@@ -1,6 +1,7 @@
 import React from 'react';
 import videojs from 'video.js';
 import { Subtitle } from 'models';
+import { LARGE_SEEK_RANGE, SMALL_SEEK_RANGE } from 'config';
 import 'videojs-seek-buttons';
 import './videojs-seek-buttons.css';
 import './videojs-skin.css';
@@ -17,7 +18,37 @@ export default class VideoPlayer extends React.Component<Props> {
   player: videojs.Player | null = null;
   videoNode = React.createRef<HTMLVideoElement>();
 
+  onKeyDown = (e: KeyboardEvent) => {
+    const player = this.player;
+    if (e.repeat || !player) {
+      return;
+    }
+
+    const seekRange = e.ctrlKey ? LARGE_SEEK_RANGE : SMALL_SEEK_RANGE;
+
+    switch (e.key) {
+      case ' ': {
+        player.paused() ? player.play() : player.pause();
+        break;
+      }
+      case 'Enter': {
+        player.isFullscreen() ? player.exitFullscreen() : player.requestFullscreen();
+        break;
+      }
+      case 'ArrowLeft': {
+        player.currentTime(player.currentTime() - seekRange);
+        break;
+      }
+      case 'ArrowRight': {
+        player.currentTime(player.currentTime() + seekRange);
+        break;
+      }
+    }
+  }
+
   componentDidMount() {
+    document.addEventListener('keydown', this.onKeyDown);
+
     const videoOption = {
       autoplay: false,
       controls: true,
@@ -118,6 +149,7 @@ export default class VideoPlayer extends React.Component<Props> {
     if (this.player) {
       this.player.dispose();
     }
+    document.removeEventListener('keydown', this.onKeyDown);
   }
 
   // wrap the player in a div with a `data-vjs-player` attribute
