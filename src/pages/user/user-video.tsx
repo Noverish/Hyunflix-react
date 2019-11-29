@@ -1,89 +1,81 @@
-import React from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Button } from 'antd';
 
 import { UserVideoList } from 'components';
-import withContainer from 'components/hoc/container';
 import { UserVideo } from 'models';
 import { deleteUserVideoBulk, userVideoList } from 'api';
+import { PAGE_SIZE } from 'config';
+import { useSearch } from 'hooks';
 
-interface State {
-  checklist: UserVideo[];
-  checkable: boolean;
-  loading: boolean;
-}
-
-class UserVideoListContainer extends withContainer<UserVideo>()(UserVideoList) {}
 const link = (userVideo: UserVideo) => `/videos/${userVideo.video.id}`;
 
-class UserVideoPage extends React.Component<RouteComponentProps, State> {
-  userVideoListContainer = React.createRef<UserVideoListContainer>();
+const UserVideoPage: React.FC<RouteComponentProps> = (props) => {
+  const { items, total, loading, query, page, setQuery, setPage, refresh } = useSearch(userVideoList, props.history, PAGE_SIZE);
+  const [checkable, setCheckable] = useState(false);
+  const [checklist, setChecklist] = useState([] as UserVideo[]);
+  const [loading2, setLoading] = useState(false);
 
-  state: State = {
-    checklist: [],
-    checkable: false,
-    loading: false,
-  };
+  // functions
+  const toggleMode = useCallback(() => {
+    setCheckable(v => !v);
+  }, []);
 
-  render() {
-    const { checklist, checkable, loading } = this.state;
-
-    const headerExtra = (checkable)
-      ? (
-        <React.Fragment>
-          <Button type="danger" onClick={this.deleteUserVideos} disabled={checklist.length === 0}>삭제</Button>
-          <Button onClick={this.toggleMode}>취소</Button>
-        </React.Fragment>
-      )
-      : <Button type="danger" onClick={this.toggleMode}>삭제</Button>;
-
-    return (
-      <UserVideoListContainer
-        title="시청 기록"
-        ref={this.userVideoListContainer}
-        checklist={checkable ? checklist : undefined}
-        onItemClick={checkable ? this.onItemClick : undefined}
-        headerExtra={headerExtra}
-        search={userVideoList}
-        link={link}
-        loading={loading}
-        history={this.props.history}
-      />
-    );
-  }
-
-  toggleMode = () => {
-    const { checkable } = this.state;
-    this.setState({ checkable: !checkable });
-  }
-
-  deleteUserVideos = () => {
-    const { checklist } = this.state;
-
+  const deleteUserVideos = useCallback(() => {
     const videoIds = checklist.map(v => v.video.id);
 
-    this.setState({ loading: true });
+    setLoading(true);
 
     deleteUserVideoBulk(videoIds)
       .then(() => {
-        this.setState({
-          checklist: [],
-          loading: false,
-        });
-        this.userVideoListContainer.current!.refresh();
+        setChecklist([]);
+        setLoading(false);
+        refresh();
       })
       .catch();
-  }
+  }, [checklist, refresh]);
 
-  onItemClick = (userVideo: UserVideo) => {
-    const { checklist } = this.state;
-
+  const onItemClick = useCallback((userVideo: UserVideo) => {
     const newChecklist = (checklist.includes(userVideo))
       ? checklist.filter(v => v !== userVideo)
       : [...checklist, userVideo];
 
-    this.setState({ checklist: newChecklist });
-  }
-}
+    setChecklist(newChecklist);
+  }, [checklist]);
+
+  // components
+  const headerExtra = useMemo(() => (checkable)
+    ? (
+      <React.Fragment>
+        <Button type="danger" onClick={deleteUserVideos} disabled={checklist.length === 0}>삭제</Button>
+        <Button onClick={toggleMode}>취소</Button>
+      </React.Fragment>
+    ) : (
+      <Button type="danger" onClick={toggleMode}>삭제</Button>
+    )
+  , [deleteUserVideos, toggleMode, checklist, checkable]);
+
+  return (
+    <UserVideoList
+      items={items}
+      total={total}
+      loading={loading || loading2}
+
+      query={query}
+      onQueryChange={setQuery}
+
+      page={page}
+      pageSize={PAGE_SIZE}
+      onPageChange={setPage}
+
+      title="시청 기록"
+      link={link}
+      headerExtra={headerExtra}
+
+      checklist={checkable ? checklist : undefined}
+      onItemClick={checkable ? onItemClick : undefined}
+    />
+  );
+};
 
 export default UserVideoPage;

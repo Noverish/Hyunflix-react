@@ -2,29 +2,38 @@ import React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button } from 'antd';
 
-import withContainer from 'components/hoc/container';
 import { VideoList } from 'components';
 import { Video } from 'models';
 import { videoList } from 'api';
+import { PAGE_SIZE } from 'config';
+import { useSearch } from 'hooks';
 
-const VideoListContainer = withContainer<Video>()(VideoList);
 const link = (video: Video) => `/videos/${video.id}`;
+const headerExtra = (
+  <Link to="/videos/series">
+    <Button type="primary">시리즈 별로 보기</Button>
+  </Link>
+);
 
-const VideoListPage: React.FunctionComponent<RouteComponentProps> = (props) => {
-  const headerExtra = (
-    <Link to="/videos/series">
-      <Button type="primary">시리즈 별로 보기</Button>
-    </Link>
-  );
+const VideoListPage: React.FC<RouteComponentProps> = (props) => {
+  const { items, total, loading, query, page, setQuery, setPage } = useSearch(videoList, props.history, PAGE_SIZE);
 
   return (
-    <VideoListContainer
+    <VideoList
+      items={items}
+      total={total}
+      loading={loading}
+
+      query={query}
+      onQueryChange={setQuery}
+
+      page={page}
+      onPageChange={setPage}
+      pageSize={PAGE_SIZE}
+
       title="Video"
-      subTitle="영화, 드라마, 예능"
-      search={videoList}
       link={link}
       headerExtra={headerExtra}
-      history={props.history}
     />
   );
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button } from 'antd';
@@ -9,8 +9,8 @@ import { musicPlaylistAdd, musicPlaylistRemove } from 'actions';
 import { musicList } from 'api';
 import { Music, PlaylistDiff } from 'models';
 import { MusicList } from 'components';
-import withContainer from 'components/hoc/container';
-import './music-list.css';
+import { PAGE_SIZE } from 'config';
+import { useSearch } from 'hooks';
 
 interface Props extends RouteComponentProps {
   musicPlaylistAdd(musics: Music[]): ReturnType<typeof musicPlaylistAdd>;
@@ -18,55 +18,57 @@ interface Props extends RouteComponentProps {
   playlistDiff: PlaylistDiff;
 }
 
-class MusicListContainer extends withContainer<Music>()(MusicList) {}
 const link = (music: Music) => `/musics/${music.id}`;
 
-class MusicListPage extends React.Component<Props> {
-  musicListContainer = React.createRef<MusicListContainer>();
+const MusicListPage: React.FC<Props> = (props) => {
+  const { items, total, loading, query, page, setQuery, setPage } = useSearch(musicList, props.history, PAGE_SIZE);
+  const { newPlaylist } = props.playlistDiff;
+  const { musicPlaylistRemove, musicPlaylistAdd } = props;
 
-  render() {
-    const { newPlaylist } = this.props.playlistDiff;
-
-    const headerExtra = (
-      <Button onClick={this.onAddAllClicked} icon="plus" type="primary">Add all to Playlist</Button>
-    );
-
-    return (
-      <div className="music-list-page">
-        <MusicListContainer
-          title="Music"
-          onItemClick={this.onItemClick}
-          ref={this.musicListContainer}
-          checklist={newPlaylist}
-          headerExtra={headerExtra}
-          search={musicList}
-          link={link}
-          history={this.props.history}
-        />
-      </div>
-    );
-  }
-
-  onItemClick = (music: Music) => {
-    const { newPlaylist } = this.props.playlistDiff;
-
+  // functions
+  const onItemClick = useCallback((music: Music) => {
     if (find(newPlaylist, music)) {
-      this.props.musicPlaylistRemove(music);
+      musicPlaylistRemove(music);
     } else {
-      this.props.musicPlaylistAdd([music]);
+      musicPlaylistAdd([music]);
     }
-  }
+  }, [newPlaylist, musicPlaylistRemove, musicPlaylistAdd]);
 
-  onAddAllClicked = () => {
-    const query = this.musicListContainer.current!.extractQuery().query;
-
+  const onAddAllClicked = useCallback(() => {
     musicList(query, 0, 0)
       .then((result) => {
-        this.props.musicPlaylistAdd(result.results);
+        musicPlaylistAdd(result.results);
       })
       .catch();
-  }
-}
+  }, [musicPlaylistAdd, query]);
+
+  // components
+  const headerExtra = useMemo(() => (
+    <Button onClick={onAddAllClicked} icon="plus" type="primary">Add all to Playlist</Button>
+  ), [onAddAllClicked]);
+
+  return (
+    <MusicList
+      items={items}
+      total={total}
+      loading={loading}
+
+      query={query}
+      onQueryChange={setQuery}
+
+      page={page}
+      pageSize={PAGE_SIZE}
+      onPageChange={setPage}
+
+      title="Music"
+      link={link}
+      headerExtra={headerExtra}
+
+      checklist={newPlaylist}
+      onItemClick={onItemClick}
+    />
+  );
+};
 
 const mapDispatchToProps = {
   musicPlaylistAdd,
