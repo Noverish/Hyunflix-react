@@ -6,7 +6,7 @@ import withList, { InjectedProps, Options } from 'components/hoc/list';
 import { VideoSeries } from 'models';
 
 interface ReduxProps {
-  isMobile: boolean;
+  tags: Map<string, string>;
 }
 
 interface OriginalProps {
@@ -15,13 +15,20 @@ interface OriginalProps {
 
 type Props = OriginalProps & InjectedProps<VideoSeries> & ReduxProps;
 
+const renderTags = (props: Props) => {
+  const { item, tags } = props;
+  const t = item.category;
+
+  return <Tag color={tags.get(t)} key={t}>{t}</Tag>;
+};
+
 const VideoSeriesItem: React.FC<Props> = (props) => {
   const { item } = props;
 
   return (
     <div className="item desktop">
       <span className="id">{item.id}</span>
-      <Tag color="magenta">{item.category}</Tag>
+      {renderTags(props)}
       <span className="title">{item.title}</span>
       <span className="gray float-right">{`총 ${item.videos.length}편`}</span>
     </div>
@@ -30,7 +37,7 @@ const VideoSeriesItem: React.FC<Props> = (props) => {
 
 // TODO state to type
 const mapStateToProps = state => ({
-  isMobile: state.etc.isMobile,
+  tags: state.video.tags,
 });
 
 const options: Options<VideoSeries> = {
