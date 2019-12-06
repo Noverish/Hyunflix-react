@@ -6,7 +6,6 @@ import { musicTagListAsync, videoTagList } from 'actions';
 
 import MainLayout from './main-layout';
 import Home from './home/home';
-import MusicAdd from './music/music-add';
 import MusicList from './music/music-list';
 import VideoContent from './video/video-content';
 import VideoList from './video/video-list';
@@ -42,7 +41,6 @@ const MainPage: React.FunctionComponent<Props> = (props) => {
         <Route path="/videos/:videoId" component={VideoContent} />
         <Route path="/videos" component={VideoList} />
 
-        <Route path="/musics/add" component={MusicAdd} />
         <Route path="/musics" component={MusicList} />
 
         <Route path="/user/videos" component={UserVideo} />

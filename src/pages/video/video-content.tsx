@@ -6,11 +6,10 @@ import { connect } from 'react-redux';
 
 import { VideoPlayer } from 'components';
 import { Video, Subtitle, UserVideo, UserVideoTime } from 'models';
-import { SOCKET_SERVER, USER_VIDEO_SOCKET_PATH } from 'config';
+import { SOCKET_SERVER, SOCKET_PATH } from 'config';
 import { videoOne , userVideoOne, videoSubtitleList } from 'api';
 
 interface Props extends RouteComponentProps {
-  userId: number;
   token: string;
 }
 
@@ -27,7 +26,7 @@ class VideoVideoContentPage extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    this.socket = socketio.connect(SOCKET_SERVER, { path: USER_VIDEO_SOCKET_PATH });
+    this.socket = socketio.connect(SOCKET_SERVER + '/user-video', { path: SOCKET_PATH });
 
     const { token } = this.props;
     const videoId: number = parseInt(this.props.match.params['videoId']);
@@ -95,11 +94,11 @@ class VideoVideoContentPage extends React.Component<Props, State> {
 
   onTimeUpdate = (time: number) => {
     const { video } = this.state;
-    const { userId } = this.props; // TOKEN으로 바꾸기
+    const { token } = this.props;
 
     if (video) {
       const userVideoTime: UserVideoTime = {
-        userId,
+        token,
         videoId: video.id,
         time,
       };
@@ -110,7 +109,6 @@ class VideoVideoContentPage extends React.Component<Props, State> {
 
 const mapStateToProps = (state) => {
   return {
-    userId: state.auth.userId,
     token: state.auth.token,
   };
 };

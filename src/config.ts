@@ -8,8 +8,7 @@ export const USER_INPUT_DEBOUNCE = 500;
 export const COLORS = ['magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
 
 export const SOCKET_SERVER = `http://${window.location.hostname}:8080`;
-export const YOUTUBE_SOCKET_PATH = '/api/socket.io/youtube';
-export const USER_VIDEO_SOCKET_PATH = '/api/socket.io/user/video';
+export const SOCKET_PATH = '/api/socket.io';
 
 export const API_SERVER = `http://${window.location.hostname}:8080/api`;
 export const AUTH_SERVER = `http://${window.location.hostname}:8080/auth`;
