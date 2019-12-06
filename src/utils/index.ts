@@ -1,5 +1,3 @@
-import * as cookie from './cookie';
-
 function resolution2Color(resolution: string) {
   const list = {
     '1080p': 'purple',
@@ -35,6 +33,5 @@ function second2String(second: number) {
 
 export {
   second2String,
-  cookie,
   resolution2Color,
 };

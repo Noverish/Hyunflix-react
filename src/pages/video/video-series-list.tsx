@@ -27,7 +27,7 @@ const VideoSeriesListPage: React.FunctionComponent<RouteComponentProps> = (props
 
       title="시리즈 별로 보기"
       link={link}
-      onBack={() => props.history.goBack()}
+      onBack={() => props.history.push(`/videos`)}
     />
   );
 };
