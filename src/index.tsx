@@ -7,21 +7,15 @@ import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import reducer from './reducers';
 import rootSaga from './sagas';
-// import logger from 'redux-logger';
 
-const persistedState = localStorage.getItem('redux.state.auth') ? JSON.parse(localStorage.getItem('redux.state.auth')!) : {};
+const token = localStorage.getItem('token');
+const persistedState = token ? { auth: { token } } : undefined;
 
 const sagaMiddleware = createSagaMiddleware();
-
-// const middlewares = (process.env.NODE_ENV === 'development')
-//   ? [sagaMiddleware, logger]
-//   : [sagaMiddleware];
-const middlewares = [sagaMiddleware];
-
 export const store = createStore(
   reducer,
-  { auth: persistedState },
-  applyMiddleware(...middlewares),
+  persistedState,
+  applyMiddleware(sagaMiddleware),
 );
 sagaMiddleware.run(rootSaga);
 
@@ -33,5 +27,5 @@ ReactDOM.render(
 );
 
 store.subscribe(() => {
-  localStorage.setItem('redux.state.auth', JSON.stringify(store.getState().auth));
+  localStorage.setItem('token', store.getState().auth.token);
 });

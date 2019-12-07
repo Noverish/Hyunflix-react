@@ -1,7 +1,7 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 
-import { registerAsync, loginAsync, logoutAsync } from 'actions';
+import { registerAsync, loginAsync, logoutAsync, validateTokenAction } from 'actions';
 import { LoginResult } from 'models';
 import * as Api from 'api';
 
@@ -20,6 +20,15 @@ export function* fetchRegister(action: ReturnType<typeof registerAsync.request>)
     yield put(registerAsync.success(result));
   } catch (errMsg) {
     yield put(registerAsync.failure(errMsg));
+  }
+}
+
+export function* fetchValidateToken() {
+  try {
+    const result: LoginResult = yield call([Api, 'validateToken']);
+    yield put(validateTokenAction.success(result));
+  } catch (errMsg) {
+    yield put(validateTokenAction.failure(errMsg));
   }
 }
 
@@ -43,8 +52,13 @@ export function* watchRegister() {
   yield takeEvery(getType(registerAsync.request), fetchRegister);
 }
 
+export function* watchValidateToken() {
+  yield takeEvery(getType(validateTokenAction.request), fetchValidateToken);
+}
+
 export default [
   watchLogin(),
   watchLogout(),
   watchRegister(),
+  watchValidateToken(),
 ];

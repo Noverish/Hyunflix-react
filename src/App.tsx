@@ -7,12 +7,13 @@ import IndexPage from 'pages';
 import Login from 'pages/auth/login';
 import Register from 'pages/auth/register';
 
-import { windowResize } from 'actions';
+import { windowResize, validateTokenAction } from 'actions';
 import 'antd/dist/antd.css';
 import './App.scss';
 
 interface Props {
   windowResize(): ReturnType<typeof windowResize>;
+  validateToken: typeof validateTokenAction.request;
   token: string;
 }
 
@@ -24,6 +25,7 @@ interface State {
 class App extends Component<Props, State> {
   componentDidMount() {
     window.onresize = debounce(this.props.windowResize, 500);
+    this.props.validateToken();
   }
 
   render() {
@@ -50,6 +52,7 @@ class App extends Component<Props, State> {
 
 const mapDispatchToProps = {
   windowResize,
+  validateToken: validateTokenAction.request,
 };
 
 const mapStateToProps = (state) => {

@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import * as NodeRSA from 'node-rsa';
 
-import { AUTH_SERVER } from 'config';
+import { AUTH_SERVER, AUTH_HEADER } from 'config';
 import { LoginParam, RegisterParam, LoginResult } from 'models';
 
 export async function getRSAKey(): Promise<string> {
@@ -44,6 +44,16 @@ export async function register(param: RegisterParam): Promise<LoginResult> {
   };
 
   return (await axios(config)).data;
+}
+
+export async function validateToken(): Promise<LoginResult> {
+  const config: AxiosRequestConfig = {
+    url: `${AUTH_SERVER}/validate-token`,
+    method: 'get',
+  };
+
+  const header = (await axios(config)).headers;
+  return JSON.parse(header[AUTH_HEADER]);
 }
 
 export async function changePassword(oldPassword: string, newPassword: string): Promise<void> {

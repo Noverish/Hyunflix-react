@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { logoutAsync } from 'actions';
 
 interface Props {
+  username: string;
   logout(): ReturnType<typeof logoutAsync.request>;
 }
 
@@ -22,6 +23,8 @@ const UserAvatarMenu: React.FunctionComponent<Props> = (props) => {
 
   const menu = (
     <Menu onClick={onClick}>
+      <Menu.Item>@{props.username}</Menu.Item>
+      <Menu.Divider />
       <Menu.Item key={USER_VIDEOS}><Link to="/user/videos">시청 기록</Link></Menu.Item>
       <Menu.Item key={CHANGE_PASSWORD}><Link to="/user/password-change">비밀번호 변경</Link></Menu.Item>
       <Menu.Divider />
@@ -40,4 +43,8 @@ const mapDispatchToProps = {
   logout: logoutAsync.request,
 };
 
-export default connect(undefined, mapDispatchToProps)(UserAvatarMenu);
+const mapStateToProps = state => ({
+  username: state.auth.username,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserAvatarMenu);

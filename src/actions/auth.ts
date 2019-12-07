@@ -20,4 +20,10 @@ export const logoutAsync = createAsyncAction(
   'LOGOUT_FAILURE',
 )<undefined, undefined, string>();
 
+export const validateTokenAction = createAsyncAction(
+  'VALIDATE_TOKEN_REQUEST',
+  'VALUDATE_TOKEN_SUCCESS',
+  'VALUDATE_TOKEN_FAILURE',
+)<undefined, LoginResult, string>();
+
 export const tokenExpire = createStandardAction('TOKEN_EXPIRE')<undefined>();
