@@ -27,3 +27,9 @@ export interface PlaylistDiff {
   added: Music[];
   removed: Music | null;
 }
+
+export interface MusicPlaylist {
+  id: number;
+  title: string;
+  musics: Music[];
+}

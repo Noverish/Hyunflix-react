@@ -10,6 +10,7 @@ export * from './music';
 export * from './video';
 export * from './user';
 export * from './video-series';
+export * from './music-playlist';
 
 export interface SearchResult<T> {
   total: number;
