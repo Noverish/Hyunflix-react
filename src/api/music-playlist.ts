@@ -22,7 +22,7 @@ export async function createMusicPlaylist(title: string): Promise<void> {
   await axios(config);
 }
 
-export async function getMusicplaylist(playlistId: number): Promise<MusicPlaylist> {
+export async function getMusicPlaylist(playlistId: number): Promise<MusicPlaylist> {
   const config: AxiosRequestConfig = {
     url: `${API_SERVER}/musics/playlist/${playlistId}`,
     method: 'get',
@@ -30,17 +30,18 @@ export async function getMusicplaylist(playlistId: number): Promise<MusicPlaylis
 
   return (await axios(config)).data;
 }
-export async function updateMusicPlaylist(playlistId: number, title: string): Promise<void> {
+
+export async function updateMusicPlaylist(playlistId: number, title?: string, musicIds?: number[]): Promise<void> {
   const config: AxiosRequestConfig = {
     url: `${API_SERVER}/musics/playlist/${playlistId}`,
     method: 'put',
-    data: { title },
+    data: { title, musicIds },
   };
 
   await axios(config);
 }
 
-export async function deleteMusicplaylist(playlistId: number): Promise<void> {
+export async function deleteMusicPlaylist(playlistId: number): Promise<void> {
   const config: AxiosRequestConfig = {
     url: `${API_SERVER}/musics/playlist/${playlistId}`,
     method: 'delete',

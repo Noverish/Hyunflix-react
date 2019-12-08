@@ -1,15 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as APlayer from 'aplayer';
-import { BackTop, Button } from 'antd';
-import Dialog from 'rc-dialog/lib/DialogWrap';
 
-import { Music, PlaylistDiff } from 'models';
+import { Music } from 'models';
 import 'aplayer/dist/APlayer.min.css';
-import 'rc-dialog/assets/index.css';
 
 interface Props {
-  playlistDiff: PlaylistDiff;
+  playlist: Music[];
   token: string;
 }
 
@@ -18,12 +15,6 @@ interface AMusic {
   name: string;
   artist: string;
   url: string;
-}
-
-interface State {
-  mouseX: number;
-  mouseY: number;
-  showModal: boolean;
 }
 
 function convert(musics: Music[], token: string): AMusic[] {
@@ -35,109 +26,50 @@ function convert(musics: Music[], token: string): AMusic[] {
   }));
 }
 
-class MusicPlayer extends React.Component<Props, State> {
+class MusicPlayer extends React.Component<Props> {
   aplayer: APlayer | null = null;
 
-  state: State = {
-    mouseX: 0,
-    mouseY: 0,
-    showModal: false,
-  };
-
-  shouldComponentUpdate(nextProps: Props, nextState: State) {
-    const { playlistDiff, token } = nextProps;
-    const { newPlaylist, added, removed } = playlistDiff;
+  shouldComponentUpdate(nextProps: Props) {
+    const { playlist, token } = nextProps;
     const aplayer = this.aplayer;
 
     if (aplayer) {
-      const oldPlaylist: AMusic[] = aplayer.list.audios;
+      aplayer.list.clear();
 
-      // Removed
-      if (oldPlaylist.length > newPlaylist.length && removed) {
-        const index = oldPlaylist.findIndex(v => v.id === removed.id);
-        aplayer.list.remove(index);
-      }
-
-      // Added
-      if (oldPlaylist.length < newPlaylist.length) {
-        aplayer.list.add(convert(added, token));
+      if (playlist.length) {
+        aplayer.list.add(convert(playlist, token));
+        aplayer.play();
       }
     }
 
-    return this.state.showModal !== nextState.showModal;
+    return false;
   }
 
-  componentDidUpdate() {
-    const { playlistDiff, token } = this.props;
-    const { showModal } = this.state;
+  componentDidMount() {
+    const { playlist, token } = this.props;
     const container = document.getElementById('aplayer');
-    const aplayer = this.aplayer;
 
-    if (!aplayer && container && showModal) {
-      const playlist: AMusic[] = convert(playlistDiff.newPlaylist, token);
+    const aplayer = new APlayer({
+      container: container,
+      audio: convert(playlist, token),
+      autoplay: true,
+      loop: 'all',
+      order: 'random',
+      listFolded: false,
+    });
 
-      const aplayer = new APlayer({
-        container: container,
-        audio: playlist,
-        autoplay: true,
-        loop: 'all',
-        order: 'random',
-        listMaxHeight: `${window.innerHeight - 400}px`,
-      });
-
-      this.aplayer = aplayer;
-    }
+    this.aplayer = aplayer;
   }
 
   render() {
-    const { showModal, mouseX, mouseY } = this.state;
-
-    const mousePosition = { x: mouseX, y: mouseY };
-
     return (
-      <React.Fragment>
-        <Dialog
-          visible={showModal}
-          onClose={this.onClose}
-          animation="zoom"
-          maskAnimation="fade"
-          forceRender={true}
-          closable={false}
-          wrapClassName="music-player-modal"
-          keyboard={true}
-          mousePosition={mousePosition}
-        >
-          <div id="aplayer" />
-        </Dialog>
-        <BackTop className="music-player-floating-button" visibilityHeight={-1} onClick={this.onFloatingBtnClick}>
-          <Button type="primary" icon="bars" size="large" />
-        </BackTop>
-      </React.Fragment>
+      <div id="aplayer" />
     );
-  }
-
-  onFloatingBtnClick = (e: React.MouseEvent) => {
-    this.setState({
-      mouseX: e.pageX,
-      mouseY: e.pageY,
-      showModal: true,
-    });
-  }
-
-  onClose = () => {
-    this.setState({ showModal: false });
   }
 }
 
-const mapDispatchToProps = {
+const mapStateToProps = state => ({
+  token: state.auth.token,
+});
 
-};
-
-const mapStateToProps = (state) => {
-  return {
-    playlistDiff: state.music.playlistDiff,
-    token: state.auth.token,
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(MusicPlayer);
+export default connect(mapStateToProps)(MusicPlayer);

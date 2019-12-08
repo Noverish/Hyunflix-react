@@ -8,6 +8,7 @@ export { default as VideoPlayer } from './video/video-player';
 export { default as MusicPlayer } from './music/music-player';
 export { default as MusicList } from './music/music-list';
 export { default as MusicPlaylistTabs } from './music/music-playlist-tabs';
+export { default as MusicPlaylistHeader } from './music/music-playlist-header';
 
 export { default as UserVideoList } from './user/user-video-list';
 export { default as UserAvatarMenu } from './user/user-avatar-menu';

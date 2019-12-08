@@ -3,7 +3,7 @@ import { Form, Input, Button, PageHeader, Spin } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { updateMusicPlaylist, getMusicplaylist } from 'api';
+import { updateMusicPlaylist, getMusicPlaylist } from 'api';
 import { MusicPlaylist } from 'models';
 
 const TITLE_FIELD = 'title';
@@ -24,8 +24,10 @@ const MusicPlaylistEditPage = (props: FormComponentProps & RouteComponentProps) 
   const playlistId: number = parseInt(props.match.params['playlistId']);
 
   useEffect(() => {
-    getMusicplaylist(playlistId)
+    setLoading(true);
+    getMusicPlaylist(playlistId)
       .then(setPlaylist)
+      .then(setLoading.bind(null, false))
       .catch(props.history.goBack);
   }, [playlistId, props.history]);
 

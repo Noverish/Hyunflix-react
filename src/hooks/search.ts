@@ -59,7 +59,7 @@ export const useSearch = <T>(search: SearchFunction<T>, history: History, pageSi
   const debouncedOnQueryChange = useCallback(debounce((newQuery: string) => {
     if (query !== newQuery) {
       const querystring = stringify({ p: 1, q: newQuery });
-      history.push(window.location.pathname + '?' + querystring);
+      history.replace(window.location.pathname + '?' + querystring);
     } else {
       setState(state => ({ ...state, loading: false }));
     }
@@ -72,7 +72,7 @@ export const useSearch = <T>(search: SearchFunction<T>, history: History, pageSi
 
   const setPage = useCallback((page: number) => {
     const querystring = stringify({ q: query, p: page });
-    history.push(window.location.pathname + '?' + querystring);
+    history.replace(window.location.pathname + '?' + querystring);
   }, [query, history]);
 
   useEffect(() => {

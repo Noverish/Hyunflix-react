@@ -9,6 +9,7 @@ import Home from './home/home';
 import MusicList from './music/music-list';
 import MusicPlaylist from './music/music-playlist';
 import MusicplaylistEdit from './music/music-playlist-edit';
+import MusicplaylistMusics from './music/music-playlist-musics';
 import VideoContent from './video/video-content';
 import VideoList from './video/video-list';
 import VideoSeriesContent from './video/video-series-content';
@@ -44,6 +45,8 @@ const MainPage: React.FunctionComponent<Props> = (props) => {
         <Route path="/videos" component={VideoList} />
 
         <Route path="/musics/playlist/:playlistId/edit" component={MusicplaylistEdit} />
+        <Route path="/musics/playlist/:playlistId/musics" component={MusicplaylistMusics} />
+        <Route path="/musics/playlist/:playlistId" component={MusicPlaylist} />
         <Route path="/musics/playlist" component={MusicPlaylist} />
         <Route path="/musics" component={MusicList} />
 

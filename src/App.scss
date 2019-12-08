@@ -187,6 +187,10 @@ $ID: #314659;
 }
 
 .aplayer {
+  * {
+    box-sizing: content-box;
+  }
+  
   .aplayer-icon-back,
   .aplayer-icon-play,
   .aplayer-icon-forward {
