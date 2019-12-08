@@ -1,10 +1,11 @@
 import React from 'react';
-import { Form, Input, Button, PageHeader, message, Spin } from 'antd';
+import { Form, Input, Button, message, Spin } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { connect } from 'react-redux';
 
 import { logoutAsync } from 'actions';
 import { changePassword } from 'api';
+import { PageHeader } from 'components';
 
 const formItemLayout = {
   labelCol: { span: 4 },

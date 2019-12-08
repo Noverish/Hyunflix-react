@@ -32,9 +32,10 @@ const MusicListPage = (props: RouteComponentProps) => {
       pageSize={PAGE_SIZE}
       onPageChange={setPage}
 
-      title="Music"
+      title="음악"
       headerExtra={headerExtra}
       onItemClick={onItemClick}
+      onBack={props.history.goBack}
     />
   );
 };

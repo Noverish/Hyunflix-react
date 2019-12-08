@@ -12,3 +12,4 @@ export { default as MusicPlaylistHeader } from './music/music-playlist-header';
 
 export { default as UserVideoList } from './user/user-video-list';
 export { default as UserAvatarMenu } from './user/user-avatar-menu';
+export { default as PageHeader } from './etc/page-header';

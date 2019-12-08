@@ -12,7 +12,7 @@ const MusicPlaylistPage = (props: RouteComponentProps) => {
 
   if (playlists.length) {
     if (!playlists.find(v => v.id === playlistId)) {
-      props.history.push(`/musics/playlist/${playlists[0].id}`); // TODO
+      props.history.replace(`/musics/playlist/${playlists[0].id}`); // TODO
     }
   }
 
@@ -27,7 +27,7 @@ const MusicPlaylistPage = (props: RouteComponentProps) => {
 
   // functions
   const onChange = useCallback((playlist: MusicPlaylist) => {
-    props.history.push(`/musics/playlist/${playlist.id}`); // TODO
+    props.history.replace(`/musics/playlist/${playlist.id}`); // TODO
   }, [props.history]);
 
   const onAdd = useCallback(() => {

@@ -31,9 +31,10 @@ const VideoListPage: React.FC<RouteComponentProps> = (props) => {
       onPageChange={setPage}
       pageSize={PAGE_SIZE}
 
-      title="Video"
+      title="동영상"
       link={link}
       headerExtra={headerExtra}
+      onBack={props.history.goBack}
     />
   );
 };

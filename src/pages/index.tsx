@@ -34,10 +34,9 @@ const MainPage: React.FunctionComponent<Props> = (props) => {
   return (
     <MainLayout>
       <Switch>
-        <Route path="/home" component={Home} />
-        <Route exact={true} path="/login" render={_ => <Redirect to="/home" />} />
-        <Route exact={true} path="/register" render={_ => <Redirect to="/home" />} />
-        <Route exact={true} path="/" render={_ => <Redirect to="/home" />} />
+        <Route exact={true} path="/" component={Home} />
+        <Route exact={true} path="/login" render={_ => <Redirect to="/" />} />
+        <Route exact={true} path="/register" render={_ => <Redirect to="/" />} />
 
         <Route path="/videos/series/:seriesId" component={VideoSeriesContent} />
         <Route path="/videos/series" component={VideoSeriesList} />

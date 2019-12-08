@@ -1,10 +1,10 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { PageHeader, Statistic } from 'antd';
+import { Statistic } from 'antd';
 import * as socketio from 'socket.io-client';
 import { connect } from 'react-redux';
 
-import { VideoPlayer } from 'components';
+import { VideoPlayer, PageHeader } from 'components';
 import { Video, Subtitle, UserVideo, UserVideoTime } from 'models';
 import { SOCKET_SERVER, SOCKET_PATH } from 'config';
 import { videoOne , userVideoOne, videoSubtitleList } from 'api';

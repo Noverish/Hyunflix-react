@@ -1,8 +1,9 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { Button, PageHeader, Dropdown, Menu, Icon } from 'antd';
+import { Button, Dropdown, Menu, Icon } from 'antd';
 
 import { MusicPlaylist } from 'models';
+import { PageHeader } from 'components';
 
 interface Props extends RouteComponentProps {
   current?: MusicPlaylist;
@@ -76,6 +77,7 @@ const MusicPlaylistPage = (props: Props) => {
       title="Music Playlist"
       className="border-top border-bottom"
       extra={extra}
+      onBack={props.history.goBack}
     />
   );
 };

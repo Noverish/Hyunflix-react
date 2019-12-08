@@ -11,18 +11,21 @@ const MainLayout: React.FunctionComponent<RouteComponentProps> = (props) => {
   const path: string = props.location.pathname;
 
   const items = [
-    { name: 'Home', path: '/home' },
-    { name: 'Video', path: '/videos' },
-    { name: 'Music', path: '/musics' },
+    { name: '홈', path: '/' },
+    { name: '동영상', path: '/videos' },
+    { name: '음악', path: '/musics' },
   ];
 
   const itemComps = items.map(i => (
-    <Menu.Item key={i.name}>
+    <Menu.Item key={i.path}>
       <Link to={i.path}>{i.name}</Link>
     </Menu.Item>
   ));
 
-  const selectedKeys: string[] = items.filter(i => path.startsWith(i.path)).map(i => i.name);
+  const selectedKeys: string[] = items.slice(1).filter(i => path.startsWith(i.path)).map(i => i.path);
+  if (path === '/') {
+    selectedKeys.push('/');
+  }
 
   return (
     <Layout className="main-layout">

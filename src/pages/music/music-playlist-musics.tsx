@@ -66,7 +66,7 @@ const MusicPlaylistMuiscsPage = (props: RouteComponentProps) => {
       pageSize={PAGE_SIZE}
       onPageChange={setPage}
 
-      title={`음악 목록: ${playlist ? playlist.title : ''}`}
+      title={playlist ? playlist.title : ''}
       headerExtra={headerExtra}
       onBack={props.history.goBack}
 
