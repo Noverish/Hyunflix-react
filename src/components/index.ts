@@ -10,6 +10,9 @@ export { default as MusicList } from './music/music-list';
 export { default as MusicPlaylistTabs } from './music/music-playlist-tabs';
 export { default as MusicPlaylistHeader } from './music/music-playlist-header';
 
+export { default as ComicList } from './comic/comic-list';
+export { default as ComicSwiper } from './comic/comic-swiper';
+
 export { default as UserVideoList } from './user/user-video-list';
 export { default as UserAvatarMenu } from './user/user-avatar-menu';
 export { default as PageHeader } from './etc/page-header';

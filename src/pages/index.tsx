@@ -17,7 +17,8 @@ import VideoList from './video/video-list';
 import VideoSeriesContent from './video/video-series-content';
 import VideoSeriesList from './video/video-series-list';
 
-import ComicReader from './comic/comic-reader';
+import ComicList from './comic/comic-list';
+import ComicContent from './comic/comic-content';
 
 import UserVideo from './user/user-video';
 import PasswordChangePage from './user/password-change';
@@ -54,7 +55,8 @@ const MainPage: React.FunctionComponent<Props> = (props) => {
         <Route path="/musics/playlist" component={MusicPlaylist} />
         <Route path="/musics" component={MusicList} />
 
-        <Route path="/comics/:comicId" component={ComicReader} />
+        <Route path="/comics/:comicId" component={ComicContent} />
+        <Route path="/comics" component={ComicList} />
 
         <Route path="/user/videos" component={UserVideo} />
         <Route path="/user/password-change" component={PasswordChangePage} />

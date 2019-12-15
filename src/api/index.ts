@@ -11,6 +11,7 @@ export * from './video';
 export * from './user';
 export * from './video-series';
 export * from './music-playlist';
+export * from './comic';
 
 export interface SearchResult<T> {
   total: number;
@@ -32,6 +33,11 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use((response) => {
   return response;
 }, (err) => {
+  if (err.response === undefined) {
+    handleError(err.message, JSON.stringify(err.config, null, 4));
+    return Promise.reject(err.message);
+  }
+
   const status: number = err.response.status;
   const data: any = err.response.data;
   const msg: string = (data.msg) ? data.msg : JSON.stringify(data);

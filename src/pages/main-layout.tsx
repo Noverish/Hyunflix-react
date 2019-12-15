@@ -14,6 +14,7 @@ const MainLayout: React.FunctionComponent<RouteComponentProps> = (props) => {
     { name: '홈', path: '/' },
     { name: '동영상', path: '/videos' },
     { name: '음악', path: '/musics' },
+    { name: '만화', path: '/comics' },
   ];
 
   const itemComps = items.map(i => (
