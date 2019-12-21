@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Swiper from 'swiper';
 import 'swiper/css/swiper.min.css';
+import './comic-swiper.scss';
 
 interface Props {
   urls: string[];
@@ -23,11 +24,10 @@ const ComicSwiper = (props: Props) => {
   }, [urls]);
 
   const slides = urls.map((url, i) => (
-    <div key={i} className="swiper-slide" style={{ display: 'flex', justifyContent: 'center' }}>
+    <div key={i} className="swiper-slide">
       <img
         className="swiper-lazy"
         data-src={url}
-        style={{ display: 'block', margin: 'auto', maxWidth: '100%', maxHeight: '100%' }}
         alt={''}
       />
       <div className="swiper-lazy-preloader swiper-lazy-preloader-white" />
@@ -35,7 +35,7 @@ const ComicSwiper = (props: Props) => {
   ));
 
   return (
-    <div className="swiper-container" style={{ height: '100%' }}>
+    <div className="comic-swiper swiper-container">
       <div className="swiper-wrapper">
         {slides}
       </div>

@@ -3,8 +3,8 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { musicTagListAsync, videoTagList } from 'actions';
+import { RouteWithLayout } from 'components';
 
-import MainLayout from './main-layout';
 import Home from './home/home';
 
 import MusicList from './music/music-list';
@@ -38,32 +38,30 @@ const MainPage: React.FunctionComponent<Props> = (props) => {
   }, [musicTagList, videoTagList]);
 
   return (
-    <MainLayout>
-      <Switch>
-        <Route exact={true} path="/" component={Home} />
-        <Route exact={true} path="/login" render={_ => <Redirect to="/" />} />
-        <Route exact={true} path="/register" render={_ => <Redirect to="/" />} />
+    <Switch>
+      <RouteWithLayout exact={true} path="/" component={Home} />
+      <RouteWithLayout exact={true} path="/login" render={_ => <Redirect to="/" />} />
+      <RouteWithLayout exact={true} path="/register" render={_ => <Redirect to="/" />} />
 
-        <Route path="/videos/series/:seriesId" component={VideoSeriesContent} />
-        <Route path="/videos/series" component={VideoSeriesList} />
-        <Route path="/videos/:videoId" component={VideoContent} />
-        <Route path="/videos" component={VideoList} />
+      <RouteWithLayout path="/videos/series/:seriesId" component={VideoSeriesContent} />
+      <RouteWithLayout path="/videos/series" component={VideoSeriesList} />
+      <RouteWithLayout path="/videos/:videoId" component={VideoContent} />
+      <RouteWithLayout path="/videos" component={VideoList} />
 
-        <Route path="/musics/playlist/:playlistId/edit" component={MusicplaylistEdit} />
-        <Route path="/musics/playlist/:playlistId/musics" component={MusicplaylistMusics} />
-        <Route path="/musics/playlist/:playlistId" component={MusicPlaylist} />
-        <Route path="/musics/playlist" component={MusicPlaylist} />
-        <Route path="/musics" component={MusicList} />
+      <RouteWithLayout path="/musics/playlist/:playlistId/edit" component={MusicplaylistEdit} />
+      <RouteWithLayout path="/musics/playlist/:playlistId/musics" component={MusicplaylistMusics} />
+      <RouteWithLayout path="/musics/playlist/:playlistId" component={MusicPlaylist} />
+      <RouteWithLayout path="/musics/playlist" component={MusicPlaylist} />
+      <RouteWithLayout path="/musics" component={MusicList} />
 
-        <Route path="/comics/:comicId" component={ComicContent} />
-        <Route path="/comics" component={ComicList} />
+      <Route path="/comics/:comicId" component={ComicContent} />
+      <RouteWithLayout path="/comics" component={ComicList} />
 
-        <Route path="/user/videos" component={UserVideo} />
-        <Route path="/user/password-change" component={PasswordChangePage} />
+      <RouteWithLayout path="/user/videos" component={UserVideo} />
+      <RouteWithLayout path="/user/password-change" component={PasswordChangePage} />
 
-        <Route component={NotFound} />
-      </Switch>
-    </MainLayout>
+      <Route component={NotFound} />
+    </Switch>
   );
 };
 

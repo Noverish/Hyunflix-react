@@ -16,3 +16,4 @@ export { default as ComicSwiper } from './comic/comic-swiper';
 export { default as UserVideoList } from './user/user-video-list';
 export { default as UserAvatarMenu } from './user/user-avatar-menu';
 export { default as PageHeader } from './etc/page-header';
+export { default as RouteWithLayout } from './etc/route-with-layout';

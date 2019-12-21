@@ -18,8 +18,6 @@ const headerExtra = (
 const ComicListPage: React.FC<RouteComponentProps> = (props) => {
   const { items, total, loading, query, page, setQuery, setPage } = useSearch(listComic, props.history, PAGE_SIZE);
 
-  console.log(items);
-
   return (
     <ComicList
       items={items}

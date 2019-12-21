@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Button, BackTop } from 'antd';
+import { Button } from 'antd';
 
 import { useFullscreenStatus } from 'hooks';
 import { PageHeader, ComicSwiper } from 'components';
 import { getComic, listComicImg } from 'api';
 import { Comic } from 'models';
+import './comic-content.scss';
 
 interface Props extends RouteComponentProps {
   token: string;
@@ -14,9 +15,10 @@ interface Props extends RouteComponentProps {
 
 const ComicContentPage = (props: Props) => {
   const fullscreenElement = useRef<HTMLDivElement>(null);
-  const [isFullscreen, setIsFullscreen] = useFullscreenStatus(fullscreenElement);
+  const [isFullscreen, setFullscreen] = useFullscreenStatus(fullscreenElement);
   const [comic, setComic] = useState(null as Comic | null);
   const [urls, setUrls] = useState([] as string[]);
+  const [hide, setHide] = useState(false);
 
   const comicId: number = parseInt(props.match.params['comicId']);
   const token: string = props.token;
@@ -33,23 +35,28 @@ const ComicContentPage = (props: Props) => {
     document.exitFullscreen();
   }, []);
 
+  const onClick = useCallback(() => {
+    setHide(v => !v);
+  }, []);
+
   // components
   const fullscreenButton = useMemo(() => (
-    <Button type="primary" onClick={setIsFullscreen}>전체화면으로 보기</Button>
-  ), [setIsFullscreen]);
-
-  const backtop = useMemo(() => (
-    <BackTop visibilityHeight={-1} onClick={exitFullscreen}>
-      <Button type="primary" icon="close" />
-    </BackTop>
-  ), [exitFullscreen]);
+    isFullscreen
+      ? (<Button type="primary" onClick={exitFullscreen}>전체화면에서 나가기</Button>)
+      : (<Button type="primary" onClick={setFullscreen}>전체화면으로 보기</Button>)
+  ), [isFullscreen, setFullscreen, exitFullscreen]);
 
   return (
-    <div>
-      <PageHeader title={comic ? comic.title : ''} className="border-top border-bottom" onBack={props.history.goBack} extra={fullscreenButton}/>
-      <div className="fullscreen" ref={fullscreenElement} style={{ background: 'black' }}>
+    <div className="comic-content-page" ref={fullscreenElement}>
+      <PageHeader
+        className="border-top border-bottom"
+        title={comic ? comic.title : ''}
+        onBack={props.history.goBack}
+        extra={fullscreenButton}
+        style={{ display: hide ? 'none' : 'block' }}
+      />
+      <div className="comic-swiper-wrapper" onClick={onClick}>
         <ComicSwiper urls={urls} />
-        {isFullscreen ? backtop : undefined}
       </div>
     </div>
   );
