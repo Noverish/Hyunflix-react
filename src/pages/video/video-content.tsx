@@ -8,9 +8,10 @@ import { VideoPlayer, PageHeader } from 'components';
 import { Video, Subtitle, UserVideo, UserVideoTime } from 'models';
 import { SOCKET_SERVER, SOCKET_PATH } from 'config';
 import { videoOne , userVideoOne, videoSubtitleList } from 'api';
+import { RootState } from 'reducers';
 
 interface Props extends RouteComponentProps {
-  token: string;
+  sessionId: string;
 }
 
 interface State {
@@ -28,19 +29,19 @@ class VideoVideoContentPage extends React.Component<Props, State> {
   componentDidMount() {
     this.socket = socketio.connect(SOCKET_SERVER + '/user-video', { path: SOCKET_PATH });
 
-    const { token } = this.props;
+    const { sessionId } = this.props;
     const videoId: number = parseInt(this.props.match.params['videoId']);
 
     videoOne(videoId)
       .then((video: Video) => {
-        video.url += `?token=${token}`;
+        video.url += `?sessionId=${sessionId}`;
         this.player.current!.src(video.url);
         this.setState({ video });
       });
 
     videoSubtitleList(videoId)
       .then((subtitles: Subtitle[]) => {
-        subtitles.forEach(v => v.url += `?token=${token}`);
+        subtitles.forEach(v => v.url += `?sessionId=${sessionId}`);
         this.player.current!.addSubtitles(subtitles);
       });
 
@@ -94,11 +95,11 @@ class VideoVideoContentPage extends React.Component<Props, State> {
 
   onTimeUpdate = (time: number) => {
     const { video } = this.state;
-    const { token } = this.props;
+    const { sessionId } = this.props;
 
     if (video) {
       const userVideoTime: UserVideoTime = {
-        token,
+        sessionId,
         videoId: video.id,
         time,
       };
@@ -107,10 +108,8 @@ class VideoVideoContentPage extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    token: state.auth.token,
-  };
-};
+const mapStateToProps = (state: RootState) => ({
+  sessionId: state.auth.sessionId,
+});
 
 export default connect(mapStateToProps)(VideoVideoContentPage);

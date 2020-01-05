@@ -19,9 +19,9 @@ export interface SearchResult<T> {
 }
 
 axios.interceptors.request.use((config) => {
-  const token = store.getState().auth.token;
-  if (token) {
-    config.headers = { Authorization: `Bearer ${token}` };
+  const sessionId = store.getState().auth.sessionId;
+  if (sessionId) {
+    config.headers = { 'x-hyunsub-session-id': sessionId };
   }
 
   return config;

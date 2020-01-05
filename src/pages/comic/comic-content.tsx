@@ -7,10 +7,11 @@ import { useFullscreenStatus } from 'hooks';
 import { PageHeader, ComicSwiper } from 'components';
 import { getComic, listComicImg } from 'api';
 import { Comic } from 'models';
+import { RootState } from 'reducers';
 import './comic-content.scss';
 
 interface Props extends RouteComponentProps {
-  token: string;
+  sessionId: string;
 }
 
 const ComicContentPage = (props: Props) => {
@@ -21,14 +22,14 @@ const ComicContentPage = (props: Props) => {
   const [hide, setHide] = useState(false);
 
   const comicId: number = parseInt(props.match.params['comicId']);
-  const token: string = props.token;
+  const sessionId: string = props.sessionId;
 
   useEffect(() => {
     getComic(comicId)
       .then(setComic)
       .then(() => listComicImg(comicId))
-      .then(urls => setUrls(urls.map(v => `${v}?token=${token}`)));
-  }, [comicId, token]);
+      .then(urls => setUrls(urls.map(v => `${v}?sessionId=${sessionId}`)));
+  }, [comicId, sessionId]);
 
   // functions
   const exitFullscreen = useCallback(() => {
@@ -62,8 +63,8 @@ const ComicContentPage = (props: Props) => {
   );
 };
 
-const mapStateToProps = state => ({
-  token: state.auth.token,
+const mapStateToProps = (state: RootState) => ({
+  sessionId: state.auth.sessionId,
 });
 
 export default connect(mapStateToProps)(ComicContentPage);

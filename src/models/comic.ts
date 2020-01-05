@@ -3,4 +3,5 @@ export interface Comic {
   title: string;
   path: string;
   date: string;
+  tags: string[];
 }

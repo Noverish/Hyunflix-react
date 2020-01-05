@@ -6,6 +6,7 @@ import * as classnames from 'classnames';
 import withList, { InjectedProps, Options } from 'components/hoc/list';
 import { Music } from 'models';
 import { second2String } from 'utils';
+import { RootState } from 'reducers';
 
 interface ReduxProps {
   tags: Map<string, string>;
@@ -59,7 +60,7 @@ const MusicItem: React.FC<Props> = (props) => {
 };
 
 // TODO state to type
-const mapStateToProps = state => ({
+const mapStateToProps = (state: RootState) => ({
   tags: state.music.tags,
   isMobile: state.etc.isMobile,
 });

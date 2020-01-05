@@ -46,9 +46,9 @@ export async function register(param: RegisterParam): Promise<LoginResult> {
   return (await axios(config)).data;
 }
 
-export async function validateToken(): Promise<LoginResult> {
+export async function validateSession(): Promise<LoginResult> {
   const config: AxiosRequestConfig = {
-    url: `${AUTH_SERVER}/validate-token`,
+    url: `${AUTH_SERVER}/validate-session`,
     method: 'get',
   };
 

@@ -6,6 +6,7 @@ import * as classnames from 'classnames';
 import withList, { InjectedProps, Options } from 'components/hoc/list';
 import { Video } from 'models';
 import { resolution2Color } from 'utils';
+import { RootState } from 'reducers';
 
 interface ReduxProps {
   tags: Map<string, string>;
@@ -60,8 +61,7 @@ const VideoItem: React.FC<Props> = (props) => {
   }
 };
 
-// TODO state to type
-const mapStateToProps = state => ({
+const mapStateToProps = (state: RootState) => ({
   tags: state.video.tags,
   isMobile: state.etc.isMobile,
 });

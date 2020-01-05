@@ -6,6 +6,7 @@ import { debounce } from 'debounce';
 import IndexPage from 'pages';
 import Login from 'pages/auth/login';
 import Register from 'pages/auth/register';
+import { RootState } from 'reducers';
 
 import { windowResize, validateTokenAction } from 'actions';
 import 'antd/dist/antd.css';
@@ -14,7 +15,7 @@ import './App.scss';
 interface Props {
   windowResize(): ReturnType<typeof windowResize>;
   validateToken: typeof validateTokenAction.request;
-  token: string;
+  sessionId: string;
 }
 
 interface State {
@@ -29,7 +30,7 @@ class App extends Component<Props, State> {
   }
 
   render() {
-    const inner = (this.props.token)
+    const inner = (this.props.sessionId)
       ? (
         <Switch>
           <Route component={IndexPage} />
@@ -55,10 +56,8 @@ const mapDispatchToProps = {
   validateToken: validateTokenAction.request,
 };
 
-const mapStateToProps = (state) => {
-  return {
-    token: state.auth.token,
-  };
-};
+const mapStateToProps = (state: RootState) => ({
+  sessionId: state.auth.sessionId,
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

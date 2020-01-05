@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Avatar, Menu, Dropdown } from 'antd';
 import { connect } from 'react-redux';
 
+import { RootState } from 'reducers';
 import { logoutAsync } from 'actions';
 
 interface Props {
@@ -43,7 +44,7 @@ const mapDispatchToProps = {
   logout: logoutAsync.request,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: RootState) => ({
   username: state.auth.username,
 });
 

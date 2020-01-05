@@ -25,7 +25,7 @@ export function* fetchRegister(action: ReturnType<typeof registerAsync.request>)
 
 export function* fetchValidateToken() {
   try {
-    const result: LoginResult = yield call([Api, 'validateToken']);
+    const result: LoginResult = yield call([Api, 'validateSession']);
     yield put(validateTokenAction.success(result));
   } catch (errMsg) {
     yield put(validateTokenAction.failure(errMsg));
