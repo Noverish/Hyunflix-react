@@ -1,16 +1,41 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
 import { Button } from 'antd';
+import { connect } from 'react-redux';
 
 import { musicList } from 'api';
 import { MusicList } from 'components';
 import { PAGE_SIZE } from 'config';
 import { useSearch } from 'hooks';
+import { Music } from 'models';
+import { RootState } from 'reducers';
 
-const MusicListPage = (props: RouteComponentProps) => {
+const MusicListPage = (props: RouteComponentProps & { sessionId: string }) => {
   const { items, total, loading, query, page, setQuery, setPage } = useSearch(musicList, props.history, PAGE_SIZE);
+  const [nowPlaying, setNowPlaying] = useState(null as HTMLAudioElement | null);
 
-  const onItemClick = useCallback(() => {}, []);
+  const onItemClick = useCallback((item: Music) => {
+    const newSrc = `${item.url}?sessionId=${props.sessionId}`;
+
+    if (nowPlaying && newSrc === decodeURI(nowPlaying.src)) {
+      setNowPlaying(null);
+    } else {
+      const newPlaying = new Audio(newSrc);
+      newPlaying.play();
+      newPlaying.addEventListener('timeupdate', (event: any) => {
+        const currentTime: number = event.path[0].currentTime;
+      });
+      setNowPlaying(newPlaying);
+    }
+  }, [nowPlaying, props.sessionId]);
+
+  useEffect(() => {
+    return () => {
+      if (nowPlaying) {
+        nowPlaying.pause();
+      }
+    };
+  }, [nowPlaying]);
 
   // components
   const headerExtra = useMemo(() => (
@@ -40,4 +65,8 @@ const MusicListPage = (props: RouteComponentProps) => {
   );
 };
 
-export default MusicListPage;
+const mapStateToProps = (state: RootState) => ({
+  sessionId: state.auth.sessionId,
+});
+
+export default connect(mapStateToProps)(MusicListPage);
