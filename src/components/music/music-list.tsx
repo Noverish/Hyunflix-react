@@ -59,7 +59,6 @@ const MusicItem: React.FC<Props> = (props) => {
   }
 };
 
-// TODO state to type
 const mapStateToProps = (state: RootState) => ({
   tags: state.music.tags,
   isMobile: state.etc.isMobile,
@@ -71,5 +70,3 @@ const options: Options<Music> = {
 
 const connected = connect(mapStateToProps)(MusicItem);
 export default withList<Music>(options)<OriginalProps>(connected);
-
-// TODO const youtubeUrl = music.youtube && `https://www.youtube.com/watch?v=${music.youtube}`;

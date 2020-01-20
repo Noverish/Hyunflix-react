@@ -22,18 +22,16 @@ const MusicListPage = (props: RouteComponentProps & { sessionId: string }) => {
     } else {
       const newPlaying = new Audio(newSrc);
       newPlaying.play();
-      newPlaying.addEventListener('timeupdate', (event: any) => {
-        const currentTime: number = event.path[0].currentTime;
-      });
+      // newPlaying.addEventListener('timeupdate', (event: any) => {
+      //   const currentTime: number = event.path[0].currentTime;
+      // });
       setNowPlaying(newPlaying);
     }
   }, [nowPlaying, props.sessionId]);
 
   useEffect(() => {
     return () => {
-      if (nowPlaying) {
-        nowPlaying.pause();
-      }
+      nowPlaying?.pause();
     };
   }, [nowPlaying]);
 

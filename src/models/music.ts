@@ -21,13 +21,6 @@ export enum YoutubeStage {
   success = 3,
 }
 
-export interface PlaylistDiff {
-  oldPlaylist: Music[];
-  newPlaylist: Music[];
-  added: Music[];
-  removed: Music | null;
-}
-
 export interface MusicPlaylist {
   id: number;
   title: string;

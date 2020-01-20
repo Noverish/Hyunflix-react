@@ -22,7 +22,7 @@ const MusicPlaylistPage = (props: Props) => {
   const { current, onAdd, onDelete } = props;
 
   const editUrl = current ? `/musics/playlist/${current.id}/edit` : ''; // TODO
-  const musicAddUrl = current ? `/musics/playlist/${current.id}/musics` : ''; // TODO
+  const musicAddUrl = current ? `/musics/playlist/${current.id}/items` : ''; // TODO
 
   const handleMenuClick = ({ key }) => {
     switch (key) {

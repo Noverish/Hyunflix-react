@@ -49,7 +49,7 @@ const MainPage: React.FunctionComponent<Props> = (props) => {
       <RouteWithLayout path="/videos" component={VideoList} />
 
       <RouteWithLayout path="/musics/playlist/:playlistId/edit" component={MusicplaylistEdit} />
-      <RouteWithLayout path="/musics/playlist/:playlistId/musics" component={MusicplaylistMusics} />
+      <RouteWithLayout path="/musics/playlist/:playlistId/items" component={MusicplaylistMusics} />
       <RouteWithLayout path="/musics/playlist/:playlistId" component={MusicPlaylist} />
       <RouteWithLayout path="/musics/playlist" component={MusicPlaylist} />
       <RouteWithLayout path="/musics" component={MusicList} />
