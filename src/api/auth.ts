@@ -39,7 +39,7 @@ export async function register(param: RegisterParam): Promise<LoginResult> {
     data: {
       username: publicKey.encrypt(param.username, 'base64'),
       password: publicKey.encrypt(param.password, 'base64'),
-      reg_code: publicKey.encrypt(param.regCode, 'base64'),
+      regCode: publicKey.encrypt(param.regCode, 'base64'),
     },
   };
 
