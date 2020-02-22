@@ -8,8 +8,8 @@ export const USER_INPUT_DEBOUNCE = 500;
 export const COLORS = ['magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
 export const AUTH_HEADER = 'x-hyunsub-auth';
 
-export const SOCKET_SERVER = `http://${window.location.hostname}:8080`;
+export const SOCKET_SERVER = `${window.location.origin}:8080`;
 export const SOCKET_PATH = '/api/socket.io';
 
-export const API_SERVER = `http://${window.location.hostname}:8080/api`;
-export const AUTH_SERVER = `http://${window.location.hostname}:8080/auth`;
+export const API_SERVER = `${window.location.origin}:8080/api`;
+export const AUTH_SERVER = `${window.location.origin}:8080/auth`;
