@@ -1,14 +1,16 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 
-import { registerAsync, loginAsync, logoutAsync, validateTokenAction } from 'actions';
+import { registerAsync, loginAsync, reissueAccessTokenAction } from 'actions';
 import { LoginResult } from 'models';
 import * as Api from 'api';
+import { registerReissueAccessTokenAction } from 'workers';
 
 export function* fetchLogin(action: ReturnType<typeof loginAsync.request>) {
   try {
     const result: LoginResult = yield call([Api, 'login'], action.payload);
     yield put(loginAsync.success(result));
+    registerReissueAccessTokenAction(result.accessToken);
   } catch (errMsg) {
     yield put(loginAsync.failure(errMsg));
   }
@@ -18,25 +20,19 @@ export function* fetchRegister(action: ReturnType<typeof registerAsync.request>)
   try {
     const result: LoginResult = yield call([Api, 'register'], action.payload);
     yield put(registerAsync.success(result));
+    registerReissueAccessTokenAction(result.accessToken);
   } catch (errMsg) {
     yield put(registerAsync.failure(errMsg));
   }
 }
 
-export function* fetchValidateToken() {
+export function* fetchAccessTokenExpire(action: ReturnType<typeof reissueAccessTokenAction.request>) {
   try {
-    const result: LoginResult = yield call([Api, 'validateSession']);
-    yield put(validateTokenAction.success(result));
+    const result: string = yield call([Api, 'reissueAccessToken'], action.payload);
+    yield put(reissueAccessTokenAction.success(result));
+    registerReissueAccessTokenAction(result);
   } catch (errMsg) {
-    yield put(validateTokenAction.failure(errMsg));
-  }
-}
-
-export function* fetchLogout(action: ReturnType<typeof logoutAsync.request>) {
-  try {
-    yield put(logoutAsync.success());
-  } catch (errMsg) {
-    yield put(logoutAsync.failure(errMsg));
+    yield put(reissueAccessTokenAction.failure(errMsg));
   }
 }
 
@@ -44,21 +40,16 @@ export function* watchLogin() {
   yield takeEvery(getType(loginAsync.request), fetchLogin);
 }
 
-export function* watchLogout() {
-  yield takeEvery(getType(logoutAsync.request), fetchLogout);
-}
-
 export function* watchRegister() {
   yield takeEvery(getType(registerAsync.request), fetchRegister);
 }
 
-export function* watchValidateToken() {
-  yield takeEvery(getType(validateTokenAction.request), fetchValidateToken);
+export function* watchAccessTokenExpire() {
+  yield takeEvery(getType(reissueAccessTokenAction.request), fetchAccessTokenExpire);
 }
 
 export default [
   watchLogin(),
-  watchLogout(),
   watchRegister(),
-  watchValidateToken(),
+  watchAccessTokenExpire(),
 ];

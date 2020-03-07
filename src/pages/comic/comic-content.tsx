@@ -11,7 +11,7 @@ import { RootState } from 'reducers';
 import './comic-content.scss';
 
 interface Props extends RouteComponentProps {
-  sessionId: string;
+  accessToken: string;
 }
 
 const ComicContentPage = (props: Props) => {
@@ -22,14 +22,14 @@ const ComicContentPage = (props: Props) => {
   const [hide, setHide] = useState(false);
 
   const comicId: number = parseInt(props.match.params['comicId']);
-  const sessionId: string = props.sessionId;
+  const accessToken: string = props.accessToken;
 
   useEffect(() => {
     getComic(comicId)
       .then(setComic)
       .then(() => listComicImg(comicId))
-      .then(urls => setUrls(urls.map(v => `${v}?sessionId=${sessionId}`)));
-  }, [comicId, sessionId]);
+      .then(urls => setUrls(urls.map(v => `${v}?token=${accessToken}`)));
+  }, [comicId, accessToken]);
 
   // functions
   const exitFullscreen = useCallback(() => {
@@ -64,7 +64,7 @@ const ComicContentPage = (props: Props) => {
 };
 
 const mapStateToProps = (state: RootState) => ({
-  sessionId: state.auth.sessionId,
+  accessToken: state.auth.accessToken,
 });
 
 export default connect(mapStateToProps)(ComicContentPage);

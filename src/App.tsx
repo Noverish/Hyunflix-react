@@ -8,14 +8,13 @@ import Login from 'pages/auth/login';
 import Register from 'pages/auth/register';
 import { RootState } from 'reducers';
 
-import { windowResize, validateTokenAction } from 'actions';
+import { windowResize } from 'actions';
 import 'antd/dist/antd.css';
 import './App.scss';
 
 interface Props {
   windowResize(): ReturnType<typeof windowResize>;
-  validateToken: typeof validateTokenAction.request;
-  sessionId: string;
+  refreshToken: string;
 }
 
 interface State {
@@ -26,11 +25,10 @@ interface State {
 class App extends Component<Props, State> {
   componentDidMount() {
     window.onresize = debounce(this.props.windowResize, 500);
-    this.props.validateToken();
   }
 
   render() {
-    const inner = (this.props.sessionId)
+    const inner = (this.props.refreshToken)
       ? (
         <Switch>
           <Route component={IndexPage} />
@@ -53,11 +51,10 @@ class App extends Component<Props, State> {
 
 const mapDispatchToProps = {
   windowResize,
-  validateToken: validateTokenAction.request,
 };
 
 const mapStateToProps = (state: RootState) => ({
-  sessionId: state.auth.sessionId,
+  refreshToken: state.auth.refreshToken,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

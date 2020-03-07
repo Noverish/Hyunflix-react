@@ -8,7 +8,7 @@ import 'aplayer/dist/APlayer.min.css';
 
 interface Props {
   playlist: Music[];
-  sessionId: string;
+  accessToken: string;
 }
 
 interface AMusic {
@@ -18,12 +18,12 @@ interface AMusic {
   url: string;
 }
 
-function convert(musics: Music[], sessionId: string): AMusic[] {
+function convert(musics: Music[], accessToken: string): AMusic[] {
   return musics.map(m => ({
     id: m.id,
     name: m.title.includes(' - ') ? m.title.split(' - ')[1] : m.title,
     artist: m.title.includes(' - ') ? m.title.split(' - ')[0] : '',
-    url: m.url + `?sessionId=${sessionId}`,
+    url: m.url + `?token=${accessToken}`,
   }));
 }
 
@@ -31,14 +31,14 @@ class MusicPlayer extends React.Component<Props> {
   aplayer: APlayer | null = null;
 
   shouldComponentUpdate(nextProps: Props) {
-    const { playlist, sessionId } = nextProps;
+    const { playlist, accessToken } = nextProps;
     const aplayer = this.aplayer;
 
     if (aplayer) {
       aplayer.list.clear();
 
       if (playlist.length) {
-        aplayer.list.add(convert(playlist, sessionId));
+        aplayer.list.add(convert(playlist, accessToken));
         aplayer.play();
       }
     }
@@ -47,12 +47,12 @@ class MusicPlayer extends React.Component<Props> {
   }
 
   componentDidMount() {
-    const { playlist, sessionId } = this.props;
+    const { playlist, accessToken } = this.props;
     const container = document.getElementById('aplayer');
 
     const aplayer = new APlayer({
       container: container,
-      audio: convert(playlist, sessionId),
+      audio: convert(playlist, accessToken),
       autoplay: true,
       loop: 'all',
       order: 'random',
@@ -70,7 +70,7 @@ class MusicPlayer extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  sessionId: state.auth.sessionId,
+  accessToken: state.auth.accessToken,
 });
 
 export default connect(mapStateToProps)(MusicPlayer);

@@ -4,11 +4,11 @@ import { Avatar, Menu, Dropdown } from 'antd';
 import { connect } from 'react-redux';
 
 import { RootState } from 'reducers';
-import { logoutAsync } from 'actions';
+import { logoutAction } from 'actions';
 
 interface Props {
   username: string;
-  logout(): ReturnType<typeof logoutAsync.request>;
+  logout(): ReturnType<typeof logoutAction>;
 }
 
 const USER_VIDEOS = 'user-videos';
@@ -41,11 +41,11 @@ const UserAvatarMenu: React.FunctionComponent<Props> = (props) => {
 };
 
 const mapDispatchToProps = {
-  logout: logoutAsync.request,
+  logout: logoutAction,
 };
 
 const mapStateToProps = (state: RootState) => ({
-  username: state.auth.username,
+  username: '', // TODO
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserAvatarMenu);

@@ -8,8 +8,8 @@ import createSagaMiddleware from 'redux-saga';
 import reducer from './reducers';
 import rootSaga from './sagas';
 
-const sessionId = localStorage.getItem('sessionId');
-const persistedState = sessionId ? { auth: { sessionId } } : undefined;
+const authString: string | null = localStorage.getItem('auth');
+const persistedState = authString ? { auth: JSON.parse(authString) } : undefined;
 
 const sagaMiddleware = createSagaMiddleware();
 export const store = createStore(
@@ -27,5 +27,5 @@ ReactDOM.render(
 );
 
 store.subscribe(() => {
-  localStorage.setItem('sessionId', store.getState().auth.sessionId);
+  localStorage.setItem('auth', JSON.stringify(store.getState().auth));
 });

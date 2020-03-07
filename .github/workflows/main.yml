@@ -18,20 +18,20 @@ jobs:
         key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
     - run: npm install
     - run: npm run tslint
-    - run: docker build -t hyunsub/frontend .
-    - run: docker save -o hyunsub-frontend.tar hyunsub/frontend
+    - run: docker build -t hyunflix/frontend .
+    - run: docker save -o hyunflix-frontend.tar hyunflix/frontend
     - uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        source: "hyunsub-frontend.tar"
-        target: "/home/hyunsub/hyunsub/"
+        source: "hyunflix-frontend.tar"
+        target: "/home/hyunsub/environment/hyunflix"
     - uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        script: cd ~/hyunsub; docker load -i hyunsub-frontend.tar; docker-compose up -d --force-recreate frontend; rm hyunsub-frontend.tar
+        script: cd ~/environment/hyunflix; docker load -i hyunflix-frontend.tar; docker-compose up -d --force-recreate frontend; rm hyunflix-frontend.tar

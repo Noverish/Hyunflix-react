@@ -3,7 +3,7 @@ import { Form, Input, Button, message, Spin } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { connect } from 'react-redux';
 
-import { logoutAsync } from 'actions';
+import { logoutAction } from 'actions';
 import { changePassword } from 'api';
 import { PageHeader } from 'components';
 
@@ -21,7 +21,7 @@ const NEW_PASSWORD_FIELD = 'newPassword';
 const NEW_PASSWORD_CONFIRM_FIELD = 'newPasswordConfirm';
 
 interface Props extends FormComponentProps {
-  logout: typeof logoutAsync.request;
+  logout: typeof logoutAction;
 }
 
 interface State {
@@ -139,7 +139,7 @@ class PasswordChangePage extends React.Component<Props, State> {
 }
 
 const mapDispatchToProps = {
-  logout: logoutAsync.request,
+  logout: logoutAction,
 };
 
 export default connect(undefined, mapDispatchToProps)(Form.create()(PasswordChangePage));

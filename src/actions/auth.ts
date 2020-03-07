@@ -14,16 +14,12 @@ export const registerAsync = createAsyncAction(
   'REGISTER_FAILURE',
 )<RegisterParam, LoginResult, string>();
 
-export const logoutAsync = createAsyncAction(
-  'LOGOUT_REQUEST',
-  'LOGOUT_SUCCESS',
-  'LOGOUT_FAILURE',
-)<undefined, undefined, string>();
+export const logoutAction = createStandardAction('LOGOUT')<undefined>();
 
-export const validateTokenAction = createAsyncAction(
-  'VALIDATE_TOKEN_REQUEST',
-  'VALUDATE_TOKEN_SUCCESS',
-  'VALUDATE_TOKEN_FAILURE',
-)<undefined, LoginResult, string>();
+export const reissueAccessTokenAction = createAsyncAction(
+  'ACCESS_TOKEN_EXPIRE_REQUEST',
+  'ACCESS_TOKEN_EXPIRE_SUCCESS',
+  'ACCESS_TOKEN_EXPIRE_FAILURE',
+)<string, string, string>();
 
-export const tokenExpire = createStandardAction('TOKEN_EXPIRE')<undefined>();
+export const refreshTokenExpireAction = createStandardAction('REFRESH_TOKEN_EXPIRE')<undefined>();

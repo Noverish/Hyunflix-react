@@ -1,17 +1,16 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Statistic } from 'antd';
-import * as socketio from 'socket.io-client';
 import { connect } from 'react-redux';
 
 import { VideoPlayer, PageHeader } from 'components';
 import { Video, Subtitle, UserVideo, UserVideoTime } from 'models';
-import { SOCKET_SERVER, SOCKET_PATH } from 'config';
-import { videoOne , userVideoOne, videoSubtitleList } from 'api';
+import { SOCKET_SERVER } from 'config';
+import { videoOne, userVideoOne, videoSubtitleList } from 'api';
 import { RootState } from 'reducers';
 
 interface Props extends RouteComponentProps {
-  sessionId: string;
+  accessToken: string;
 }
 
 interface State {
@@ -19,7 +18,7 @@ interface State {
 }
 
 class VideoVideoContentPage extends React.Component<Props, State> {
-  socket: socketio.Socket | null = null;
+  socket: WebSocket | null = null;
   player = React.createRef<VideoPlayer>();
 
   state: State = {
@@ -27,21 +26,21 @@ class VideoVideoContentPage extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    this.socket = socketio.connect(SOCKET_SERVER + '/user-video', { path: SOCKET_PATH });
+    this.socket = new WebSocket(SOCKET_SERVER);
 
-    const { sessionId } = this.props;
+    const { accessToken } = this.props;
     const videoId: number = parseInt(this.props.match.params['videoId']);
 
     videoOne(videoId)
       .then((video: Video) => {
-        video.url += `?sessionId=${sessionId}`;
+        video.url += `?token=${accessToken}`;
         this.player.current!.src(video.url);
         this.setState({ video });
       });
 
     videoSubtitleList(videoId)
       .then((subtitles: Subtitle[]) => {
-        subtitles.forEach(v => v.url += `?sessionId=${sessionId}`);
+        subtitles.forEach(v => v.url += `?token=${accessToken}`);
         this.player.current!.addSubtitles(subtitles);
       });
 
@@ -54,9 +53,7 @@ class VideoVideoContentPage extends React.Component<Props, State> {
   }
 
   componentWillUnmount() {
-    if (this.socket) {
-      this.socket.disconnect();
-    }
+    this.socket?.close();
   }
 
   render() {
@@ -95,11 +92,11 @@ class VideoVideoContentPage extends React.Component<Props, State> {
 
   onTimeUpdate = (time: number) => {
     const { video } = this.state;
-    const { sessionId } = this.props;
+    const { accessToken } = this.props;
 
-    if (video) {
+    if (video && this.socket) {
       const userVideoTime: UserVideoTime = {
-        sessionId,
+        token: accessToken,
         videoId: video.id,
         time,
       };
@@ -109,7 +106,7 @@ class VideoVideoContentPage extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  sessionId: state.auth.sessionId,
+  accessToken: state.auth.accessToken,
 });
 
 export default connect(mapStateToProps)(VideoVideoContentPage);

@@ -3,7 +3,8 @@ import React from 'react';
 import { notification, message } from 'antd';
 
 import { store } from 'index';
-import { tokenExpire } from 'actions';
+import { refreshTokenExpireAction } from 'actions';
+import { AUTH_SERVER, API_SERVER, ACCESS_TOKEN_HEADER, REFRESH_TOKEN_HEADER } from 'config';
 
 export * from './auth';
 export * from './music';
@@ -19,9 +20,10 @@ export interface SearchResult<T> {
 }
 
 axios.interceptors.request.use((config) => {
-  const sessionId = store.getState().auth.sessionId;
-  if (sessionId) {
-    config.headers = { 'x-hyunsub-session-id': sessionId };
+  if (config.url?.startsWith(AUTH_SERVER)) {
+    config.headers[REFRESH_TOKEN_HEADER] = store.getState().auth.refreshToken;
+  } else if (config.url?.startsWith(API_SERVER)) {
+    config.headers[ACCESS_TOKEN_HEADER] = store.getState().auth.accessToken;
   }
 
   return config;
@@ -43,7 +45,7 @@ axios.interceptors.response.use((response) => {
   const msg: string = (data.msg) ? data.msg : JSON.stringify(data);
 
   if (status === 401) {
-    store.dispatch(tokenExpire());
+    store.dispatch(refreshTokenExpireAction());
   } else if (status === 500) {
     const lines = msg.split('\n');
     handleError(lines.shift() || '', lines.join('\n'));

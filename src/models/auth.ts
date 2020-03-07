@@ -10,6 +10,6 @@ export interface RegisterParam {
 }
 
 export interface LoginResult {
-  sessionId: string;
-  username: string;
+  refreshToken: string;
+  accessToken: string;
 }

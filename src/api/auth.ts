@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import * as NodeRSA from 'node-rsa';
 
-import { AUTH_SERVER, AUTH_HEADER } from 'config';
+import { AUTH_SERVER, ACCESS_TOKEN_HEADER } from 'config';
 import { LoginParam, RegisterParam, LoginResult } from 'models';
 
 export async function getRSAKey(): Promise<string> {
@@ -46,16 +46,6 @@ export async function register(param: RegisterParam): Promise<LoginResult> {
   return (await axios(config)).data;
 }
 
-export async function validateSession(): Promise<LoginResult> {
-  const config: AxiosRequestConfig = {
-    url: `${AUTH_SERVER}/validate-session`,
-    method: 'get',
-  };
-
-  const header = (await axios(config)).headers;
-  return JSON.parse(header[AUTH_HEADER]);
-}
-
 export async function changePassword(oldPassword: string, newPassword: string): Promise<void> {
   const publicKeyString: string = await getRSAKey();
   const publicKey = new NodeRSA(publicKeyString, 'pkcs8-public');
@@ -70,4 +60,16 @@ export async function changePassword(oldPassword: string, newPassword: string): 
   };
 
   await axios(config);
+}
+
+export async function reissueAccessToken(accessToken: string): Promise<string> {
+  const config: AxiosRequestConfig = {
+    url: `${AUTH_SERVER}/reissue-access-token`,
+    method: 'post',
+    data: {
+      [ACCESS_TOKEN_HEADER]: accessToken,
+    },
+  };
+
+  return (await axios(config)).data['accessToken'];
 }

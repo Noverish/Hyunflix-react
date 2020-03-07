@@ -1,22 +1,22 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
 
-import { loginAsync, registerAsync, logoutAsync, tokenExpire, validateTokenAction } from 'actions';
+import { loginAsync, registerAsync, logoutAction, refreshTokenExpireAction, reissueAccessTokenAction } from 'actions';
 
-export const sessionId = createReducer('' as string)
-  .handleAction(loginAsync.success, (_, action: ReturnType<typeof loginAsync.success>) => action.payload.sessionId)
-  .handleAction(registerAsync.success, (_, action: ReturnType<typeof registerAsync.success>) => action.payload.sessionId)
-  .handleAction([tokenExpire, logoutAsync.success], () => '');
+export const refreshToken = createReducer('' as string)
+  .handleAction(loginAsync.success, (_, action: ReturnType<typeof loginAsync.success>) => action.payload.refreshToken)
+  .handleAction(registerAsync.success, (_, action: ReturnType<typeof registerAsync.success>) => action.payload.refreshToken)
+  .handleAction([refreshTokenExpireAction, logoutAction], () => '');
 
-export const username = createReducer('' as string)
-  .handleAction(loginAsync.success, (_, action: ReturnType<typeof loginAsync.success>) => action.payload.username)
-  .handleAction(registerAsync.success, (_, action: ReturnType<typeof registerAsync.success>) => action.payload.username)
-  .handleAction(validateTokenAction.success, (_, action: ReturnType<typeof validateTokenAction.success>) => action.payload.username)
-  .handleAction([tokenExpire, logoutAsync.success], () => '');
+export const accessToken = createReducer('' as string)
+  .handleAction(loginAsync.success, (_, action: ReturnType<typeof loginAsync.success>) => action.payload.accessToken)
+  .handleAction(registerAsync.success, (_, action: ReturnType<typeof registerAsync.success>) => action.payload.accessToken)
+  .handleAction(reissueAccessTokenAction.success, (_, action: ReturnType<typeof reissueAccessTokenAction.success>) => action.payload)
+  .handleAction([refreshTokenExpireAction, logoutAction], () => '');
 
 const reducer = combineReducers({
-  sessionId,
-  username,
+  refreshToken,
+  accessToken,
 });
 
 export default reducer;

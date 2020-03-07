@@ -10,12 +10,12 @@ import { useSearch } from 'hooks';
 import { Music } from 'models';
 import { RootState } from 'reducers';
 
-const MusicListPage = (props: RouteComponentProps & { sessionId: string }) => {
+const MusicListPage = (props: RouteComponentProps & { accessToken: string }) => {
   const { items, total, loading, query, page, setQuery, setPage } = useSearch(musicList, props.history, PAGE_SIZE);
   const [nowPlaying, setNowPlaying] = useState(null as HTMLAudioElement | null);
 
   const onItemClick = useCallback((item: Music) => {
-    const newSrc = `${item.url}?sessionId=${props.sessionId}`;
+    const newSrc = `${item.url}?token=${props.accessToken}`;
 
     if (nowPlaying && newSrc === decodeURI(nowPlaying.src)) {
       setNowPlaying(null);
@@ -27,7 +27,7 @@ const MusicListPage = (props: RouteComponentProps & { sessionId: string }) => {
       // });
       setNowPlaying(newPlaying);
     }
-  }, [nowPlaying, props.sessionId]);
+  }, [nowPlaying, props.accessToken]);
 
   useEffect(() => {
     return () => {
@@ -64,7 +64,7 @@ const MusicListPage = (props: RouteComponentProps & { sessionId: string }) => {
 };
 
 const mapStateToProps = (state: RootState) => ({
-  sessionId: state.auth.sessionId,
+  accessToken: state.auth.accessToken,
 });
 
 export default connect(mapStateToProps)(MusicListPage);
