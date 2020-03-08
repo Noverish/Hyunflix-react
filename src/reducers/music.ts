@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { createReducer } from 'typesafe-actions';
+import { createReducer, StateType } from 'typesafe-actions';
 
 import { musicTagListAsync } from 'actions';
 import { COLORS } from 'config';
@@ -20,4 +20,4 @@ const reducer = combineReducers({
 
 export default reducer;
 
-export type MusicState = ReturnType<typeof reducer>;
+export type MusicState = StateType<typeof reducer>;

@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { createReducer } from 'typesafe-actions';
+import { createReducer, StateType } from 'typesafe-actions';
 
 import { COLORS } from 'config';
 
@@ -21,4 +21,4 @@ const reducer = combineReducers({
 
 export default reducer;
 
-export type VideoState = ReturnType<typeof reducer>;
+export type VideoState = StateType<typeof reducer>;

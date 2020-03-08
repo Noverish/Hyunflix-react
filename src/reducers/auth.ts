@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { createReducer } from 'typesafe-actions';
+import { createReducer, StateType } from 'typesafe-actions';
 
 import { loginAsync, registerAsync, logoutAction, refreshTokenExpireAction, reissueAccessTokenAction } from 'actions';
 
@@ -21,4 +21,4 @@ const reducer = combineReducers({
 
 export default reducer;
 
-export type AuthState = ReturnType<typeof reducer>;
+export type AuthState = StateType<typeof reducer>;

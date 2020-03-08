@@ -1,3 +1,3 @@
-import { createStandardAction } from 'typesafe-actions';
+import { createAction } from 'typesafe-actions';
 
-export const windowResize = createStandardAction('WINDOW_RESIZE')<undefined>();
+export const windowResize = createAction('WINDOW_RESIZE')<undefined>();

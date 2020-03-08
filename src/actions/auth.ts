@@ -1,4 +1,4 @@
-import { createAsyncAction, createStandardAction } from 'typesafe-actions';
+import { createAsyncAction, createAction } from 'typesafe-actions';
 
 import { LoginParam, RegisterParam, LoginResult } from 'models';
 
@@ -14,7 +14,7 @@ export const registerAsync = createAsyncAction(
   'REGISTER_FAILURE',
 )<RegisterParam, LoginResult, string>();
 
-export const logoutAction = createStandardAction('LOGOUT')<undefined>();
+export const logoutAction = createAction('LOGOUT')<undefined>();
 
 export const reissueAccessTokenAction = createAsyncAction(
   'ACCESS_TOKEN_EXPIRE_REQUEST',
@@ -22,4 +22,4 @@ export const reissueAccessTokenAction = createAsyncAction(
   'ACCESS_TOKEN_EXPIRE_FAILURE',
 )<string, string, string>();
 
-export const refreshTokenExpireAction = createStandardAction('REFRESH_TOKEN_EXPIRE')<undefined>();
+export const refreshTokenExpireAction = createAction('REFRESH_TOKEN_EXPIRE')<undefined>();
