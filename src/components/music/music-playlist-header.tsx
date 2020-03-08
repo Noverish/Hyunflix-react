@@ -1,6 +1,7 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { Button, Dropdown, Menu, Icon } from 'antd';
+import { Button, Dropdown, Menu } from 'antd';
+import { PlusOutlined, EditOutlined, DeleteOutlined, UnorderedListOutlined, DownOutlined } from '@ant-design/icons';
 
 import { MusicPlaylist } from 'models';
 import { PageHeader } from 'components';
@@ -48,19 +49,19 @@ const MusicPlaylistPage = (props: Props) => {
   const menu = (
     <Menu onClick={handleMenuClick}>
       <Menu.Item key={Actions.ADD}>
-        <Icon type="plus" />
+        <PlusOutlined />
         플레이리스트 추가
       </Menu.Item>
       <Menu.Item key={Actions.MODIFY} disabled={!current}>
-        <Icon type="edit" />
+        <EditOutlined />
         현재 플레이리스트 수정
       </Menu.Item>
       <Menu.Item key={Actions.DELETE} disabled={!current}>
-        <Icon type="delete" />
+        <DeleteOutlined />
         현재 플레이리스트 삭제
       </Menu.Item>
       <Menu.Item key={Actions.MUSIC} disabled={!current}>
-        <Icon type="unordered-list" />
+        <UnorderedListOutlined />
         플레이리스트 목록 수정
       </Menu.Item>
     </Menu>
@@ -68,7 +69,7 @@ const MusicPlaylistPage = (props: Props) => {
 
   const extra = (
     <Dropdown overlay={menu} placement="bottomRight">
-      <Button>수정하기 <Icon type="down" /></Button>
+      <Button>수정하기 <DownOutlined /></Button>
     </Dropdown>
   );
 

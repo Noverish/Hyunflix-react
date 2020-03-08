@@ -1,5 +1,6 @@
 import React from 'react';
-import { Checkbox, Tag, Icon } from 'antd';
+import { Checkbox, Tag } from 'antd';
+import { YoutubeOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import * as classnames from 'classnames';
 
@@ -37,7 +38,7 @@ const MusicItem: React.FC<Props> = (props) => {
         <div className="first-row">
           {checked !== undefined && <Checkbox checked={checked} />}
           <span className="title">{item.title}</span>
-          {item.youtube && <Icon type="youtube" style={{ color: '#f5222d' }} />}
+          {item.youtube && <YoutubeOutlined style={{ color: '#f5222d' }} />}
         </div>
         <div className="last-row">
           {renderTags(props)}
@@ -52,7 +53,7 @@ const MusicItem: React.FC<Props> = (props) => {
         <span className="id">{item.id}</span>
         {renderTags(props)}
         <span className="title">{item.title}</span>
-        {item.youtube && <Icon type="youtube" style={{ color: '#f5222d' }} />}
+        {item.youtube && <YoutubeOutlined style={{ color: '#f5222d' }} />}
         <span className="gray float-right">{time}</span>
       </div>
     );

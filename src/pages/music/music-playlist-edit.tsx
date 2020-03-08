@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Form, Input, Button, Spin } from 'antd';
-import { FormComponentProps } from 'antd/lib/form';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { updateMusicPlaylist, getMusicPlaylist } from 'api';
@@ -18,10 +17,9 @@ const buttonItemLayout = {
   wrapperCol: { span: 14, offset: 4 },
 };
 
-const MusicPlaylistEditPage = (props: FormComponentProps & RouteComponentProps) => {
+const MusicPlaylistEditPage = (props: RouteComponentProps) => {
   const [playlist, setPlaylist] = useState(undefined as MusicPlaylist | undefined);
   const [loading, setLoading] = useState(false);
-  const { getFieldDecorator } = props.form;
   const playlistId: number = parseInt(props.match.params['playlistId']);
 
   useEffect(() => {
@@ -32,33 +30,16 @@ const MusicPlaylistEditPage = (props: FormComponentProps & RouteComponentProps) 
       .catch(props.history.goBack);
   }, [playlistId, props.history]);
 
-  const onSubmit = useCallback((e) => {
-    e.preventDefault();
-    props.form.validateFields({ force: true }, (err, values) => {
-      if (err) {
-        return;
-      }
+  const onFinish = useCallback((values) => {
+    const title = values[TITLE_FIELD];
 
-      const title = values[TITLE_FIELD];
-
-      setLoading(true);
-      updateMusicPlaylist(playlistId, title)
-        .then(props.history.goBack)
-        .catch(() => {
-          setLoading(false);
-        });
-    });
-  }, [props.form, props.history, playlistId]);
-
-  const titleField = getFieldDecorator(TITLE_FIELD, {
-    initialValue: playlist ? playlist.title : '',
-    rules: [
-      {
-        required: true,
-        message: '제목을 입력해주세요',
-      },
-    ],
-  })(<Input />);
+    setLoading(true);
+    updateMusicPlaylist(playlistId, title)
+      .then(props.history.goBack)
+      .catch(() => {
+        setLoading(false);
+      });
+  }, [props.history, playlistId]);
 
   return (
     <React.Fragment>
@@ -69,9 +50,20 @@ const MusicPlaylistEditPage = (props: FormComponentProps & RouteComponentProps) 
         onBack={props.history.goBack}
       />
       <Spin spinning={loading}>
-        <Form className="border-bottom" layout="vertical" onSubmit={onSubmit}>
-          <Form.Item label="제목" {...formItemLayout}>
-            {titleField}
+        <Form
+          className="border-bottom"
+          layout="vertical"
+          onFinish={onFinish}
+          initialValues={{ [TITLE_FIELD]: playlist ? playlist.title : '' }}
+        >
+          <Form.Item
+            label="제목"
+            name={TITLE_FIELD}
+
+            rules={[{ required: true, message: '제목을 입력해주세요' }]}
+            {...formItemLayout}
+          >
+            <Input />
           </Form.Item>
           <Form.Item {...buttonItemLayout}>
             <Button type="primary" htmlType="submit">확인</Button>
@@ -82,4 +74,4 @@ const MusicPlaylistEditPage = (props: FormComponentProps & RouteComponentProps) 
   );
 };
 
-export default Form.create()(MusicPlaylistEditPage);
+export default MusicPlaylistEditPage;

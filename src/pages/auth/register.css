@@ -24,12 +24,6 @@
 .register-form > .ant-form-item > .ant-form-item-control-wrapper {
   flex-grow: 1;
 }
-  
-.register-form-button {
-  display: block !important;
-  margin-left: auto;
-  margin-right: auto;
-}
 
 @media only screen and (max-width: 575px) {
   .register-form > .ant-form-item {

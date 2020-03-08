@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Avatar, Menu, Dropdown } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 
 import { RootState } from 'reducers';
@@ -35,7 +36,7 @@ const UserAvatarMenu: React.FunctionComponent<Props> = (props) => {
 
   return (
     <Dropdown overlay={menu} trigger={['click']}>
-      <Avatar icon="user" />
+      <Avatar icon={<UserOutlined />} />
     </Dropdown>
   );
 };
