@@ -91,18 +91,18 @@ export default class VideoPlayer extends React.Component<Props> {
   public addSubtitles = (subtitles: Subtitle[]) => {
     const player = this.player;
     if (player) {
-      for (const subtitle of subtitles) {
+      subtitles.forEach((subtitle, index) => {
         const option: videojs.TextTrackOptions = {
           kind: 'subtitles',
           srclang: subtitle.language,
           label: subtitle.language,
           src: subtitle.url,
-          mode: (subtitle.language === 'ko') ? 'showing' : 'hidden',
-          default: subtitle.language === 'ko',
+          mode: (subtitle.language === 'default') ? 'showing' : 'hidden',
+          default: subtitle.language === 'default',
         };
 
         player.addRemoteTextTrack(option, false);
-      }
+      });
     }
   }
 
