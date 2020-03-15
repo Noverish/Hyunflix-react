@@ -1,5 +1,5 @@
 {
-  "name": "hyunsub-react",
+  "name": "Hyunflix-react",
   "private": true,
   "scripts": {
     "start": "PORT=80 react-scripts start",
