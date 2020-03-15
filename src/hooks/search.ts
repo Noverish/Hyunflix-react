@@ -33,7 +33,7 @@ function extractQuery() {
   return { query, page };
 }
 
-export const useSearch = <T>(search: SearchFunction<T>, history: History, pageSize: number): Result<T> => {
+export function useSearch<T>(search: SearchFunction<T>, history: History, pageSize: number): Result<T> {
   const [state, setState] = useState({
     items: [],
     total: 0,
@@ -59,7 +59,7 @@ export const useSearch = <T>(search: SearchFunction<T>, history: History, pageSi
   const debouncedOnQueryChange = useCallback(debounce((newQuery: string) => {
     if (query !== newQuery) {
       const querystring = stringify({ p: 1, q: newQuery });
-      history.replace(window.location.pathname + '?' + querystring);
+      history.replace(`${window.location.pathname}?${querystring}`);
     } else {
       setState(state => ({ ...state, loading: false }));
     }
@@ -72,7 +72,7 @@ export const useSearch = <T>(search: SearchFunction<T>, history: History, pageSi
 
   const setPage = useCallback((page: number) => {
     const querystring = stringify({ q: query, p: page });
-    history.replace(window.location.pathname + '?' + querystring);
+    history.replace(`${window.location.pathname}?${querystring}`);
   }, [query, history]);
 
   useEffect(() => {
@@ -80,4 +80,4 @@ export const useSearch = <T>(search: SearchFunction<T>, history: History, pageSi
   }, [refresh]);
 
   return { items, total, loading, query, page, setQuery, setPage, refresh };
-};
+}

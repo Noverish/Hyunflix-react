@@ -44,16 +44,16 @@ const UserVideoPage: React.FC<RouteComponentProps> = (props) => {
   }, [checklist]);
 
   // components
-  const headerExtra = useMemo(() => (checkable)
+  const headerExtra = useMemo(() => ((checkable)
     ? (
-      <React.Fragment>
+      <>
         <Button type="danger" onClick={deleteUserVideos} disabled={checklist.length === 0}>삭제</Button>
         <Button onClick={toggleMode}>취소</Button>
-      </React.Fragment>
+      </>
     ) : (
       <Button type="danger" onClick={toggleMode}>삭제</Button>
-    )
-  , [deleteUserVideos, toggleMode, checklist, checkable]);
+    )),
+  [deleteUserVideos, toggleMode, checklist, checkable]);
 
   return (
     <UserVideoList

@@ -7,9 +7,9 @@ import { COLORS } from 'config';
 const tags = createReducer(new Map<string, string>())
   .handleAction(musicTagListAsync.success, (_, action: ReturnType<typeof musicTagListAsync.success>) => {
     const map = new Map<string, string>();
-    const tags: string[] = action.payload;
+    const tags2: string[] = action.payload;
 
-    tags.forEach((t, i) => map.set(t, COLORS[i % COLORS.length]));
+    tags2.forEach((t, i) => map.set(t, COLORS[i % COLORS.length]));
 
     return map;
   });

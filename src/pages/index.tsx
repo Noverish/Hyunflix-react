@@ -39,9 +39,9 @@ const MainPage: React.FunctionComponent<Props> = (props) => {
 
   return (
     <Switch>
-      <RouteWithLayout exact={true} path="/" component={Home} />
-      <RouteWithLayout exact={true} path="/login" render={_ => <Redirect to="/" />} />
-      <RouteWithLayout exact={true} path="/register" render={_ => <Redirect to="/" />} />
+      <RouteWithLayout exact path="/" component={Home} />
+      <RouteWithLayout exact path="/login" render={_ => <Redirect to="/" />} />
+      <RouteWithLayout exact path="/register" render={_ => <Redirect to="/" />} />
 
       <RouteWithLayout path="/videos/series/:seriesId" component={VideoSeriesContent} />
       <RouteWithLayout path="/videos/series" component={VideoSeriesList} />

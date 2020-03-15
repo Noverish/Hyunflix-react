@@ -28,10 +28,10 @@ function withItem<T>(options: Options<T>) {
   return function <OriginalProps extends {}>(Component: ComponentType<OriginalProps & InjectedProps<T>>) {
     const Item: FC<OriginalProps & ExternalProps<T>> = (props) => {
       const { item, checked, link } = props;
-      const _link: string = link ? link(item) : '';
+      const mlink: string = link ? link(item) : '';
 
       return (
-        <Link to={_link} onClick={onClick.bind(null, props)}>
+        <Link to={mlink} onClick={onClick.bind(null, props)}>
           {checked !== undefined && <Checkbox checked={checked} />}
           <Component {...props} />
         </Link>

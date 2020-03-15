@@ -24,14 +24,12 @@ function itemRender(route, params, routes, paths) {
   return last ? (
     <span>{route.breadcrumbName}</span>
   ) : (
-    <Link to={'/' + paths.join('/')}>{route.breadcrumbName}</Link>
+    <Link to={`/${paths.join('/')}`}>{route.breadcrumbName}</Link>
   );
 }
 
-const CustomPageHeader = (props) => {
-  return (
-    <PageHeader {...props} breadcrumb={{ itemRender, routes: routes() }} />
-  );
-};
+const CustomPageHeader = props => (
+  <PageHeader {...props} breadcrumb={{ itemRender, routes: routes() }} />
+);
 
 export default CustomPageHeader;

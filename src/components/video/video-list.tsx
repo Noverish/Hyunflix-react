@@ -46,19 +46,18 @@ const VideoItem: React.FC<Props> = (props) => {
         </div>
       </div>
     );
-  } else {
-    return (
-      <div className="item desktop">
-        {checked !== undefined && <Checkbox checked={checked} />}
-        <span className="id">{item.id}</span>
-        {renderTags(props)}
-        <span className="title">{item.title}</span>
-        <span className="gray float-right">{item.durationString}</span>
-        <Tag color={color}>{item.resolution}</Tag>
-        <span className="gray">{item.date}</span>
-      </div>
-    );
   }
+  return (
+    <div className="item desktop">
+      {checked !== undefined && <Checkbox checked={checked} />}
+      <span className="id">{item.id}</span>
+      {renderTags(props)}
+      <span className="title">{item.title}</span>
+      <span className="gray float-right">{item.durationString}</span>
+      <Tag color={color}>{item.resolution}</Tag>
+      <span className="gray">{item.date}</span>
+    </div>
+  );
 };
 
 const mapStateToProps = (state: RootState) => ({

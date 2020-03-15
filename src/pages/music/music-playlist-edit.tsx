@@ -42,7 +42,7 @@ const MusicPlaylistEditPage = (props: RouteComponentProps) => {
   }, [props.history, playlistId]);
 
   return (
-    <React.Fragment>
+    <>
       <PageHeader
         title="음악 플레이리스트 수정"
         className="border-top border-bottom"
@@ -70,7 +70,7 @@ const MusicPlaylistEditPage = (props: RouteComponentProps) => {
           </Form.Item>
         </Form>
       </Spin>
-    </React.Fragment>
+    </>
   );
 };
 

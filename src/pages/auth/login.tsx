@@ -7,6 +7,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { loginAsync } from 'actions';
 import { LoginParam } from 'models';
 import './login.css';
+
 const { Title } = Typography;
 
 const USERNAME_FILED = 'username';
@@ -16,24 +17,13 @@ interface Props extends RouteComponentProps {
   loginAsyncRequest(param: LoginParam): ReturnType<typeof loginAsync.request>;
 }
 
-interface State {
-
-}
-
-class LoginPage extends React.Component<Props, State> {
-  onFinish = (values) => {
-    const username = values[USERNAME_FILED];
-    const password = values[PASSWORD_FIELD];
-
-    this.props.loginAsyncRequest({ username, password });
-  }
-
+class LoginPage extends React.Component<Props> {
   componentDidMount() {
     try {
       // @ts-ignore
       window.startVanta();
-    } catch (_) {
-
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -42,8 +32,14 @@ class LoginPage extends React.Component<Props, State> {
     window.stopVanta();
   }
 
-  render() {
+  onFinish = (values) => {
+    const username = values[USERNAME_FILED];
+    const password = values[PASSWORD_FIELD];
 
+    this.props.loginAsyncRequest({ username, password });
+  };
+
+  render() {
     return (
       <div className="login-form-container">
         <Title>로그인</Title>

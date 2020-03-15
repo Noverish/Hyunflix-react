@@ -3,8 +3,8 @@ import { History } from 'history';
 import { debounce } from 'debounce';
 import { parse, stringify } from 'query-string';
 
-import { ExternalProps as ComponentExternalProps } from './list';
 import { USER_INPUT_DEBOUNCE, PAGE_SIZE } from 'config';
+import { ExternalProps as ComponentExternalProps } from './list';
 
 type Without<T, K> = Pick<T, Exclude<keyof T, keyof K>>;
 type SearchResult<T> = { total: number, results: T[] };
@@ -39,6 +39,17 @@ function withContainer<T>(options?: Options<T>) {
         loading: false,
       };
 
+      debouncedOnQueryChange = debounce((query: string) => {
+        const { query: oldQuery } = this.extractQuery();
+        if (oldQuery !== query) {
+          const querystring = stringify({ p: 1, q: query });
+          this.props.history.push(`${window.location.pathname}?${querystring}`);
+          this.refresh();
+        } else {
+          this.setState({ loading: false });
+        }
+      }, USER_INPUT_DEBOUNCE);
+
       componentDidMount() {
         this.refresh();
       }
@@ -48,7 +59,37 @@ function withContainer<T>(options?: Options<T>) {
         const query: string = (q || '') as string;
         const page: number = parseInt(p as string || '1');
         return { query, page };
-      }
+      };
+
+      onQueryChange = (query: string) => {
+        if (!this.state.loading) {
+          this.setState({ loading: true });
+        }
+        this.debouncedOnQueryChange(query);
+      };
+
+      onPageChange = (page: number) => {
+        const { query } = this.extractQuery();
+        const querystring = stringify({ q: query, p: page });
+        this.props.history.push(`${window.location.pathname}?${querystring}`);
+        this.refresh();
+      };
+
+      public refresh = () => {
+        const pageSize = this.props.pageSize || PAGE_SIZE;
+        const { query, page } = this.extractQuery();
+        this.setState({ loading: true });
+
+        this.props.search(query, page, pageSize)
+          .then((result: SearchResult<T>) => {
+            this.setState({
+              loading: false,
+              items: result.results,
+              total: result.total,
+            });
+          })
+          .catch(() => {}); // TODO catch
+      };
 
       render() {
         const pageSize = this.props.pageSize || PAGE_SIZE;
@@ -70,45 +111,6 @@ function withContainer<T>(options?: Options<T>) {
             loading={loading}
           />
         );
-      }
-
-      debouncedOnQueryChange = debounce((query: string) => {
-        const { query: oldQuery } = this.extractQuery();
-        if (oldQuery !== query) {
-          const querystring = stringify({ p: 1, q: query });
-          this.props.history.push(window.location.pathname + '?' + querystring);
-          this.refresh();
-        } else {
-          this.setState({ loading: false });
-        }
-      }, USER_INPUT_DEBOUNCE);
-
-      onQueryChange = (query: string) => {
-        this.state.loading || this.setState({ loading: true });
-        this.debouncedOnQueryChange(query);
-      }
-
-      onPageChange = (page: number) => {
-        const { query } = this.extractQuery();
-        const querystring = stringify({ q: query, p: page });
-        this.props.history.push(window.location.pathname + '?' + querystring);
-        this.refresh();
-      }
-
-      public refresh = () => {
-        const pageSize = this.props.pageSize || PAGE_SIZE;
-        const { query, page } = this.extractQuery();
-        this.setState({ loading: true });
-
-        this.props.search(query, page, pageSize)
-          .then((result: SearchResult<T>) => {
-            this.setState({
-              loading: false,
-              items: result.results,
-              total: result.total,
-            });
-          })
-          .catch(() => {}); // TODO catch
       }
     }
 

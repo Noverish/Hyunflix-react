@@ -46,18 +46,17 @@ const MusicItem: React.FC<Props> = (props) => {
         </div>
       </div>
     );
-  } else {
-    return (
-      <div className="item desktop">
-        {checked !== undefined && <Checkbox checked={checked} />}
-        <span className="id">{item.id}</span>
-        {renderTags(props)}
-        <span className="title">{item.title}</span>
-        {item.youtube && <YoutubeOutlined style={{ color: '#f5222d' }} />}
-        <span className="gray float-right">{time}</span>
-      </div>
-    );
   }
+  return (
+    <div className="item desktop">
+      {checked !== undefined && <Checkbox checked={checked} />}
+      <span className="id">{item.id}</span>
+      {renderTags(props)}
+      <span className="title">{item.title}</span>
+      {item.youtube && <YoutubeOutlined style={{ color: '#f5222d' }} />}
+      <span className="gray float-right">{time}</span>
+    </div>
+  );
 };
 
 const mapStateToProps = (state: RootState) => ({

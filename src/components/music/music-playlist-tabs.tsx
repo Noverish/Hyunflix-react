@@ -13,20 +13,20 @@ interface Props {
 }
 
 const MusicPlaylistPage = (props: Props) => {
-  const { playlists, current, onChange } = props;
+  const { playlists, current, onChange: onChangeProps } = props;
 
-  const _onChange = (key) => {
-    onChange(find(playlists, { id: parseInt(key) }));
+  const onChange = (key) => {
+    onChangeProps(find(playlists, { id: parseInt(key) }));
   };
 
   const playlistButtons = playlists.map(v => (
-    <TabPane tab={v.title} key={v.id.toString()} closable={true}/>
+    <TabPane tab={v.title} key={v.id.toString()} closable />
   ));
 
   return (
     <Tabs
-      hideAdd={true}
-      onChange={_onChange}
+      hideAdd
+      onChange={onChange}
       activeKey={current ? current.id.toString() : undefined}
       type="line"
       tabBarStyle={{ margin: '0' }}

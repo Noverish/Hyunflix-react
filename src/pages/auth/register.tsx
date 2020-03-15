@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { registerAsync } from 'actions';
 import { RegisterParam } from 'models';
 import './register.css';
+
 const { Title } = Typography;
 
 const USERNAME_FIELD = 'username';
@@ -34,7 +35,7 @@ class RegisterPage extends React.Component<Props> {
     const regCode = values[REGCODE_FIELD];
 
     this.props.registerAsyncRequest({ username, password, regCode });
-  }
+  };
 
   render() {
     return (
@@ -54,7 +55,7 @@ class RegisterPage extends React.Component<Props> {
             <Input />
           </Form.Item>
           <Form.Item
-            hasFeedback={true}
+            hasFeedback
             label="비밀번호"
             name={PASSWORD1_FIELD}
             rules={[{ required: true, message: '비밀번호를 입력해주세요!' }]}
@@ -62,7 +63,7 @@ class RegisterPage extends React.Component<Props> {
             <Input.Password />
           </Form.Item>
           <Form.Item
-            hasFeedback={true}
+            hasFeedback
             label="비밀번호 확인"
             name={PASSWORD2_FIELD}
             dependencies={[PASSWORD1_FIELD]}
@@ -73,7 +74,7 @@ class RegisterPage extends React.Component<Props> {
                   if (!value || getFieldValue(PASSWORD1_FIELD) === value) {
                     return Promise.resolve();
                   }
-                  return Promise.reject('위에서 입력하신 비밀번호와 다릅니다!');
+                  return Promise.reject(new Error('위에서 입력하신 비밀번호와 다릅니다!'));
                 },
               }),
             ]}

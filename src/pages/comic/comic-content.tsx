@@ -22,7 +22,7 @@ const ComicContentPage = (props: Props) => {
   const [hide, setHide] = useState(false);
 
   const comicId: number = parseInt(props.match.params['comicId']);
-  const accessToken: string = props.accessToken;
+  const { accessToken } = props;
 
   useEffect(() => {
     getComic(comicId)

@@ -43,6 +43,8 @@ const MusicPlaylistPage = (props: Props) => {
         props.history.push(musicAddUrl);
         break;
       }
+      default:
+        break;
     }
   };
 
@@ -69,7 +71,10 @@ const MusicPlaylistPage = (props: Props) => {
 
   const extra = (
     <Dropdown overlay={menu} placement="bottomRight">
-      <Button>수정하기 <DownOutlined /></Button>
+      <Button>
+        수정하기
+        <DownOutlined />
+      </Button>
     </Dropdown>
   );
 

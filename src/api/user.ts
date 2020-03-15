@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 import { API_SERVER } from 'config';
 import { UserVideo } from 'models';
-import { SearchResult } from './';
+import { SearchResult } from '.';
 
 export async function userVideoList(query: string, page: number, pageSize: number): Promise<SearchResult<UserVideo>> {
   const config: AxiosRequestConfig = {
@@ -18,7 +18,7 @@ export async function userVideoOne(videoId: number): Promise<UserVideo | null> {
   const config: AxiosRequestConfig = {
     url: `${API_SERVER}/user/videos/${videoId}`,
     method: 'get',
-    validateStatus: function (status: number) {
+    validateStatus(status: number) {
       return status === 200 || status === 404;
     },
   };
@@ -26,9 +26,8 @@ export async function userVideoOne(videoId: number): Promise<UserVideo | null> {
   const result = (await axios(config)).data;
   if (result.msg) {
     return null;
-  } else {
-    return result;
   }
+  return result;
 }
 
 export async function deleteUserVideoBulk(videoIds: number[]): Promise<void> {

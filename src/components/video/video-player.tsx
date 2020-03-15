@@ -14,35 +14,8 @@ interface Props {
 
 export default class VideoPlayer extends React.Component<Props> {
   player: videojs.Player | null = null;
+
   videoNode = React.createRef<HTMLVideoElement>();
-
-  onKeyDown = (e: KeyboardEvent) => {
-    const player = this.player;
-    if (e.repeat || !player) {
-      return;
-    }
-
-    const seekRange = e.ctrlKey ? LARGE_SEEK_RANGE : SMALL_SEEK_RANGE;
-
-    switch (e.key) {
-      case ' ': {
-        player.paused() ? player.play() : player.pause();
-        break;
-      }
-      case 'Enter': {
-        player.isFullscreen() ? player.exitFullscreen() : player.requestFullscreen();
-        break;
-      }
-      case 'ArrowLeft': {
-        player.currentTime(player.currentTime() - seekRange);
-        break;
-      }
-      case 'ArrowRight': {
-        player.currentTime(player.currentTime() + seekRange);
-        break;
-      }
-    }
-  }
 
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDown);
@@ -81,15 +54,22 @@ export default class VideoPlayer extends React.Component<Props> {
     this.player = player;
   }
 
+  componentWillUnmount() {
+    if (this.player) {
+      this.player.dispose();
+    }
+    document.removeEventListener('keydown', this.onKeyDown);
+  }
+
   public src = (src: string) => {
-    const player = this.player;
+    const { player } = this;
     if (player) {
       player.src({ src, type: 'video/mp4' });
     }
-  }
+  };
 
   public addSubtitles = (subtitles: Subtitle[]) => {
-    const player = this.player;
+    const { player } = this;
     if (player) {
       subtitles.forEach((subtitle, index) => {
         const option: videojs.TextTrackOptions = {
@@ -104,21 +84,52 @@ export default class VideoPlayer extends React.Component<Props> {
         player.addRemoteTextTrack(option, false);
       });
     }
-  }
+  };
 
   public setCurrentTime = (currentTime: number) => {
-    const player = this.player;
+    const { player } = this;
     if (player) {
       player.currentTime(currentTime);
     }
-  }
+  };
 
-  componentWillUnmount() {
-    if (this.player) {
-      this.player.dispose();
+  onKeyDown = (e: KeyboardEvent) => {
+    const { player } = this;
+    if (e.repeat || !player) {
+      return;
     }
-    document.removeEventListener('keydown', this.onKeyDown);
-  }
+
+    const seekRange = e.ctrlKey ? LARGE_SEEK_RANGE : SMALL_SEEK_RANGE;
+
+    switch (e.key) {
+      case ' ': {
+        if (player.paused()) {
+          player.play();
+        } else {
+          player.pause();
+        }
+        break;
+      }
+      case 'Enter': {
+        if (player.isFullscreen()) {
+          player.exitFullscreen();
+        } else {
+          player.requestFullscreen();
+        }
+        break;
+      }
+      case 'ArrowLeft': {
+        player.currentTime(player.currentTime() - seekRange);
+        break;
+      }
+      case 'ArrowRight': {
+        player.currentTime(player.currentTime() + seekRange);
+        break;
+      }
+      default:
+        break;
+    }
+  };
 
   // wrap the player in a div with a `data-vjs-player` attribute
   // so videojs won't create additional wrapper in the DOM
@@ -129,7 +140,7 @@ export default class VideoPlayer extends React.Component<Props> {
     return (
       <div style={{ position: 'relative', paddingTop: `${ratio}%` }}>
         <div style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%' }}>
-          <div data-vjs-player={true} style={{ width: '100%', height: '100%' }}>
+          <div data-vjs-player style={{ width: '100%', height: '100%' }}>
             <video className="video-js" ref={this.videoNode} />
           </div>
         </div>

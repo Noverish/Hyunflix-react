@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 import { API_SERVER } from 'config';
 import { VideoSeries } from 'models';
-import { SearchResult } from './';
+import { SearchResult } from '.';
 
 export async function videoSeriesList(query: string, page: number, pageSize: number): Promise<SearchResult<VideoSeries>> {
   const config: AxiosRequestConfig = {

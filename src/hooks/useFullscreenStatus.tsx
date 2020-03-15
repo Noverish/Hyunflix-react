@@ -20,8 +20,7 @@ export default function useFullscreenStatus(elRef): [boolean, () => void] {
   };
 
   React.useLayoutEffect(() => {
-    document.onfullscreenchange = () =>
-      setIsFullscreen(document[getBrowserFullscreenElementProp()] != null);
+    document.onfullscreenchange = () => setIsFullscreen(document[getBrowserFullscreenElementProp()] != null);
 
     return () => {
       document.onfullscreenchange = null;
@@ -35,13 +34,12 @@ export default function useFullscreenStatus(elRef): [boolean, () => void] {
 function getBrowserFullscreenElementProp() {
   if (typeof document['fullscreenElement'] !== 'undefined') {
     return 'fullscreenElement';
-  } else if (typeof document['mozFullScreenElement'] !== 'undefined') {
+  } if (typeof document['mozFullScreenElement'] !== 'undefined') {
     return 'mozFullScreenElement';
-  } else if (typeof document['msFullscreenElement'] !== 'undefined') {
+  } if (typeof document['msFullscreenElement'] !== 'undefined') {
     return 'msFullscreenElement';
-  } else if (typeof document['webkitFullscreenElement'] !== 'undefined') {
+  } if (typeof document['webkitFullscreenElement'] !== 'undefined') {
     return 'webkitFullscreenElement';
-  } else {
-    throw new Error('fullscreenElement is not supported by this browser');
   }
+  throw new Error('fullscreenElement is not supported by this browser');
 }

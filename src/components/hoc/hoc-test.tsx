@@ -24,13 +24,11 @@ interface Options<T> {
 
 function hoc<T>(options: Options<T>) {
   return function <OriginalProps extends {}>(Component: React.ComponentType<OriginalProps & InjectedProps>) {
-    const HOC: React.FC<OriginalProps & ExternalProps> = (props) => {
-      return (
-        <div>
-          <Component {...props} injected="injected" />
-        </div>
-      );
-    };
+    const HOC: React.FC<OriginalProps & ExternalProps> = props => (
+      <div>
+        <Component {...props} injected="injected" />
+      </div>
+    );
 
     return HOC;
   };

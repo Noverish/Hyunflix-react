@@ -29,7 +29,7 @@ const MusicPlaylistMuiscsPage = (props: RouteComponentProps) => {
         return playlist;
       }
 
-      const musics = playlist.musics;
+      const { musics } = playlist;
       const newMusics = find(musics, music)
         ? musics.filter(v => v.id !== music.id)
         : [...musics, music];

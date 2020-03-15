@@ -46,7 +46,7 @@ const VideoSeriesContentPage: React.FunctionComponent<RouteComponentProps> = (pr
         setLoading(false);
       })
       .catch();
-  },        [seriesId]);
+  }, [seriesId]);
 
   return (
     <VideoList

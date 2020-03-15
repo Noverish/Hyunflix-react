@@ -23,16 +23,32 @@ function convert(musics: Music[], accessToken: string): AMusic[] {
     id: m.id,
     name: m.title.includes(' - ') ? m.title.split(' - ')[1] : m.title,
     artist: m.title.includes(' - ') ? m.title.split(' - ')[0] : '',
-    url: m.url + `?token=${accessToken}`,
+    url: `${m.url}?token=${accessToken}`,
   }));
 }
 
 class MusicPlayer extends React.Component<Props> {
   aplayer: APlayer | null = null;
 
+  componentDidMount() {
+    const { playlist, accessToken } = this.props;
+    const container = document.getElementById('aplayer');
+
+    const aplayer = new APlayer({
+      container,
+      audio: convert(playlist, accessToken),
+      autoplay: true,
+      loop: 'all',
+      order: 'random',
+      listFolded: false,
+    });
+
+    this.aplayer = aplayer;
+  }
+
   shouldComponentUpdate(nextProps: Props) {
     const { playlist, accessToken } = nextProps;
-    const aplayer = this.aplayer;
+    const { aplayer } = this;
 
     if (aplayer) {
       aplayer.list.clear();
@@ -44,22 +60,6 @@ class MusicPlayer extends React.Component<Props> {
     }
 
     return false;
-  }
-
-  componentDidMount() {
-    const { playlist, accessToken } = this.props;
-    const container = document.getElementById('aplayer');
-
-    const aplayer = new APlayer({
-      container: container,
-      audio: convert(playlist, accessToken),
-      autoplay: true,
-      loop: 'all',
-      order: 'random',
-      listFolded: false,
-    });
-
-    this.aplayer = aplayer;
   }
 
   render() {

@@ -29,10 +29,8 @@ const MusicListPage = (props: RouteComponentProps & { accessToken: string }) => 
     }
   }, [nowPlaying, props.accessToken]);
 
-  useEffect(() => {
-    return () => {
+  useEffect(() => () => {
       nowPlaying?.pause();
-    };
   }, [nowPlaying]);
 
   // components

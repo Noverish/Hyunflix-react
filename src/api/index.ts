@@ -32,16 +32,14 @@ axios.interceptors.request.use((config) => {
   return Promise.reject(err.message);
 });
 
-axios.interceptors.response.use((response) => {
-  return response;
-}, (err) => {
+axios.interceptors.response.use(response => response, (err) => {
   if (err.response === undefined) {
     handleError(err.message, JSON.stringify(err.config, null, 4));
     return Promise.reject(err.message);
   }
 
-  const status: number = err.response.status;
-  const data: any = err.response.data;
+  const { status } = err.response;
+  const { data } = err.response;
   const msg: string = (data.msg) ? data.msg : JSON.stringify(data);
 
   if (status === 401) {
@@ -62,6 +60,6 @@ function handleError(title: string, content: string) {
     description: React.createElement('pre', null, content),
     duration: 0,
     placement: 'topLeft',
-    style:{ width: '80vw' },
+    style: { width: '80vw' },
   });
 }

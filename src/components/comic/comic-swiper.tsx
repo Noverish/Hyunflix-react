@@ -13,7 +13,9 @@ const ComicSwiper = (props: Props) => {
   const { urls } = props;
 
   useEffect(() => {
-    swiper && swiper.destroy(false, true);
+    if (swiper) {
+      swiper.destroy(false, true);
+    }
 
     swiper = new Swiper('.swiper-container', {
       slidesPerView: 'auto',
@@ -23,12 +25,12 @@ const ComicSwiper = (props: Props) => {
     });
   }, [urls]);
 
-  const slides = urls.map((url, i) => (
-    <div key={i} className="swiper-slide">
+  const slides = urls.map(url => (
+    <div key={url} className="swiper-slide">
       <img
         className="swiper-lazy"
         data-src={url}
-        alt={''}
+        alt=""
       />
       <div className="swiper-lazy-preloader swiper-lazy-preloader-white" />
     </div>

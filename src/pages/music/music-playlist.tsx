@@ -17,7 +17,9 @@ const MusicPlaylistPage = (props: RouteComponentProps) => {
   }
 
   useEffect(() => {
-    playlistId && getMusicPlaylist(playlistId).then(setCurrent);
+    if (playlistId) {
+      getMusicPlaylist(playlistId).then(setCurrent);
+    }
   }, [playlistId]);
 
   useEffect(() => {
@@ -31,7 +33,7 @@ const MusicPlaylistPage = (props: RouteComponentProps) => {
   }, [props.history]);
 
   const onAdd = useCallback(() => {
-    createMusicPlaylist('Playlist ' + (playlists.length + 1))
+    createMusicPlaylist(`Playlist ${playlists.length + 1}`)
       .then(listMusicPlaylist)
       .then(setPlaylists);
   }, [playlists.length]);

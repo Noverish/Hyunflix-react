@@ -62,14 +62,14 @@ function withList<T>(options: Options<T>) {
       item: T,
     ) {
       const { checklist, link } = props;
-      const _link: string = link ? link(item) : '';
+      const mLink: string = link ? link(item) : '';
 
       const checked = (checklist !== undefined)
         ? checklist.some(i => compare(i, item))
         : undefined;
 
       return (
-        <Link className="item-wrapper" to={_link} onClick={onItemClick.bind(null, props, item)}>
+        <Link className="item-wrapper" to={mLink} onClick={onItemClick.bind(null, props, item)}>
           <Component
             {...props}
             item={item}
@@ -87,15 +87,15 @@ function withList<T>(options: Options<T>) {
         : { backIcon: false };
 
       const extra = (
-        <React.Fragment>
+        <>
           <Input.Search onChange={onQueryChange.bind(null, props)} defaultValue={query} />
           {headerExtra}
-        </React.Fragment>
+        </>
       );
 
       return (
         <div className="list">
-          <PageHeader {...pageHeaderProps} title={title} subTitle={subTitle} extra={extra}/>
+          <PageHeader {...pageHeaderProps} title={title} subTitle={subTitle} extra={extra} />
           <List
             dataSource={items}
             renderItem={renderItem.bind(null, props)}

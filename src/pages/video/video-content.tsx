@@ -19,6 +19,7 @@ interface State {
 
 class VideoVideoContentPage extends React.Component<Props, State> {
   socket: WebSocket | null = null;
+
   player = React.createRef<VideoPlayer>();
 
   state: State = {
@@ -56,6 +57,24 @@ class VideoVideoContentPage extends React.Component<Props, State> {
     this.socket?.close();
   }
 
+  onBack = () => {
+    this.props.history.goBack();
+  };
+
+  onTimeUpdate = (time: number) => {
+    const { video } = this.state;
+    const { accessToken } = this.props;
+
+    if (video && this.socket) {
+      const userVideoTime: UserVideoTime = {
+        token: accessToken,
+        videoId: video.id,
+        time,
+      };
+      this.socket.send(JSON.stringify(userVideoTime));
+    }
+  };
+
   render() {
     const { video } = this.state;
 
@@ -84,24 +103,6 @@ class VideoVideoContentPage extends React.Component<Props, State> {
         {statistics}
       </div>
     );
-  }
-
-  onBack = () => {
-    this.props.history.goBack();
-  }
-
-  onTimeUpdate = (time: number) => {
-    const { video } = this.state;
-    const { accessToken } = this.props;
-
-    if (video && this.socket) {
-      const userVideoTime: UserVideoTime = {
-        token: accessToken,
-        videoId: video.id,
-        time,
-      };
-      this.socket.send(JSON.stringify(userVideoTime));
-    }
   }
 }
 
