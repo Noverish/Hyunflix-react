@@ -1,10 +1,10 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 
-import { registerAsync, loginAsync, reissueAccessTokenAction } from 'actions';
-import { LoginResult } from 'models';
-import * as Api from 'api';
-import { registerReissueAccessTokenAction } from 'workers';
+import { registerAsync, loginAsync, reissueAccessTokenAction } from 'src/actions';
+import { LoginResult } from 'src/models';
+import * as Api from 'src/api';
+import { registerReissueAccessTokenAction } from 'src/workers';
 
 export function* fetchLogin(action: ReturnType<typeof loginAsync.request>) {
   try {

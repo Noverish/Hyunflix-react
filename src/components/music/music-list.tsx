@@ -4,10 +4,10 @@ import { YoutubeOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import * as classnames from 'classnames';
 
-import withList, { InjectedProps, Options } from 'components/hoc/list';
-import { Music } from 'models';
-import { second2String } from 'utils';
-import { RootState } from 'reducers';
+import withList, { InjectedProps, Options } from 'src/components/hoc/list';
+import { Music } from 'src/models';
+import { second2String } from 'src/utils';
+import { RootState } from 'src/reducers';
 
 interface ReduxProps {
   tags: Map<string, string>;

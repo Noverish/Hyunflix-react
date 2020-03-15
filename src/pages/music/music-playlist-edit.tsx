@@ -2,9 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Form, Input, Button, Spin } from 'antd';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { updateMusicPlaylist, getMusicPlaylist } from 'api';
-import { MusicPlaylist } from 'models';
-import { PageHeader } from 'components';
+import { updateMusicPlaylist, getMusicPlaylist } from 'src/api';
+import { MusicPlaylist } from 'src/models';
+import { PageHeader } from 'src/components';
 
 const TITLE_FIELD = 'title';
 

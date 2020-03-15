@@ -2,7 +2,7 @@ import React from 'react';
 import { Tabs } from 'antd';
 import find from 'lodash/find';
 
-import { MusicPlaylist } from 'models';
+import { MusicPlaylist } from 'src/models';
 
 const { TabPane } = Tabs;
 

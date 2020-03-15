@@ -3,8 +3,8 @@ import { parse, stringify } from 'query-string';
 import { History } from 'history';
 import { debounce } from 'debounce';
 
-import { SearchResult } from 'api';
-import { USER_INPUT_DEBOUNCE } from 'config';
+import { SearchResult } from 'src/api';
+import { USER_INPUT_DEBOUNCE } from 'src/config';
 
 export interface SearchState<T> {
   items: T[];

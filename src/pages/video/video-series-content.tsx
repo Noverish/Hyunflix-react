@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { VideoList } from 'components';
-import { VideoSeries, Video } from 'models';
-import { videoSeries, SearchResult } from 'api';
-import { useSearch } from 'hooks';
-import { PAGE_SIZE } from 'config';
+import { VideoList } from 'src/components';
+import { VideoSeries, Video } from 'src/models';
+import { videoSeries, SearchResult } from 'src/api';
+import { useSearch } from 'src/hooks';
+import { PAGE_SIZE } from 'src/config';
 
 const link = (video: Video) => `/videos/${video.id}`;
 

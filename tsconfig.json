@@ -20,7 +20,7 @@
     "jsx": "preserve",
     "outDir": "build",
     
-    "baseUrl": "src",
+    "baseUrl": ".",
     "noImplicitAny": false
   },
   "include": [

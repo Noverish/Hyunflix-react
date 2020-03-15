@@ -2,11 +2,11 @@ import React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button } from 'antd';
 
-import { ComicList } from 'components';
-import { Comic } from 'models';
-import { listComic } from 'api';
-import { PAGE_SIZE } from 'config';
-import { useSearch } from 'hooks';
+import { ComicList } from 'src/components';
+import { Comic } from 'src/models';
+import { listComic } from 'src/api';
+import { PAGE_SIZE } from 'src/config';
+import { useSearch } from 'src/hooks';
 
 const link = (comic: Comic) => `/comics/${comic.id}`;
 const headerExtra = (

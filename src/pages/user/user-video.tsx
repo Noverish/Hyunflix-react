@@ -2,11 +2,11 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Button } from 'antd';
 
-import { UserVideoList } from 'components';
-import { UserVideo } from 'models';
-import { deleteUserVideoBulk, userVideoList } from 'api';
-import { PAGE_SIZE } from 'config';
-import { useSearch } from 'hooks';
+import { UserVideoList } from 'src/components';
+import { UserVideo } from 'src/models';
+import { deleteUserVideoBulk, userVideoList } from 'src/api';
+import { PAGE_SIZE } from 'src/config';
+import { useSearch } from 'src/hooks';
 
 const link = (userVideo: UserVideo) => `/videos/${userVideo.video.id}`;
 

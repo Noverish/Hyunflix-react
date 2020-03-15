@@ -3,7 +3,7 @@ import { History } from 'history';
 import { debounce } from 'debounce';
 import { parse, stringify } from 'query-string';
 
-import { USER_INPUT_DEBOUNCE, PAGE_SIZE } from 'config';
+import { USER_INPUT_DEBOUNCE, PAGE_SIZE } from 'src/config';
 import { ExternalProps as ComponentExternalProps } from './list';
 
 type Without<T, K> = Pick<T, Exclude<keyof T, keyof K>>;

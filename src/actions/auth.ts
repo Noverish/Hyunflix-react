@@ -1,6 +1,6 @@
 import { createAsyncAction, createAction } from 'typesafe-actions';
 
-import { LoginParam, RegisterParam, LoginResult } from 'models';
+import { LoginParam, RegisterParam, LoginResult } from 'src/models';
 
 export const loginAsync = createAsyncAction(
   'LOGIN_REQUEST',

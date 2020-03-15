@@ -1,7 +1,7 @@
 import React from 'react';
 import videojs from 'video.js';
-import { Subtitle } from 'models';
-import { LARGE_SEEK_RANGE, SMALL_SEEK_RANGE, VIDEO_SCREEN_RATIO } from 'config';
+import { Subtitle } from 'src/models';
+import { LARGE_SEEK_RANGE, SMALL_SEEK_RANGE, VIDEO_SCREEN_RATIO } from 'src/config';
 import 'videojs-seek-buttons';
 import 'videojs-landscape-fullscreen';
 import './videojs-seek-buttons.css';

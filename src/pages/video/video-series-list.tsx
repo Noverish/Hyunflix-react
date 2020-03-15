@@ -1,11 +1,11 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { VideoSeries } from 'models';
-import { VideoSeriesList } from 'components';
-import { videoSeriesList } from 'api';
-import { PAGE_SIZE } from 'config';
-import { useSearch } from 'hooks';
+import { VideoSeries } from 'src/models';
+import { VideoSeriesList } from 'src/components';
+import { videoSeriesList } from 'src/api';
+import { PAGE_SIZE } from 'src/config';
+import { useSearch } from 'src/hooks';
 
 const link = (item: VideoSeries) => `/videos/series/${item.id}`;
 

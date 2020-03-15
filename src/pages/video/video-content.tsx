@@ -3,11 +3,11 @@ import { RouteComponentProps } from 'react-router-dom';
 import { Statistic } from 'antd';
 import { connect } from 'react-redux';
 
-import { VideoPlayer, PageHeader } from 'components';
-import { Video, Subtitle, UserVideo, UserVideoTime } from 'models';
-import { SOCKET_SERVER } from 'config';
-import { videoOne, userVideoOne, videoSubtitleList } from 'api';
-import { RootState } from 'reducers';
+import { VideoPlayer, PageHeader } from 'src/components';
+import { Video, Subtitle, UserVideo, UserVideoTime } from 'src/models';
+import { SOCKET_SERVER } from 'src/config';
+import { videoOne, userVideoOne, videoSubtitleList } from 'src/api';
+import { RootState } from 'src/reducers';
 
 interface Props extends RouteComponentProps {
   accessToken: string;

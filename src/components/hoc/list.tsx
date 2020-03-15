@@ -1,8 +1,8 @@
 import React, { ComponentType, FC } from 'react';
 import { Link } from 'react-router-dom';
 import { List, Pagination, Input } from 'antd';
-import { PAGE_SIZE } from 'config';
-import { PageHeader } from 'components';
+import { PAGE_SIZE } from 'src/config';
+import { PageHeader } from 'src/components';
 
 export interface ExternalProps<T> {
   items: T[];

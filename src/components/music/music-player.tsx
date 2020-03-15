@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as APlayer from 'aplayer';
 
-import { Music } from 'models';
-import { RootState } from 'reducers';
+import { Music } from 'src/models';
+import { RootState } from 'src/reducers';
 import 'aplayer/dist/APlayer.min.css';
 
 interface Props {

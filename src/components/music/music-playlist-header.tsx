@@ -3,8 +3,8 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Button, Dropdown, Menu } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, UnorderedListOutlined, DownOutlined } from '@ant-design/icons';
 
-import { MusicPlaylist } from 'models';
-import { PageHeader } from 'components';
+import { MusicPlaylist } from 'src/models';
+import { PageHeader } from 'src/components';
 
 interface Props extends RouteComponentProps {
   current?: MusicPlaylist;

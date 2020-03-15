@@ -2,9 +2,9 @@ import axios from 'axios';
 import React from 'react';
 import { notification, message } from 'antd';
 
-import { store } from 'index';
-import { refreshTokenExpireAction } from 'actions';
-import { AUTH_SERVER, API_SERVER, ACCESS_TOKEN_HEADER, REFRESH_TOKEN_HEADER } from 'config';
+import { store } from 'src';
+import { refreshTokenExpireAction } from 'src/actions';
+import { AUTH_SERVER, API_SERVER, ACCESS_TOKEN_HEADER, REFRESH_TOKEN_HEADER } from 'src/config';
 
 export * from './auth';
 export * from './music';

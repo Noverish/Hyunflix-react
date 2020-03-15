@@ -4,8 +4,8 @@ import { Avatar, Menu, Dropdown } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 
-import { RootState } from 'reducers';
-import { logoutAction } from 'actions';
+import { RootState } from 'src/reducers';
+import { logoutAction } from 'src/actions';
 
 interface Props {
   username: string;

@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Form, Input, Button, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
-import { loginAsync } from 'actions';
-import { LoginParam } from 'models';
+import { loginAsync } from 'src/actions';
+import { LoginParam } from 'src/models';
 import './login.css';
 
 const { Title } = Typography;

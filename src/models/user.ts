@@ -1,4 +1,4 @@
-import { Video } from 'models';
+import { Video } from 'src/models';
 
 export interface UserVideo {
   video: Video;

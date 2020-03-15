@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-import { API_SERVER } from 'config';
-import { Music } from 'models';
+import { API_SERVER } from 'src/config';
+import { Music } from 'src/models';
 import { SearchResult } from '.';
 
 export async function musicList(query: string, page: number, pageSize: number): Promise<SearchResult<Music>> {

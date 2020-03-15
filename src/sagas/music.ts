@@ -1,8 +1,8 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 
-import { musicTagListAsync } from 'actions';
-import * as Api from 'api';
+import { musicTagListAsync } from 'src/actions';
+import * as Api from 'src/api';
 
 function* fetchMusicTagList(): Generator {
   try {

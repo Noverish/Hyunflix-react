@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { MusicPlaylistTabs, MusicPlayer, MusicPlaylistHeader } from 'components';
-import { MusicPlaylist } from 'models';
-import { listMusicPlaylist, createMusicPlaylist, deleteMusicPlaylist, getMusicPlaylist } from 'api';
+import { MusicPlaylistTabs, MusicPlayer, MusicPlaylistHeader } from 'src/components';
+import { MusicPlaylist } from 'src/models';
+import { listMusicPlaylist, createMusicPlaylist, deleteMusicPlaylist, getMusicPlaylist } from 'src/api';
 
 const MusicPlaylistPage = (props: RouteComponentProps) => {
   const [playlists, setPlaylists] = useState([] as MusicPlaylist[]);

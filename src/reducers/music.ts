@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import { createReducer, StateType } from 'typesafe-actions';
 
-import { musicTagListAsync } from 'actions';
-import { COLORS } from 'config';
+import { musicTagListAsync } from 'src/actions';
+import { COLORS } from 'src/config';
 
 const tags = createReducer(new Map<string, string>())
   .handleAction(musicTagListAsync.success, (_, action: ReturnType<typeof musicTagListAsync.success>) => {

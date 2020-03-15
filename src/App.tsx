@@ -3,12 +3,12 @@ import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { debounce } from 'debounce';
 
-import IndexPage from 'pages';
-import Login from 'pages/auth/login';
-import Register from 'pages/auth/register';
-import { RootState } from 'reducers';
+import IndexPage from 'src/pages';
+import Login from 'src/pages/auth/login';
+import Register from 'src/pages/auth/register';
+import { RootState } from 'src/reducers';
 
-import { windowResize } from 'actions';
+import { windowResize } from 'src/actions';
 import 'antd/dist/antd.css';
 import './App.scss';
 

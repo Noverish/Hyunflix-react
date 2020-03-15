@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, RouteProps } from 'react-router-dom';
 
-import MainLayout from 'components/layout/main-layout';
+import MainLayout from 'src/components/layout/main-layout';
 
 interface Props extends RouteProps {
   layout?: React.ComponentType<any>;

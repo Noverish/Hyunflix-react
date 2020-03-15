@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-import { API_SERVER } from 'config';
-import { MusicPlaylist } from 'models';
+import { API_SERVER } from 'src/config';
+import { MusicPlaylist } from 'src/models';
 
 export async function listMusicPlaylist(): Promise<MusicPlaylist[]> {
   const config: AxiosRequestConfig = {

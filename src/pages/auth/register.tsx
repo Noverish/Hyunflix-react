@@ -3,8 +3,8 @@ import { Form, Input, Button, Typography } from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import { connect } from 'react-redux';
 
-import { registerAsync } from 'actions';
-import { RegisterParam } from 'models';
+import { registerAsync } from 'src/actions';
+import { RegisterParam } from 'src/models';
 import './register.css';
 
 const { Title } = Typography;

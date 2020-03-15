@@ -2,9 +2,9 @@ import React from 'react';
 import { Tag } from 'antd';
 import { connect } from 'react-redux';
 
-import withList, { InjectedProps, Options } from 'components/hoc/list';
-import { VideoSeries } from 'models';
-import { RootState } from 'reducers';
+import withList, { InjectedProps, Options } from 'src/components/hoc/list';
+import { VideoSeries } from 'src/models';
+import { RootState } from 'src/reducers';
 
 interface ReduxProps {
   tags: Map<string, string>;

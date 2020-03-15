@@ -3,12 +3,12 @@ import { RouteComponentProps, Link } from 'react-router-dom';
 import { Button } from 'antd';
 import { connect } from 'react-redux';
 
-import { musicList } from 'api';
-import { MusicList } from 'components';
-import { PAGE_SIZE } from 'config';
-import { useSearch } from 'hooks';
-import { Music } from 'models';
-import { RootState } from 'reducers';
+import { musicList } from 'src/api';
+import { MusicList } from 'src/components';
+import { PAGE_SIZE } from 'src/config';
+import { useSearch } from 'src/hooks';
+import { Music } from 'src/models';
+import { RootState } from 'src/reducers';
 
 const MusicListPage = (props: RouteComponentProps & { accessToken: string }) => {
   const { items, total, loading, query, page, setQuery, setPage } = useSearch(musicList, props.history, PAGE_SIZE);

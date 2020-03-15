@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-import { API_SERVER } from 'config';
-import { Video, Subtitle } from 'models';
+import { API_SERVER } from 'src/config';
+import { Video, Subtitle } from 'src/models';
 import { SearchResult } from '.';
 
 export async function videoList(query: string, page: number, pageSize: number): Promise<SearchResult<Video>> {

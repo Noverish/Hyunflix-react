@@ -1,8 +1,8 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 
-import { videoTagList } from 'actions';
-import * as Api from 'api';
+import { videoTagList } from 'src/actions';
+import * as Api from 'src/api';
 
 export function* fetchVideoTagList() {
   try {

@@ -3,9 +3,9 @@ import { Form, Input, Button, message, Spin } from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import { connect } from 'react-redux';
 
-import { logoutAction } from 'actions';
-import { changePassword } from 'api';
-import { PageHeader } from 'components';
+import { logoutAction } from 'src/actions';
+import { changePassword } from 'src/api';
+import { PageHeader } from 'src/components';
 
 const formItemLayout = {
   labelCol: { span: 4 },

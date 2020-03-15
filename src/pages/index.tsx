@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { musicTagListAsync, videoTagList } from 'actions';
-import { RouteWithLayout } from 'components';
+import { musicTagListAsync, videoTagList } from 'src/actions';
+import { RouteWithLayout } from 'src/components';
 
 import Home from './home/home';
 

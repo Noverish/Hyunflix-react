@@ -3,11 +3,11 @@ import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button } from 'antd';
 
-import { useFullscreenStatus } from 'hooks';
-import { PageHeader, ComicSwiper } from 'components';
-import { getComic, listComicImg } from 'api';
-import { Comic } from 'models';
-import { RootState } from 'reducers';
+import { useFullscreenStatus } from 'src/hooks';
+import { PageHeader, ComicSwiper } from 'src/components';
+import { getComic, listComicImg } from 'src/api';
+import { Comic } from 'src/models';
+import { RootState } from 'src/reducers';
 import './comic-content.scss';
 
 interface Props extends RouteComponentProps {

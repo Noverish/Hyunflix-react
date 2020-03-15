@@ -3,11 +3,11 @@ import { RouteComponentProps } from 'react-router-dom';
 import { Button } from 'antd';
 import find from 'lodash/find';
 
-import { musicList, getMusicPlaylist, updateMusicPlaylist } from 'api';
-import { Music, MusicPlaylist } from 'models';
-import { MusicList } from 'components';
-import { PAGE_SIZE } from 'config';
-import { useSearch } from 'hooks';
+import { musicList, getMusicPlaylist, updateMusicPlaylist } from 'src/api';
+import { Music, MusicPlaylist } from 'src/models';
+import { MusicList } from 'src/components';
+import { PAGE_SIZE } from 'src/config';
+import { useSearch } from 'src/hooks';
 
 const MusicPlaylistMuiscsPage = (props: RouteComponentProps) => {
   const { items, total, loading, query, page, setQuery, setPage } = useSearch(musicList, props.history, PAGE_SIZE);

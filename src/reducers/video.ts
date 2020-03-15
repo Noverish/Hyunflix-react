@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 import { createReducer, StateType } from 'typesafe-actions';
 
-import { COLORS } from 'config';
+import { COLORS } from 'src/config';
 
-import { videoTagList } from 'actions';
+import { videoTagList } from 'src/actions';
 
 export const tags = createReducer(new Map<string, string>())
   .handleAction(videoTagList.success, (_, action: ReturnType<typeof videoTagList.success>) => {

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Checkbox, Tag } from 'antd';
 
-import withList, { InjectedProps, Options } from 'components/hoc/list';
-import { Comic } from 'models';
+import withList, { InjectedProps, Options } from 'src/components/hoc/list';
+import { Comic } from 'src/models';
 
 interface OriginalProps {
 

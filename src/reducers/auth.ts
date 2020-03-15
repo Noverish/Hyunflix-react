@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { createReducer, StateType } from 'typesafe-actions';
 
-import { loginAsync, registerAsync, logoutAction, refreshTokenExpireAction, reissueAccessTokenAction } from 'actions';
+import { loginAsync, registerAsync, logoutAction, refreshTokenExpireAction, reissueAccessTokenAction } from 'src/actions';
 
 export const refreshToken = createReducer('' as string)
   .handleAction(loginAsync.success, (_, action: ReturnType<typeof loginAsync.success>) => action.payload.refreshToken)

@@ -3,10 +3,10 @@ import { Checkbox, Tag } from 'antd';
 import { connect } from 'react-redux';
 import * as classnames from 'classnames';
 
-import withList, { InjectedProps, Options } from 'components/hoc/list';
-import { Video } from 'models';
-import { resolution2Color } from 'utils';
-import { RootState } from 'reducers';
+import withList, { InjectedProps, Options } from 'src/components/hoc/list';
+import { Video } from 'src/models';
+import { resolution2Color } from 'src/utils';
+import { RootState } from 'src/reducers';
 
 interface ReduxProps {
   tags: Map<string, string>;

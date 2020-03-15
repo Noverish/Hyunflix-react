@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import { createReducer, StateType } from 'typesafe-actions';
 
-import { windowResize } from 'actions';
-import { MOBILE_BREAKPOINT } from 'config';
+import { windowResize } from 'src/actions';
+import { MOBILE_BREAKPOINT } from 'src/config';
 
 export const isMobile = createReducer(window.innerWidth <= MOBILE_BREAKPOINT as boolean)
   .handleAction(windowResize, (_, action: ReturnType<typeof windowResize>) => window.innerWidth <= MOBILE_BREAKPOINT);

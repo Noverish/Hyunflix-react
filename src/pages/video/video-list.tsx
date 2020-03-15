@@ -2,11 +2,11 @@ import React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button } from 'antd';
 
-import { VideoList } from 'components';
-import { Video } from 'models';
-import { videoList } from 'api';
-import { PAGE_SIZE } from 'config';
-import { useSearch } from 'hooks';
+import { VideoList } from 'src/components';
+import { Video } from 'src/models';
+import { videoList } from 'src/api';
+import { PAGE_SIZE } from 'src/config';
+import { useSearch } from 'src/hooks';
 
 const link = (video: Video) => `/videos/${video.id}`;
 const headerExtra = (

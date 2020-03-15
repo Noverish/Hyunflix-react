@@ -3,9 +3,9 @@ import { Checkbox, Tag, Progress } from 'antd';
 import { connect } from 'react-redux';
 import * as classnames from 'classnames';
 
-import withList, { InjectedProps, Options } from 'components/hoc/list';
-import { RootState } from 'reducers';
-import { UserVideo } from 'models';
+import withList, { InjectedProps, Options } from 'src/components/hoc/list';
+import { RootState } from 'src/reducers';
+import { UserVideo } from 'src/models';
 
 interface ReduxProps {
   tags: Map<string, string>;
