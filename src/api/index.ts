@@ -20,13 +20,23 @@ export interface SearchResult<T> {
 }
 
 axios.interceptors.request.use((config) => {
-  if (config.url?.startsWith(AUTH_SERVER)) {
-    config.headers[REFRESH_TOKEN_HEADER] = store.getState().auth.refreshToken;
-  } else if (config.url?.startsWith(API_SERVER)) {
-    config.headers[ACCESS_TOKEN_HEADER] = store.getState().auth.accessToken;
-  }
+  const refreshTokenHeader = config.url?.startsWith(AUTH_SERVER)
+    ? store.getState().auth.refreshToken
+    : undefined;
 
-  return config;
+  const accessTokenHeader = config.url?.startsWith(API_SERVER)
+    ? store.getState().auth.accessToken
+    : undefined;
+
+  const newConfig = {
+    ...config,
+    headers: {
+      [REFRESH_TOKEN_HEADER]: refreshTokenHeader,
+      [ACCESS_TOKEN_HEADER]: accessTokenHeader,
+    },
+  };
+
+  return newConfig;
 }, (err) => {
   handleError(err.message, JSON.stringify(err.config, null, 4));
   return Promise.reject(err.message);

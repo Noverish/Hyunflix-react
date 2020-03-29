@@ -34,15 +34,15 @@ class VideoVideoContentPage extends React.Component<Props, State> {
 
     videoOne(videoId)
       .then((video: Video) => {
-        video.url += `?token=${accessToken}`;
-        this.player.current!.src(video.url);
-        this.setState({ video });
+        const videoWithToken = { ...video, url: `${video.url}?token=${accessToken}` };
+        this.player.current!.src(videoWithToken.url);
+        this.setState({ video: videoWithToken });
       });
 
     videoSubtitleList(videoId)
       .then((subtitles: Subtitle[]) => {
-        subtitles.forEach(v => v.url += `?token=${accessToken}`);
-        this.player.current!.addSubtitles(subtitles);
+        const subtitlesWithToken = subtitles.map(v => ({ ...v, url: `${v.url}?token=${accessToken}` }));
+        this.player.current!.addSubtitles(subtitlesWithToken);
       });
 
     userVideoOne(videoId)
