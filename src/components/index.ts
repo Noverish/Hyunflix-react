@@ -1,19 +1,17 @@
-export { default as withItem } from './hoc/item';
-export { default as withList } from './hoc/list';
-
-export { default as VideoList } from './video/video-list';
-export { default as VideoSeriesList } from './video/video-series-list';
+export { default as VideoItem } from './video/video-item';
+export { default as VideoSeriesItem } from './video/video-series-item';
 export { default as VideoPlayer } from './video/video-player';
 
 export { default as MusicPlayer } from './music/music-player';
-export { default as MusicList } from './music/music-list';
+export { default as MusicItem } from './music/music-item';
 export { default as MusicPlaylistTabs } from './music/music-playlist-tabs';
 export { default as MusicPlaylistHeader } from './music/music-playlist-header';
 
-export { default as ComicList } from './comic/comic-list';
+export { default as ComicItem } from './comic/comic-item';
 export { default as ComicSwiper } from './comic/comic-swiper';
 
-export { default as UserVideoList } from './user/user-video-list';
+export { default as UserVideoItem } from './user/user-video-item';
 export { default as UserAvatarMenu } from './user/user-avatar-menu';
+
 export { default as PageHeader } from './etc/page-header';
 export { default as RouteWithLayout } from './etc/route-with-layout';

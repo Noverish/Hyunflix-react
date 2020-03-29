@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
+import { List, Pagination } from 'antd';
 
-import { VideoList } from 'src/components';
+import { PageHeader, VideoItem } from 'src/components';
 import { VideoSeries, Video } from 'src/models';
 import { videoSeries, SearchResult } from 'src/api';
 import { useSearch } from 'src/hooks';
 import { PAGE_SIZE } from 'src/config';
 
-const link = (video: Video) => `/videos/${video.id}`;
+const renderItem = (item: Video) => (
+  <VideoItem item={item} link={`/videos/${item.id}`} />
+);
 
 const VideoSeriesContentPage: React.FunctionComponent<RouteComponentProps> = (props) => {
   const [series, setSeries] = useState(null as VideoSeries | null);
@@ -49,23 +52,26 @@ const VideoSeriesContentPage: React.FunctionComponent<RouteComponentProps> = (pr
   }, [seriesId]);
 
   return (
-    <VideoList
-      items={items}
-      total={total}
-      loading={loading || loading2}
-
-      page={page}
-      pageSize={PAGE_SIZE}
-      onPageChange={setPage}
-
-      query={query}
-      onQueryChange={setQuery}
-
-      title={series ? series.title : ''}
-      subTitle={`총 ${series ? series.videos.length : 0}편`}
-      link={link}
-      onBack={() => props.history.goBack()}
-    />
+    <div className="list">
+      <PageHeader
+        title={series ? series.title : ''}
+        subTitle={`총 ${series ? series.videos.length : 0}편`}
+        onBack={props.history.goBack}
+        query={query}
+        onQueryChange={setQuery}
+      />
+      <List
+        dataSource={items}
+        renderItem={renderItem}
+        loading={loading || loading2}
+      />
+      <Pagination
+        current={page}
+        total={total}
+        pageSize={PAGE_SIZE}
+        onChange={setPage}
+      />
+    </div>
   );
 };
 

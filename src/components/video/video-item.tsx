@@ -3,33 +3,31 @@ import { Checkbox, Tag } from 'antd';
 import { connect } from 'react-redux';
 import * as classnames from 'classnames';
 
-import withList, { InjectedProps, Options } from 'src/components/hoc/list';
 import { Video } from 'src/models';
 import { resolution2Color } from 'src/utils';
 import { RootState } from 'src/reducers';
+import withLink from '../hoc/with-link';
+
+interface Props {
+  item: Video;
+  checked?: boolean;
+}
 
 interface ReduxProps {
   tags: Map<string, string>;
   isMobile: boolean;
 }
 
-interface OriginalProps {
-
-}
-
-type Props = OriginalProps & InjectedProps<Video> & ReduxProps;
-
-const renderTags = (props: Props) => {
-  const { item, tags } = props;
-
-  return item.tags.map(t => (
+const renderTags = (item: Video, tags: Map<string, string>) => (
+  item.tags.map(t => (
     <Tag color={tags.get(t)} key={t}>{t}</Tag>
-  ));
-};
+  ))
+);
 
-const VideoItem: React.FC<Props> = (props) => {
-  const { item, checked, isMobile } = props;
+const VideoItem = ({ item, checked, isMobile, tags }: Props & ReduxProps) => {
   const color = resolution2Color(item.resolution);
+
+  const tag = renderTags(item, tags);
 
   if (isMobile) {
     return (
@@ -39,7 +37,7 @@ const VideoItem: React.FC<Props> = (props) => {
           <span className="title">{item.title}</span>
         </div>
         <div className="last-row">
-          {renderTags(props)}
+          {tag}
           <span className="gray">{item.durationString}</span>
           <span className="gray float-right">{item.date}</span>
           <Tag color={color}>{item.resolution}</Tag>
@@ -51,7 +49,7 @@ const VideoItem: React.FC<Props> = (props) => {
     <div className="item desktop">
       {checked !== undefined && <Checkbox checked={checked} />}
       <span className="id">{item.id}</span>
-      {renderTags(props)}
+      {tag}
       <span className="title">{item.title}</span>
       <span className="gray float-right">{item.durationString}</span>
       <Tag color={color}>{item.resolution}</Tag>
@@ -65,9 +63,5 @@ const mapStateToProps = (state: RootState) => ({
   isMobile: state.etc.isMobile,
 });
 
-const options: Options<Video> = {
-  compare: (t1, t2) => t1.id === t2.id,
-};
-
 const connected = connect(mapStateToProps)(VideoItem);
-export default withList<Video>(options)<OriginalProps>(connected);
+export default withLink<Video, Props>(connected);

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { Button } from 'antd';
+import { Button, List, Pagination } from 'antd';
 import find from 'lodash/find';
 
 import { musicList, getMusicPlaylist, updateMusicPlaylist } from 'src/api';
 import { Music, MusicPlaylist } from 'src/models';
-import { MusicList } from 'src/components';
+import { PageHeader, MusicItem } from 'src/components';
 import { PAGE_SIZE } from 'src/config';
 import { useSearch } from 'src/hooks';
 
@@ -23,16 +23,23 @@ const MusicPlaylistMuiscsPage = (props: RouteComponentProps) => {
   }, [playlistId, props.history.goBack]);
 
   // functions
-  const onItemClick = useCallback((music: Music) => {
+  const onComplete = useCallback(() => {
+    const musicIds = playlist!.musics.map(v => v.id);
+    setLoading2(true);
+    updateMusicPlaylist(playlistId, undefined, musicIds)
+      .then(props.history.goBack);
+  }, [playlist, playlistId, props.history.goBack]);
+
+  const onItemClick = useCallback((item: Music) => {
     setPlaylist((playlist: MusicPlaylist | undefined) => {
       if (!playlist) {
         return playlist;
       }
 
       const { musics } = playlist;
-      const newMusics = find(musics, music)
-        ? musics.filter(v => v.id !== music.id)
-        : [...musics, music];
+      const newMusics = find(musics, item)
+        ? musics.filter(v => v.id !== item.id)
+        : [...musics, item];
 
       return {
         ...playlist,
@@ -41,12 +48,14 @@ const MusicPlaylistMuiscsPage = (props: RouteComponentProps) => {
     });
   }, []);
 
-  const onComplete = useCallback(() => {
-    const musicIds = playlist!.musics.map(v => v.id);
-    setLoading2(true);
-    updateMusicPlaylist(playlistId, undefined, musicIds)
-      .then(props.history.goBack);
-  }, [playlist, playlistId, props.history.goBack]);
+  const renderItem = useCallback((item: Music) => (
+    <MusicItem
+      item={item}
+      link={`/musics/${item.id}`}
+      onClick={onItemClick}
+      checked={musics.some(v => v.id === item.id)}
+    />
+  ), [onItemClick, musics]);
 
   // components
   const headerExtra = useMemo(() => (
@@ -54,25 +63,26 @@ const MusicPlaylistMuiscsPage = (props: RouteComponentProps) => {
   ), [onComplete]);
 
   return (
-    <MusicList
-      items={items}
-      total={total}
-      loading={loading || loading2}
-
-      query={query}
-      onQueryChange={setQuery}
-
-      page={page}
-      pageSize={PAGE_SIZE}
-      onPageChange={setPage}
-
-      title={playlist ? playlist.title : ''}
-      headerExtra={headerExtra}
-      onBack={props.history.goBack}
-
-      checklist={musics}
-      onItemClick={onItemClick}
-    />
+    <div className="list">
+      <PageHeader
+        title={playlist ? playlist.title : ''}
+        onBack={props.history.goBack}
+        extra={headerExtra}
+        query={query}
+        onQueryChange={setQuery}
+      />
+      <List
+        dataSource={items}
+        renderItem={renderItem}
+        loading={loading || loading2}
+      />
+      <Pagination
+        current={page}
+        total={total}
+        pageSize={PAGE_SIZE}
+        onChange={setPage}
+      />
+    </div>
   );
 };
 

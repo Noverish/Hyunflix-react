@@ -1,6 +1,7 @@
-import React from 'react';
-import { PageHeader } from 'antd';
+import React, { useCallback, useMemo } from 'react';
+import { PageHeader, Input } from 'antd';
 import { Link } from 'react-router-dom';
+import { PageHeaderProps } from 'antd/lib/page-header';
 
 function routes() {
   const path = document.location!.pathname;
@@ -28,8 +29,33 @@ function itemRender(route, params, routes, paths) {
   );
 }
 
-const CustomPageHeader = props => (
-  <PageHeader {...props} breadcrumb={{ itemRender, routes: routes() }} />
-);
+interface Props extends PageHeaderProps {
+  query?: string;
+  onQueryChange?(query: string): void;
+}
 
-export default CustomPageHeader;
+export default ({ query, onQueryChange, extra, ...restProps }: Props) => {
+  const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    onQueryChange?.(e.target.value);
+  }, [onQueryChange]);
+
+  const headerExtra = useMemo(() => {
+    if (query !== undefined && onChange !== undefined) {
+      return (
+        <>
+          <Input.Search onChange={onChange} defaultValue={query} />
+          {extra}
+        </>
+      );
+    }
+    return extra;
+  }, [onChange, query, extra]);
+
+  return (
+    <PageHeader
+      breadcrumb={{ itemRender, routes: routes() }}
+      extra={headerExtra}
+      {...restProps}
+    />
+  );
+};

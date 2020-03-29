@@ -1,34 +1,40 @@
 import React from 'react';
+import { List, Pagination } from 'antd';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { VideoSeries } from 'src/models';
-import { VideoSeriesList } from 'src/components';
+import { PageHeader, VideoSeriesItem } from 'src/components';
 import { videoSeriesList } from 'src/api';
 import { PAGE_SIZE } from 'src/config';
 import { useSearch } from 'src/hooks';
 
-const link = (item: VideoSeries) => `/videos/series/${item.id}`;
+const renderItem = (item: VideoSeries) => (
+  <VideoSeriesItem item={item} link={`/videos/series/${item.id}`} />
+);
 
-const VideoSeriesListPage: React.FunctionComponent<RouteComponentProps> = (props) => {
+const VideoSeriesListPage = (props: RouteComponentProps) => {
   const { items, total, loading, query, page, setQuery, setPage } = useSearch(videoSeriesList, props.history, PAGE_SIZE);
 
   return (
-    <VideoSeriesList
-      items={items}
-      total={total}
-      loading={loading}
-
-      page={page}
-      pageSize={PAGE_SIZE}
-      onPageChange={setPage}
-
-      query={query}
-      onQueryChange={setQuery}
-
-      title="시리즈 별로 보기"
-      link={link}
-      onBack={props.history.goBack}
-    />
+    <div className="list">
+      <PageHeader
+        title="시리즈 별로 보기"
+        onBack={props.history.goBack}
+        query={query}
+        onQueryChange={setQuery}
+      />
+      <List
+        dataSource={items}
+        renderItem={renderItem}
+        loading={loading}
+      />
+      <Pagination
+        current={page}
+        total={total}
+        pageSize={PAGE_SIZE}
+        onChange={setPage}
+      />
+    </div>
   );
 };
 

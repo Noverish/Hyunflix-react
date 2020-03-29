@@ -4,32 +4,28 @@ import { YoutubeOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import * as classnames from 'classnames';
 
-import withList, { InjectedProps, Options } from 'src/components/hoc/list';
 import { Music } from 'src/models';
 import { second2String } from 'src/utils';
 import { RootState } from 'src/reducers';
+import withLink from '../hoc/with-link';
+
+interface Props {
+  item: Music;
+  checked?: boolean;
+}
 
 interface ReduxProps {
   tags: Map<string, string>;
   isMobile: boolean;
 }
 
-interface OriginalProps {
-
-}
-
-type Props = OriginalProps & InjectedProps<Music> & ReduxProps;
-
-const renderTags = (props: Props) => {
-  const { item, tags } = props;
-
-  return item.tags.map(t => (
+const renderTags = (item: Music, tags: Map<string, string>) => (
+  item.tags.map(t => (
     <Tag color={tags.get(t)} key={t}>{t}</Tag>
-  ));
-};
+  ))
+);
 
-const MusicItem: React.FC<Props> = (props) => {
-  const { item, checked, isMobile } = props;
+const MusicItem = ({ item, checked, tags, isMobile }: Props & ReduxProps) => {
   const time = second2String(item.duration);
 
   if (isMobile) {
@@ -41,7 +37,7 @@ const MusicItem: React.FC<Props> = (props) => {
           {item.youtube && <YoutubeOutlined style={{ color: '#f5222d' }} />}
         </div>
         <div className="last-row">
-          {renderTags(props)}
+          {renderTags(item, tags)}
           <span className="gray float-right">{time}</span>
         </div>
       </div>
@@ -51,7 +47,7 @@ const MusicItem: React.FC<Props> = (props) => {
     <div className="item desktop">
       {checked !== undefined && <Checkbox checked={checked} />}
       <span className="id">{item.id}</span>
-      {renderTags(props)}
+      {renderTags(item, tags)}
       <span className="title">{item.title}</span>
       {item.youtube && <YoutubeOutlined style={{ color: '#f5222d' }} />}
       <span className="gray float-right">{time}</span>
@@ -64,9 +60,5 @@ const mapStateToProps = (state: RootState) => ({
   isMobile: state.etc.isMobile,
 });
 
-const options: Options<Music> = {
-  compare: (t1, t2) => t1.id === t2.id,
-};
-
 const connected = connect(mapStateToProps)(MusicItem);
-export default withList<Music>(options)<OriginalProps>(connected);
+export default withLink<Music, Props>(connected);
