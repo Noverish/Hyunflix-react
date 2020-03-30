@@ -15,3 +15,4 @@ export { default as UserAvatarMenu } from './user/user-avatar-menu';
 
 export { default as PageHeader } from './etc/page-header';
 export { default as RouteWithLayout } from './etc/route-with-layout';
+export { default as TagSelectDropdown } from './etc/tag-select-dropdown';
