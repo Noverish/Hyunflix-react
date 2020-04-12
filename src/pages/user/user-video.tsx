@@ -60,7 +60,7 @@ const UserVideoPage: React.FC<RouteComponentProps> = (props) => {
     <UserVideoItem
       item={item}
       link={`/videos/${item.video.id}`}
-      onClick={onItemClick}
+      onClick={checkable ? onItemClick : undefined}
       checked={checkable ? checklist.some(v => v.video.id === item.video.id) : undefined}
     />
   ), [checkable, checklist, onItemClick]);
