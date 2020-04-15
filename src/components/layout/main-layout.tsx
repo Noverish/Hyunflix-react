@@ -5,10 +5,11 @@ import { Layout, Menu } from 'antd';
 import { UserAvatarMenu } from 'src/components';
 import './main-layout.css';
 
-const { Header, Content } = Layout;
+const { Header, Content, Footer } = Layout;
 
 const MainLayout: React.FunctionComponent<RouteComponentProps> = (props) => {
   const path: string = props.location.pathname;
+  const year: number = new Date().getFullYear();
 
   const items = [
     { name: '홈', path: '/' },
@@ -46,6 +47,12 @@ const MainLayout: React.FunctionComponent<RouteComponentProps> = (props) => {
           {props.children}
         </div>
       </Content>
+      <Footer style={{ textAlign: 'center' }}>
+        Hyunflix ©
+        {year}
+        {' '}
+        Created by Hyunsub Kim
+      </Footer>
     </Layout>
   );
 };
