@@ -1,12 +1,11 @@
-import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { DeleteOutlined, DownOutlined, EditOutlined, PlusOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Menu } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, UnorderedListOutlined, DownOutlined } from '@ant-design/icons';
-
-import { MusicPlaylist } from 'src/models';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { PageHeader } from 'src/components';
+import { MusicPlaylist } from 'src/models';
 
-interface Props extends RouteComponentProps {
+interface Props {
   current?: MusicPlaylist;
   onAdd(): void;
   onDelete(playlist: MusicPlaylist): void;
@@ -20,6 +19,7 @@ enum Actions {
 }
 
 const MusicPlaylistPage = (props: Props) => {
+  const history = useHistory();
   const { current, onAdd, onDelete } = props;
 
   const editUrl = current ? `/musics/playlist/${current.id}/edit` : ''; // TODO
@@ -32,7 +32,7 @@ const MusicPlaylistPage = (props: Props) => {
         break;
       }
       case Actions.MODIFY: {
-        props.history.push(editUrl);
+        history.push(editUrl);
         break;
       }
       case Actions.DELETE: {
@@ -40,7 +40,7 @@ const MusicPlaylistPage = (props: Props) => {
         break;
       }
       case Actions.MUSIC: {
-        props.history.push(musicAddUrl);
+        history.push(musicAddUrl);
         break;
       }
       default:
@@ -56,15 +56,15 @@ const MusicPlaylistPage = (props: Props) => {
       </Menu.Item>
       <Menu.Item key={Actions.MODIFY} disabled={!current}>
         <EditOutlined />
-        현재 플레이리스트 수정
-      </Menu.Item>
-      <Menu.Item key={Actions.DELETE} disabled={!current}>
-        <DeleteOutlined />
-        현재 플레이리스트 삭제
+        플레이리스트 이름 변경
       </Menu.Item>
       <Menu.Item key={Actions.MUSIC} disabled={!current}>
         <UnorderedListOutlined />
-        플레이리스트 목록 수정
+        노래 추가/제거
+      </Menu.Item>
+      <Menu.Item key={Actions.DELETE} disabled={!current}>
+        <DeleteOutlined />
+        플레이리스트 삭제
       </Menu.Item>
     </Menu>
   );
@@ -72,7 +72,7 @@ const MusicPlaylistPage = (props: Props) => {
   const extra = (
     <Dropdown overlay={menu} placement="bottomRight">
       <Button>
-        수정하기
+        Actions
         <DownOutlined />
       </Button>
     </Dropdown>
@@ -83,9 +83,9 @@ const MusicPlaylistPage = (props: Props) => {
       title="Music Playlist"
       className="border-top border-bottom"
       extra={extra}
-      onBack={props.history.back}
+      onBack={history.goBack}
     />
   );
 };
 
-export default withRouter(MusicPlaylistPage);
+export default MusicPlaylistPage;

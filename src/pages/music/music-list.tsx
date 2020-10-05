@@ -1,14 +1,13 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import { RouteComponentProps, Link } from 'react-router-dom';
 import { Button, List, Pagination } from 'antd';
-import { connect } from 'react-redux';
-
+import React, { useCallback, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { musicList } from 'src/api';
-import { PageHeader, MusicItem } from 'src/components';
+import { MusicItem, PageHeader } from 'src/components';
 import { PAGE_SIZE } from 'src/config';
 import { useSearch } from 'src/hooks';
 import { Music } from 'src/models';
-import { RootState } from 'src/reducers';
+import { RootState } from 'src/features';
 
 const headerExtra = (
   <Link to="/musics/playlist">
@@ -16,26 +15,23 @@ const headerExtra = (
   </Link>
 );
 
-const MusicListPage = (props: RouteComponentProps & { accessToken: string }) => {
-  const { items, total, loading, query, page, setQuery, setPage } = useSearch(musicList, props.history, PAGE_SIZE);
-  const [nowPlaying, setNowPlaying] = useState(null as HTMLAudioElement | null);
-
-  useEffect(() => nowPlaying?.pause(), [nowPlaying]);
+const MusicListPage = (props: RouteComponentProps) => {
+  const { history } = props;
+  const { items, total, loading, query, page, setQuery, setPage } = useSearch(musicList, history, PAGE_SIZE);
+  const nowPlayingRef = useRef<HTMLAudioElement>(null);
+  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
 
   const onItemClick = useCallback((item: Music) => {
-    const newSrc = `${item.url}?token=${props.accessToken}`;
+    const newSrc = `${item.url}?token=${accessToken}`;
 
-    if (nowPlaying && newSrc === decodeURI(nowPlaying.src)) {
-      setNowPlaying(null);
-    } else {
-      const newPlaying = new Audio(newSrc);
-      newPlaying.play();
-      // newPlaying.addEventListener('timeupdate', (event: any) => {
-      //   const currentTime: number = event.path[0].currentTime;
-      // });
-      setNowPlaying(newPlaying);
+    const nowPlaying = nowPlayingRef.current;
+    if (nowPlaying) {
+      nowPlaying.pause();
+      nowPlaying.src = newSrc;
+      nowPlaying.currentTime = 0;
+      nowPlaying.play();
     }
-  }, [nowPlaying, props.accessToken]);
+  }, [accessToken]);
 
   const renderItem = useCallback((item: Music) => (
     <MusicItem
@@ -54,7 +50,15 @@ const MusicListPage = (props: RouteComponentProps & { accessToken: string }) => 
         query={query}
         onQueryChange={setQuery}
       />
+      <audio
+        ref={nowPlayingRef}
+        style={{ width: '100%', margin: '8px 0' }}
+        controls
+        loop
+        src="/media/cc0-audio/t-rex-roar.mp3"
+      />
       <List
+        className="border-top"
         dataSource={items}
         renderItem={renderItem}
         loading={loading}
@@ -69,8 +73,4 @@ const MusicListPage = (props: RouteComponentProps & { accessToken: string }) => 
   );
 };
 
-const mapStateToProps = (state: RootState) => ({
-  accessToken: state.auth.accessToken,
-});
-
-export default connect(mapStateToProps)(MusicListPage);
+export default MusicListPage;

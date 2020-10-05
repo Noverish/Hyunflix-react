@@ -192,6 +192,13 @@ $ID: #314659;
 }
 
 .aplayer {
+  @include desktop {
+    margin: 12px 0 0 0;
+  }
+  @include mobile {
+    margin: 0 0 0 0;
+  }
+
   * {
     box-sizing: content-box;
   }
@@ -224,7 +231,7 @@ $ID: #314659;
   }
   
   .aplayer-icon-menu {
-    display: none;
+    display: none !important;
   }
   
   .aplayer-music {

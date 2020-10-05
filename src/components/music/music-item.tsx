@@ -1,22 +1,17 @@
 import React from 'react';
 import { Checkbox, Tag } from 'antd';
-import { YoutubeOutlined } from '@ant-design/icons';
-import { connect } from 'react-redux';
-import * as classnames from 'classnames';
+// import { YoutubeOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
+import classnames from 'classnames';
 
 import { Music } from 'src/models';
 import { second2String } from 'src/utils';
-import { RootState } from 'src/reducers';
+import { RootState } from 'src/features';
 import withLink from '../hoc/with-link';
 
 interface Props {
   item: Music;
   checked?: boolean;
-}
-
-interface ReduxProps {
-  tags: Map<string, string>;
-  isMobile: boolean;
 }
 
 const renderTags = (item: Music, tags: Map<string, string>) => (
@@ -25,7 +20,9 @@ const renderTags = (item: Music, tags: Map<string, string>) => (
   ))
 );
 
-const MusicItem = ({ item, checked, tags, isMobile }: Props & ReduxProps) => {
+const MusicItem = ({ item, checked }: Props) => {
+  const tags = useSelector((state: RootState) =>  state.music.tags);
+  const isMobile = useSelector((state: RootState) => state.screen.isMobile);
   const time = second2String(item.duration);
 
   if (isMobile) {
@@ -34,7 +31,7 @@ const MusicItem = ({ item, checked, tags, isMobile }: Props & ReduxProps) => {
         <div className="first-row">
           {checked !== undefined && <Checkbox checked={checked} />}
           <span className="title">{item.title}</span>
-          {item.youtube && <YoutubeOutlined style={{ color: '#f5222d' }} />}
+          {/* {item.youtube && <YoutubeOutlined style={{ color: '#f5222d' }} />} */}
         </div>
         <div className="last-row">
           {renderTags(item, tags)}
@@ -49,16 +46,10 @@ const MusicItem = ({ item, checked, tags, isMobile }: Props & ReduxProps) => {
       <span className="id">{item.id}</span>
       {renderTags(item, tags)}
       <span className="title">{item.title}</span>
-      {item.youtube && <YoutubeOutlined style={{ color: '#f5222d' }} />}
+      {/* {item.youtube && <YoutubeOutlined style={{ color: '#f5222d' }} />} */}
       <span className="gray float-right">{time}</span>
     </div>
   );
 };
 
-const mapStateToProps = (state: RootState) => ({
-  tags: state.music.tags,
-  isMobile: state.etc.isMobile,
-});
-
-const connected = connect(mapStateToProps)(MusicItem);
-export default withLink<Music, Props>(connected);
+export default withLink<Music, Props>(MusicItem);

@@ -18,8 +18,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "outDir": "build",
-    
     "baseUrl": ".",
     "noImplicitAny": false
   },

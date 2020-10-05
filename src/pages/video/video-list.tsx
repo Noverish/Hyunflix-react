@@ -1,25 +1,21 @@
-import React, { useMemo, useCallback, useState } from 'react';
-import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, List, Pagination } from 'antd';
-import { connect } from 'react-redux';
-
-import { PageHeader, VideoItem, TagSelectDropdown } from 'src/components';
-import { Video } from 'src/models';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { videoList } from 'src/api';
+import { PageHeader, TagSelectDropdown, VideoItem } from 'src/components';
 import { PAGE_SIZE } from 'src/config';
+import { RootState } from 'src/features';
 import { useSearch } from 'src/hooks';
-import { RootState } from 'src/reducers';
-
-interface Props extends RouteComponentProps {
-  tags: Map<string, string>;
-}
+import { Video } from 'src/models';
 
 const renderItem = (item: Video) => (
   <VideoItem item={item} link={`/videos/${item.id}`} />
 );
 
-const VideoListPage = ({ tags, history }: Props) => {
-  const { items, total, loading, query, page, setQuery, setPage } = useSearch(videoList, history, PAGE_SIZE);
+const VideoListPage = (props: RouteComponentProps) => {
+  const tags = useSelector((state: RootState) => state.video.tags);
+  const { items, total, loading, query, page, setQuery, setPage } = useSearch(videoList, props.history, PAGE_SIZE);
   const [selectedTag, setSelectedTag] = useState(undefined as string | undefined);
 
   const onChange = useCallback((tag?: string) => {
@@ -59,9 +55,4 @@ const VideoListPage = ({ tags, history }: Props) => {
   );
 };
 
-const mapStateToProps = (state: RootState) => ({
-  tags: state.video.tags,
-});
-
-const connected = connect(mapStateToProps)(VideoListPage);
-export default connected;
+export default VideoListPage;

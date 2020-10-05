@@ -1,60 +1,45 @@
-import React, { Component } from 'react';
-import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import 'antd/dist/antd.css';
 import { debounce } from 'debounce';
-
+import React, { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { RootActions, RootState } from 'src/features';
 import IndexPage from 'src/pages';
 import Login from 'src/pages/auth/login';
 import Register from 'src/pages/auth/register';
-import { RootState } from 'src/reducers';
-
-import { windowResize } from 'src/actions';
-import 'antd/dist/antd.css';
 import './App.scss';
 
-interface Props {
-  windowResize(): ReturnType<typeof windowResize>;
-  refreshToken: string;
-}
-
-interface State {
-
-}
-
 // TODO destroy vanta after login or register success
-class App extends Component<Props, State> {
-  componentDidMount() {
-    window.onresize = debounce(this.props.windowResize, 500);
-  }
+const App = () => {
+  const dispatch = useDispatch();
+  const refreshToken = useSelector((state: RootState) => state.auth.refreshToken);
 
-  render() {
-    const inner = (this.props.refreshToken)
-      ? (
-        <Switch>
-          <Route component={IndexPage} />
-        </Switch>
-      ) : (
-        <Switch>
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
-          <Route render={_ => <Redirect to="/login" />} />
-        </Switch>
-      );
+  const onWindowResize = useCallback(() => {
+    dispatch(RootActions.screen.reload());
+  }, [dispatch]);
 
-    return (
-      <BrowserRouter>
-        {inner}
-      </BrowserRouter>
+  useEffect(() => {
+    window.onresize = debounce(onWindowResize, 500);
+  }, [onWindowResize]);
+
+  const inner = (refreshToken)
+    ? (
+      <Switch>
+        <Route component={IndexPage} />
+      </Switch>
+    ) : (
+      <Switch>
+        <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
+        <Route render={_ => <Redirect to="/login" />} />
+      </Switch>
     );
-  }
+
+  return (
+    <BrowserRouter>
+      {inner}
+    </BrowserRouter>
+  )
 }
 
-const mapDispatchToProps = {
-  windowResize,
-};
-
-const mapStateToProps = (state: RootState) => ({
-  refreshToken: state.auth.refreshToken,
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

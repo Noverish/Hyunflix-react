@@ -19,16 +19,16 @@ const MusicPlaylistMuiscsPage = (props: RouteComponentProps) => {
   useEffect(() => {
     getMusicPlaylist(playlistId)
       .then(setPlaylist)
-      .catch(props.history.back);
-  }, [playlistId, props.history.back]);
+      .catch(props.history.goBack);
+  }, [playlistId, props.history.goBack]);
 
   // functions
   const onComplete = useCallback(() => {
     const musicIds = playlist!.musics.map(v => v.id);
     setLoading2(true);
     updateMusicPlaylist(playlistId, undefined, musicIds)
-      .then(props.history.back);
-  }, [playlist, playlistId, props.history.back]);
+      .then(props.history.goBack);
+  }, [playlist, playlistId, props.history.goBack]);
 
   const onItemClick = useCallback((item: Music) => {
     setPlaylist((playlist: MusicPlaylist | undefined) => {
@@ -66,7 +66,7 @@ const MusicPlaylistMuiscsPage = (props: RouteComponentProps) => {
     <div className="list">
       <PageHeader
         title={playlist ? playlist.title : ''}
-        onBack={props.history.back}
+        onBack={props.history.goBack}
         extra={headerExtra}
         query={query}
         onQueryChange={setQuery}

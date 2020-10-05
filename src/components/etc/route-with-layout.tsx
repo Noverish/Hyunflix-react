@@ -11,7 +11,7 @@ const RouteWithLayout = (props: Props) => {
   const { layout, component, render, ...rest } = props;
 
   if (component) {
-    const render2 = props => React.createElement(layout || MainLayout, props, React.createElement(component, props));
+    const render2 = (props: any) => React.createElement(layout || MainLayout, props, React.createElement(component, props));
 
     return (
       <Route {...rest} render={render2} />
@@ -19,7 +19,7 @@ const RouteWithLayout = (props: Props) => {
   }
 
   if (render) {
-    const render2 = props => React.createElement(layout || MainLayout, props, render(props)); // TODO 연구하기
+    const render2 = (props: any) => React.createElement(layout || MainLayout, props, render(props)); // TODO 연구하기
 
     return (
       <Route {...rest} render={render2} />

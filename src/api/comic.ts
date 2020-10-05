@@ -14,7 +14,7 @@ export async function listComic(query: string, page: number, pageSize: number): 
   return (await axios(config)).data;
 }
 
-export async function getComic(comicId): Promise<Comic> {
+export async function getComic(comicId: number): Promise<Comic> {
   const config: AxiosRequestConfig = {
     url: `${API_SERVER}/comics/${comicId}`,
     method: 'get',
@@ -23,7 +23,7 @@ export async function getComic(comicId): Promise<Comic> {
   return (await axios(config)).data;
 }
 
-export async function listComicImg(comicId): Promise<string[]> {
+export async function listComicImg(comicId: number): Promise<string[]> {
   const config: AxiosRequestConfig = {
     url: `${API_SERVER}/comics/${comicId}/imgs`,
     method: 'get',

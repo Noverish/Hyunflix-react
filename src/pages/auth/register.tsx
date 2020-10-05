@@ -1,10 +1,7 @@
-import React, { RefObject } from 'react';
-import { Form, Input, Button, Typography } from 'antd';
-import { FormInstance } from 'antd/lib/form';
-import { connect } from 'react-redux';
-
-import { registerAsync } from 'src/actions';
-import { RegisterParam } from 'src/models';
+import { Button, Form, Input, Typography } from 'antd';
+import React, { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { actions as AuthActions } from 'src/features/auth';
 import './register.css';
 
 const { Title } = Typography;
@@ -22,85 +19,74 @@ const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
 
-interface Props {
-  registerAsyncRequest(param: RegisterParam): ReturnType<typeof registerAsync.request>;
-}
+const RegisterPage = () => {
+  const dispatch = useDispatch();
 
-class RegisterPage extends React.Component<Props> {
-  formRef: RefObject<FormInstance> = React.createRef();
-
-  onFinish = (values) => {
+  const onFinish = useCallback((values) => {
     const username = values[USERNAME_FIELD];
     const password = values[PASSWORD1_FIELD];
     const regCode = values[REGCODE_FIELD];
 
-    this.props.registerAsyncRequest({ username, password, regCode });
-  };
+    dispatch(AuthActions.registerRequest({ username, password, regCode }));
+  }, [dispatch]);
 
-  render() {
-    return (
-      <div className="register-form-container">
-        <Title>회원가입</Title>
-        <Form
-          ref={this.formRef}
-          onFinish={this.onFinish}
-          className="register-form"
-          {...layout}
+  return (
+    <div className="register-form-container">
+      <Title>회원가입</Title>
+      <Form
+        onFinish={onFinish}
+        className="register-form"
+        {...layout}
+      >
+        <Form.Item
+          label="유저이름"
+          name={USERNAME_FIELD}
+          rules={[{ required: true, message: '유저이름을 입력해주세요!' }]}
         >
-          <Form.Item
-            label="유저이름"
-            name={USERNAME_FIELD}
-            rules={[{ required: true, message: '유저이름을 입력해주세요!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            hasFeedback
-            label="비밀번호"
-            name={PASSWORD1_FIELD}
-            rules={[{ required: true, message: '비밀번호를 입력해주세요!' }]}
-          >
-            <Input.Password />
-          </Form.Item>
-          <Form.Item
-            hasFeedback
-            label="비밀번호 확인"
-            name={PASSWORD2_FIELD}
-            dependencies={[PASSWORD1_FIELD]}
-            rules={[
-              { required: true, message: '위에서 입력하신 비밀번호를 다시 입력해주세요!' },
-              ({ getFieldValue }) => ({
-                validator(rule, value) {
-                  if (!value || getFieldValue(PASSWORD1_FIELD) === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(new Error('위에서 입력하신 비밀번호와 다릅니다!'));
-                },
-              }),
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
-          <Form.Item
-            label="가입코드"
-            name={REGCODE_FIELD}
-            rules={[{ required: true, message: '회원가입 코드를 입력해주세요!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit">
-              가입하기
+          <Input />
+        </Form.Item>
+        <Form.Item
+          hasFeedback
+          label="비밀번호"
+          name={PASSWORD1_FIELD}
+          rules={[{ required: true, message: '비밀번호를 입력해주세요!' }]}
+        >
+          <Input.Password />
+        </Form.Item>
+        <Form.Item
+          hasFeedback
+          label="비밀번호 확인"
+          name={PASSWORD2_FIELD}
+          dependencies={[PASSWORD1_FIELD]}
+          rules={[
+            { required: true, message: '위에서 입력하신 비밀번호를 다시 입력해주세요!' },
+            ({ getFieldValue }) => ({
+              validator(rule, value) {
+                if (!value || getFieldValue(PASSWORD1_FIELD) === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('위에서 입력하신 비밀번호와 다릅니다!'));
+              },
+            }),
+          ]}
+        >
+          <Input.Password />
+        </Form.Item>
+        <Form.Item
+          label="가입코드"
+          name={REGCODE_FIELD}
+          rules={[{ required: true, message: '회원가입 코드를 입력해주세요!' }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item {...tailLayout}>
+          <Button type="primary" htmlType="submit">
+            가입하기
             </Button>
-          </Form.Item>
-        </Form>
-      </div>
-    );
-  }
+        </Form.Item>
+      </Form>
+    </div>
+  )
 }
 
-const mapDispatchToProps = {
-  registerAsyncRequest: registerAsync.request,
-};
-
-export default connect(undefined, mapDispatchToProps)(RegisterPage);
+export default RegisterPage;

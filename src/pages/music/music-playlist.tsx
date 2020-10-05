@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-
-import { MusicPlaylistTabs, MusicPlayer, MusicPlaylistHeader } from 'src/components';
+import { createMusicPlaylist, deleteMusicPlaylist, getMusicPlaylist, listMusicPlaylist } from 'src/api';
+import { MusicPlayer, MusicPlaylistHeader, MusicPlaylistTabs } from 'src/components';
 import { MusicPlaylist } from 'src/models';
-import { listMusicPlaylist, createMusicPlaylist, deleteMusicPlaylist, getMusicPlaylist } from 'src/api';
 
 const MusicPlaylistPage = (props: RouteComponentProps) => {
+  const { history, match } = props;
   const [playlists, setPlaylists] = useState([] as MusicPlaylist[]);
   const [current, setCurrent] = useState(undefined as MusicPlaylist | undefined);
-  const playlistId: number = parseInt(props.match.params['playlistId']);
+  const playlistId: number = parseInt(match.params['playlistId']);
 
   if (playlists.length) {
     if (!playlists.find(v => v.id === playlistId)) {
-      props.history.replace(`/musics/playlist/${playlists[0].id}`); // TODO
+      history.replace(`/musics/playlist/${playlists[0].id}`); // TODO
     }
   }
 
@@ -29,8 +29,8 @@ const MusicPlaylistPage = (props: RouteComponentProps) => {
 
   // functions
   const onChange = useCallback((playlist: MusicPlaylist) => {
-    props.history.replace(`/musics/playlist/${playlist.id}`); // TODO
-  }, [props.history]);
+    history.replace(`/musics/playlist/${playlist.id}`); // TODO
+  }, [history]);
 
   const onAdd = useCallback(() => {
     createMusicPlaylist(`Playlist ${playlists.length + 1}`)

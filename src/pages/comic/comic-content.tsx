@@ -1,28 +1,24 @@
-import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { Button } from 'antd';
-
-import { useFullscreenStatus } from 'src/hooks';
-import { PageHeader, ComicSwiper } from 'src/components';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RouteComponentProps } from 'react-router-dom';
 import { getComic, listComicImg } from 'src/api';
+import { ComicSwiper, PageHeader } from 'src/components';
+import { useFullscreenStatus } from 'src/hooks';
 import { Comic } from 'src/models';
-import { RootState } from 'src/reducers';
+import { RootState } from 'src/features';
 import './comic-content.scss';
 
-interface Props extends RouteComponentProps {
-  accessToken: string;
-}
-
-const ComicContentPage = (props: Props) => {
+const ComicContentPage = (props: RouteComponentProps) => {
+  const { history, match } = props;
   const fullscreenElement = useRef<HTMLDivElement>(null);
   const [isFullscreen, setFullscreen] = useFullscreenStatus(fullscreenElement);
   const [comic, setComic] = useState(null as Comic | null);
   const [urls, setUrls] = useState([] as string[]);
   const [hide, setHide] = useState(false);
+  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
 
-  const comicId: number = parseInt(props.match.params['comicId']);
-  const { accessToken } = props;
+  const comicId: number = parseInt(match.params['comicId']);
 
   useEffect(() => {
     getComic(comicId)
@@ -52,7 +48,7 @@ const ComicContentPage = (props: Props) => {
       <PageHeader
         className="border-top border-bottom"
         title={comic ? comic.title : ''}
-        onBack={props.history.back}
+        onBack={history.goBack}
         extra={fullscreenButton}
         style={{ display: hide ? 'none' : 'block' }}
       />
@@ -63,8 +59,4 @@ const ComicContentPage = (props: Props) => {
   );
 };
 
-const mapStateToProps = (state: RootState) => ({
-  accessToken: state.auth.accessToken,
-});
-
-export default connect(mapStateToProps)(ComicContentPage);
+export default ComicContentPage;

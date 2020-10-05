@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import * as NodeRSA from 'node-rsa';
+import NodeRSA from 'node-rsa';
 
 import { AUTH_SERVER, ACCESS_TOKEN_HEADER } from 'src/config';
 import { LoginParam, RegisterParam, LoginResult } from 'src/models';

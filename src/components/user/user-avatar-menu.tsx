@@ -1,25 +1,22 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Avatar, Menu, Dropdown } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import { connect } from 'react-redux';
-
-import { RootState } from 'src/reducers';
-import { logoutAction } from 'src/actions';
-
-interface Props {
-  username: string;
-  logout(): ReturnType<typeof logoutAction>;
-}
+import { Avatar, Dropdown, Menu } from 'antd';
+import React, { useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { RootState } from 'src/features';
+import { actions as AuthActions } from 'src/features/auth';
 
 const USER_VIDEOS = 'user-videos';
 const LOGOUT = 'logout';
 const CHANGE_PASSWORD = 'change-password';
 
-const UserAvatarMenu: React.FunctionComponent<Props> = (props) => {
+const UserAvatarMenu = () => {
+  const dispatch = useDispatch();
+  const username = useSelector((state: RootState) => state.auth.username);
+
   const onClick = ({ key }) => {
     if (key === LOGOUT) {
-      props.logout();
+      dispatch(AuthActions.clear());
     }
   };
 
@@ -27,7 +24,7 @@ const UserAvatarMenu: React.FunctionComponent<Props> = (props) => {
     <Menu onClick={onClick}>
       <Menu.Item>
         @
-        {props.username}
+        {username}
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key={USER_VIDEOS}><Link to="/user/videos">시청 기록</Link></Menu.Item>
@@ -37,19 +34,17 @@ const UserAvatarMenu: React.FunctionComponent<Props> = (props) => {
     </Menu>
   );
 
+  const avatar = useMemo(() => (
+    (username)
+      ? <Avatar style={{ backgroundColor: '#f56a00' }}>{username}</Avatar>
+      : <Avatar icon={<UserOutlined />}></Avatar>
+  ), [username]);
+
   return (
     <Dropdown overlay={menu} trigger={['click']}>
-      <Avatar icon={<UserOutlined />} />
+      {avatar}
     </Dropdown>
   );
 };
 
-const mapDispatchToProps = {
-  logout: logoutAction,
-};
-
-const mapStateToProps = (state: RootState) => ({
-  username: '', // TODO
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserAvatarMenu);
+export default UserAvatarMenu;

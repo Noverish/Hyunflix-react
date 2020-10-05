@@ -1,14 +1,12 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import * as APlayer from 'aplayer';
-
-import { Music } from 'src/models';
-import { RootState } from 'src/reducers';
+import APlayer from 'aplayer';
 import 'aplayer/dist/APlayer.min.css';
+import React, { useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/features';
+import { Music } from 'src/models';
 
 interface Props {
   playlist: Music[];
-  accessToken: string;
 }
 
 interface AMusic {
@@ -27,50 +25,43 @@ function convert(musics: Music[], accessToken: string): AMusic[] {
   }));
 }
 
-class MusicPlayer extends React.Component<Props> {
-  aplayer: APlayer | null = null;
+const MusicPlayer = ({ playlist }: Props) => {
+  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
+  const playerRef = useRef<APlayer>();
 
-  componentDidMount() {
-    const { playlist, accessToken } = this.props;
+  useEffect(() => {
     const container = document.getElementById('aplayer');
 
     const aplayer = new APlayer({
       container,
-      audio: convert(playlist, accessToken),
-      autoplay: true,
       loop: 'all',
       order: 'random',
-      listFolded: false,
+      listMaxHeight: 0,
     });
 
-    this.aplayer = aplayer;
-  }
+    playerRef.current = aplayer;
 
-  shouldComponentUpdate(nextProps: Props) {
-    const { playlist, accessToken } = nextProps;
-    const { aplayer } = this;
+    return () => {
+      aplayer.pause();
+    }
+  }, []);
 
-    if (aplayer) {
-      aplayer.list.clear();
+  useEffect(() => {
+    const player = playerRef.current;
+
+    if (player) {
+      player.list.clear();
 
       if (playlist.length) {
-        aplayer.list.add(convert(playlist, accessToken));
-        aplayer.play();
+        player.list.add(convert(playlist, accessToken));
+        player.play();
       }
     }
+  }, [accessToken, playlist]);
 
-    return false;
-  }
-
-  render() {
-    return (
-      <div id="aplayer" />
-    );
-  }
+  return (
+    <div id="aplayer" />
+  );
 }
 
-const mapStateToProps = (state: RootState) => ({
-  accessToken: state.auth.accessToken,
-});
-
-export default connect(mapStateToProps)(MusicPlayer);
+export default MusicPlayer;

@@ -1,20 +1,15 @@
+import { Checkbox, Progress, Tag } from 'antd';
+import classnames from 'classnames';
 import React from 'react';
-import { Checkbox, Tag, Progress } from 'antd';
-import { connect } from 'react-redux';
-import * as classnames from 'classnames';
-
-import { RootState } from 'src/reducers';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/features';
 import { UserVideo } from 'src/models';
 import withLink from '../hoc/with-link';
+
 
 interface Props {
   item: UserVideo;
   checked?: boolean;
-}
-
-interface ReduxProps {
-  tags: Map<string, string>;
-  isMobile: boolean;
 }
 
 const renderTags = (item: UserVideo, tags: Map<string, string>) => (
@@ -23,7 +18,9 @@ const renderTags = (item: UserVideo, tags: Map<string, string>) => (
   ))
 );
 
-const UserVideoItem = ({ item, checked, tags, isMobile }: Props & ReduxProps) => {
+const UserVideoItem = ({ item, checked }: Props) => {
+  const tags = useSelector((state: RootState) => state.video.tags);
+  const isMobile = useSelector((state: RootState) => state.screen.isMobile);
   const { video } = item;
   const percent = Math.floor((item.time / video.duration) * 100);
 
@@ -61,10 +58,4 @@ const UserVideoItem = ({ item, checked, tags, isMobile }: Props & ReduxProps) =>
   );
 };
 
-const mapStateToProps = (state: RootState) => ({
-  tags: state.video.tags,
-  isMobile: state.etc.isMobile,
-});
-
-const connected = connect(mapStateToProps)(UserVideoItem);
-export default withLink<UserVideo, Props>(connected);
+export default withLink<UserVideo, Props>(UserVideoItem);

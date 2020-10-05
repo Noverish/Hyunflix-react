@@ -1,21 +1,15 @@
-import React from 'react';
 import { Checkbox, Tag } from 'antd';
-import { connect } from 'react-redux';
-import * as classnames from 'classnames';
-
+import classnames from 'classnames';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/features';
 import { Video } from 'src/models';
 import { resolution2Color } from 'src/utils';
-import { RootState } from 'src/reducers';
 import withLink from '../hoc/with-link';
 
 interface Props {
   item: Video;
   checked?: boolean;
-}
-
-interface ReduxProps {
-  tags: Map<string, string>;
-  isMobile: boolean;
 }
 
 const renderTags = (item: Video, tags: Map<string, string>) => (
@@ -24,7 +18,9 @@ const renderTags = (item: Video, tags: Map<string, string>) => (
   ))
 );
 
-const VideoItem = ({ item, checked, isMobile, tags }: Props & ReduxProps) => {
+const VideoItem = ({ item, checked }: Props) => {
+  const tags = useSelector((state: RootState) => state.video.tags);
+  const isMobile = useSelector((state: RootState) => state.screen.isMobile);
   const color = resolution2Color(item.resolution);
 
   const tag = renderTags(item, tags);
@@ -58,10 +54,4 @@ const VideoItem = ({ item, checked, isMobile, tags }: Props & ReduxProps) => {
   );
 };
 
-const mapStateToProps = (state: RootState) => ({
-  tags: state.video.tags,
-  isMobile: state.etc.isMobile,
-});
-
-const connected = connect(mapStateToProps)(VideoItem);
-export default withLink<Video, Props>(connected);
+export default withLink<Video, Props>(VideoItem);

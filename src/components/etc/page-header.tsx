@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { PageHeader, Input } from 'antd';
 import { Link } from 'react-router-dom';
 import { PageHeaderProps } from 'antd/lib/page-header';
+import { BreadcrumbProps } from 'antd/lib/breadcrumb';
 
 function routes() {
   const path = document.location!.pathname;
@@ -20,7 +21,7 @@ function routes() {
   ];
 }
 
-function itemRender(route, params, routes, paths) {
+const itemRender: BreadcrumbProps['itemRender'] = (route, params, routes, paths) => {
   const last = routes.indexOf(route) === routes.length - 1;
   return last ? (
     <span>{route.breadcrumbName}</span>
