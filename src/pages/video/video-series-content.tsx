@@ -56,7 +56,7 @@ const VideoSeriesContentPage: React.FunctionComponent<RouteComponentProps> = (pr
       <PageHeader
         title={series ? series.title : ''}
         subTitle={`총 ${series ? series.videos.length : 0}편`}
-        onBack={props.history.goBack}
+        onBack={props.history.back}
         query={query}
         onQueryChange={setQuery}
       />

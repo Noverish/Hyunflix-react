@@ -27,7 +27,7 @@ const MusicPlaylistEditPage = (props: RouteComponentProps) => {
     getMusicPlaylist(playlistId)
       .then(setPlaylist)
       .then(setLoading.bind(null, false))
-      .catch(props.history.goBack);
+      .catch(props.history.back);
   }, [playlistId, props.history]);
 
   const onFinish = useCallback((values) => {
@@ -35,7 +35,7 @@ const MusicPlaylistEditPage = (props: RouteComponentProps) => {
 
     setLoading(true);
     updateMusicPlaylist(playlistId, title)
-      .then(props.history.goBack)
+      .then(props.history.back)
       .catch(() => {
         setLoading(false);
       });
@@ -47,7 +47,7 @@ const MusicPlaylistEditPage = (props: RouteComponentProps) => {
         title="음악 플레이리스트 수정"
         className="border-top border-bottom"
         style={{ marginBottom: '32px' }}
-        onBack={props.history.goBack}
+        onBack={props.history.back}
       />
       <Spin spinning={loading}>
         <Form

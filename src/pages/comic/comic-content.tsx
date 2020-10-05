@@ -52,7 +52,7 @@ const ComicContentPage = (props: Props) => {
       <PageHeader
         className="border-top border-bottom"
         title={comic ? comic.title : ''}
-        onBack={props.history.goBack}
+        onBack={props.history.back}
         extra={fullscreenButton}
         style={{ display: hide ? 'none' : 'block' }}
       />

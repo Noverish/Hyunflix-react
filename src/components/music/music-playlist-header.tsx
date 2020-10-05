@@ -83,7 +83,7 @@ const MusicPlaylistPage = (props: Props) => {
       title="Music Playlist"
       className="border-top border-bottom"
       extra={extra}
-      onBack={props.history.goBack}
+      onBack={props.history.back}
     />
   );
 };

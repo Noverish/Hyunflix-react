@@ -19,7 +19,7 @@ const VideoSeriesListPage = (props: RouteComponentProps) => {
     <div className="list">
       <PageHeader
         title="시리즈 별로 보기"
-        onBack={props.history.goBack}
+        onBack={props.history.back}
         query={query}
         onQueryChange={setQuery}
       />

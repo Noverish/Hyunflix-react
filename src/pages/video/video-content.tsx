@@ -58,7 +58,7 @@ class VideoVideoContentPage extends React.Component<Props, State> {
   }
 
   onBack = () => {
-    this.props.history.goBack();
+    this.props.history.back();
   };
 
   onTimeUpdate = (time: number) => {

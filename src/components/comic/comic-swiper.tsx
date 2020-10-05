@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Swiper from 'swiper';
-import 'swiper/css/swiper.min.css';
+import 'swiper/swiper-bundle.css';
 import './comic-swiper.scss';
 
 interface Props {

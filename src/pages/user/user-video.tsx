@@ -17,11 +17,11 @@ const renderHeaderExtra = (
   (checkable)
     ? (
       <>
-        <Button type="danger" onClick={deleteUserVideos} disabled={checkedNum === 0}>삭제</Button>
+        <Button danger onClick={deleteUserVideos} disabled={checkedNum === 0}>삭제</Button>
         <Button onClick={toggleMode}>취소</Button>
       </>
     ) : (
-      <Button type="danger" onClick={toggleMode}>삭제</Button>
+      <Button danger onClick={toggleMode}>삭제</Button>
     )
 );
 

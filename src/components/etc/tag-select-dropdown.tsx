@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { Dropdown, Button, Menu } from 'antd';
-import { ClickParam } from 'antd/lib/menu';
+import { MenuInfo } from 'rc-menu/lib/interface';
 
 const NO_SELECT = '선택 없음';
 
@@ -13,8 +13,8 @@ interface Props {
 export default ({ tags, onChange, value }: Props) => {
   const className: string | undefined = value ? `ant-tag-${tags.get(value)}` : undefined;
 
-  const onClick = useCallback((param: ClickParam) => {
-    onChange(param.key === NO_SELECT ? undefined : param.key);
+  const onClick = useCallback((param: MenuInfo) => {
+    onChange(param.key === NO_SELECT ? undefined : param.key.toString());
   }, [onChange]);
 
   const menu = useMemo(() => {

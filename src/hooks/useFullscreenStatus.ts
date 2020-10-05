@@ -1,8 +1,8 @@
-import React from 'react';
+import { useState, useLayoutEffect } from 'react';
 
 // from https://github.com/Darth-Knoppix/example-react-fullscreen
 export default function useFullscreenStatus(elRef): [boolean, () => void] {
-  const [isFullscreen, setIsFullscreen] = React.useState(
+  const [isFullscreen, setIsFullscreen] = useState(
     document[getBrowserFullscreenElementProp()] != null,
   );
 
@@ -19,7 +19,7 @@ export default function useFullscreenStatus(elRef): [boolean, () => void] {
       });
   };
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     document.onfullscreenchange = () => setIsFullscreen(document[getBrowserFullscreenElementProp()] != null);
 
     return () => {
