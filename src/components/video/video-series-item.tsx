@@ -10,9 +10,9 @@ interface Props {
   item: VideoSeries;
 }
 
-const renderTags = (item: VideoSeries, tags: Map<string, string>) => {
+const renderTags = (item: VideoSeries, tags: {[tag: string]: string}) => {
   const t = item.category;
-  return <Tag color={tags.get(t)} key={t}>{t}</Tag>;
+  return <Tag color={tags[t]} key={t}>{t}</Tag>;
 };
 
 const VideoSeriesItem = ({ item }: Props) => {

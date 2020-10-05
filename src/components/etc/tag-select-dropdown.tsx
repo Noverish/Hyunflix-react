@@ -6,19 +6,19 @@ const NO_SELECT = '선택 없음';
 
 interface Props {
   onChange(tag?: string): void;
-  tags: Map<string, string>;
+  tags: {[tag: string]: string};
   value?: string;
 }
 
 export default ({ tags, onChange, value }: Props) => {
-  const className: string | undefined = value ? `ant-tag-${tags.get(value)}` : undefined;
+  const className: string | undefined = value ? `ant-tag-${tags[value]}` : undefined;
 
   const onClick = useCallback((param: MenuInfo) => {
     onChange(param.key === NO_SELECT ? undefined : param.key.toString());
   }, [onChange]);
 
   const menu = useMemo(() => {
-    const items = Array.from(tags.keys()).map(t => (
+    const items = Object.keys(tags).map(t => (
       <Menu.Item key={t}>
         {t}
       </Menu.Item>

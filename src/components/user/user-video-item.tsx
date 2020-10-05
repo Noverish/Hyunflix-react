@@ -12,9 +12,9 @@ interface Props {
   checked?: boolean;
 }
 
-const renderTags = (item: UserVideo, tags: Map<string, string>) => (
+const renderTags = (item: UserVideo, tags: {[tag: string]: string}) => (
   item.video.tags.map(t => (
-    <Tag color={tags.get(t)} key={t}>{t}</Tag>
+    <Tag color={tags[t]} key={t}>{t}</Tag>
   ))
 );
 

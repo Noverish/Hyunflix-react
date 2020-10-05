@@ -5,9 +5,9 @@ import { COLORS } from 'src/config';
 
 const request = createAction('music/tags/request');
 
-type State = Map<string, string>;
+type State = {[tag: string]: string};
 
-const initialState: State = new Map<string, string>();
+const initialState: State = {};
 
 const slice = createSlice({
   name: 'music/tags',
@@ -26,9 +26,9 @@ export const actions = {
 
 function* fetch() {
   try {
-    const map = new Map<string, string>();
+    const map = {};
     const result: string[] = yield call([Api, 'musicTagList']);
-    result.forEach((t, i) => map.set(t, COLORS[i % COLORS.length]));
+    result.forEach((t, i) => map[t] = COLORS[i % COLORS.length]);
     yield put(actions.set(map));
   } catch (errMsg) {
 

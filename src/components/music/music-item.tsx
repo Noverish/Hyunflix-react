@@ -14,9 +14,9 @@ interface Props {
   checked?: boolean;
 }
 
-const renderTags = (item: Music, tags: Map<string, string>) => (
+const renderTags = (item: Music, tags: {[tag: string]: string}) => (
   item.tags.map(t => (
-    <Tag color={tags.get(t)} key={t}>{t}</Tag>
+    <Tag color={tags[t]} key={t}>{t}</Tag>
   ))
 );
 
